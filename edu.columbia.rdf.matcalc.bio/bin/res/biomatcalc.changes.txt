@@ -1,0 +1,46 @@
+VERSION 31 - 03/12/15
+
+  * Support for already logged data.
+  
+  
+VERSION 30 - 03/05/15
+
+  * Duplicate rows using a delimiter.
+  * Help support.
+  
+  
+VERSION 28 - 01/29/15
+
+  * UI improvements.
+  
+  
+VERSION 27 - 01/12/15
+
+  * Filter by human/mouse core genes.
+
+
+VERSION 25 - 11/21/14
+
+  * Fixes bugs with clustered row labels.
+  * Allow clusters to be drawn without heat maps.
+
+
+VERSION 24 - 11/03/14
+
+  * Added ability to import sample names into groups to negate writing
+    regular expressions.
+  * Fixed bug stopping gct files from being created from files with
+    multiple annotation.
+
+
+VERSION 23 - 10/22/14
+
+  * Revised icons.
+  * Added Convert Genes tool.
+  * When opening a text file, will now prompt for how many annotation 
+    columns there are.
+  
+
+VERSION 22 - 10/20/14
+
+  * Added ability to filter columns by loading a list.
