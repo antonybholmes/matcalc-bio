@@ -35,12 +35,15 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 
 import org.jebtk.bioinformatics.gapsearch.BinarySearch;
 import org.jebtk.bioinformatics.gapsearch.FixedGapSearch;
 import org.jebtk.core.collections.DefaultHashMap;
 import org.jebtk.core.collections.DefaultHashMapCreator;
+import org.jebtk.core.collections.DefaultTreeMap;
+import org.jebtk.core.collections.DefaultTreeSetCreator;
 import org.jebtk.core.collections.HashMapCreator;
 import org.jebtk.core.io.FileUtils;
 import org.jebtk.core.io.PathUtils;
@@ -71,6 +74,9 @@ public class AnnotationService implements Iterable<String> {
 	private static final Path RES_DIR =
 			PathUtils.getPath("res/modules/gene_annotation/genomes");
 
+	private Map<String, Set<String>> mGenomeMap =
+			DefaultTreeMap.create(new DefaultTreeSetCreator<String>());
+	
 	private Map<String, Path> mFileMap = new TreeMap<String, Path>();
 
 	//private Map<String, Map<Integer, Map<Integer, FixedGapSearch<AnnotationGene>>>> mFixedGapSearchMap = 
@@ -232,6 +238,10 @@ public class AnnotationService implements Iterable<String> {
 									TextUtils.EMPTY_STRING);
 
 							mFileMap.put(name, file);
+							
+							String genome = file.getParent().getFileName().toString();
+							
+							mGenomeMap.get(genome).add(name);
 						}
 					} else {
 						List<Path> files = FileUtils.ls(file);
@@ -246,6 +256,18 @@ public class AnnotationService implements Iterable<String> {
 			mAutoLoad = false;
 		}
 	}
+	
+	public Iterable<String> genomes() throws IOException {
+		autoLoad();
+		
+		return mGenomeMap.keySet();
+	}
+	
+	public Iterable<String> annotations(String genome) throws IOException {
+		autoLoad();
+		
+		return mGenomeMap.get(genome);
+	}
 
 	public ModernCheckTree<String> createTree() throws IOException {
 		return createTree(ModernCheckTreeMode.MULTI);
@@ -253,7 +275,6 @@ public class AnnotationService implements Iterable<String> {
 
 	public ModernCheckTree<String> createTree(ModernCheckTreeMode mode) throws IOException {
 		ModernCheckTree<String> tree = new ModernCheckTree<String>(mode);
-
 
 		Deque<Path> stack = new ArrayDeque<Path>();
 		stack.push(RES_DIR);

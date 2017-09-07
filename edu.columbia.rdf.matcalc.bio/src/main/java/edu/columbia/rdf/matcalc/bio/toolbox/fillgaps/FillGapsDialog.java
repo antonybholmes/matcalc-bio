@@ -97,7 +97,7 @@ public class FillGapsDialog extends ModernDialogTaskWindow {
 
 		setResizable(true);
 
-		setSize(720, 480);
+		setSize(720, 520);
 
 		UI.centerWindowToScreen(this);
 	}
@@ -148,7 +148,7 @@ public class FillGapsDialog extends ModernDialogTaskWindow {
 		
 		//content.setBorder(BorderService.getInstance().createBorder(10));
 		
-		setContent(content);
+		setDialogCardContent(content);
 	}
 	
 	private void loadSamples() throws IOException, InvalidFormatException {

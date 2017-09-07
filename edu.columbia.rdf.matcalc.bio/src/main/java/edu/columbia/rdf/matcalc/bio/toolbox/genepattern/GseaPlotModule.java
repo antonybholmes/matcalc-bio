@@ -48,15 +48,15 @@ import org.jebtk.core.text.Formatter;
 import org.jebtk.core.text.TextUtils;
 import org.jebtk.graphplot.PlotFactory;
 import org.jebtk.graphplot.figure.Axes;
-import org.jebtk.graphplot.figure.Axes2D;
+import org.jebtk.graphplot.figure.Axes;
 import org.jebtk.graphplot.figure.Axis;
 import org.jebtk.graphplot.figure.Figure;
-import org.jebtk.graphplot.figure.FigureLayoutGrid;
 import org.jebtk.graphplot.figure.LabelPlotLayer;
 import org.jebtk.graphplot.figure.Plot;
 import org.jebtk.graphplot.figure.RightLabelPlotLayer;
 import org.jebtk.graphplot.figure.SubFigure;
 import org.jebtk.graphplot.figure.series.XYSeries;
+import org.jebtk.graphplot.plotbox.PlotBoxRowLayout;
 import org.jebtk.math.Linspace;
 import org.jebtk.math.matrix.AnnotatableMatrix;
 import org.jebtk.math.matrix.AnnotationMatrix;
@@ -92,6 +92,8 @@ public class GseaPlotModule extends CalcModule implements ModernClickListener {
 	
 	private static final Color GREEN_COLOR =  
 			ColorUtils.decodeHtmlColor("#00aa44");
+
+	private static final int DEFAULT_WIDTH = 1000;
 	
 	/**
 	 * The member parent.
@@ -291,7 +293,7 @@ public class GseaPlotModule extends CalcModule implements ModernClickListener {
 			
 			double es = esMap.get(name);
 			
-			Figure figure = new Figure(new FigureLayoutGrid(3, 1));
+			Figure figure = new Figure("GSEA Figure", new PlotBoxRowLayout());
 			
 			SubFigure subFigure = figure.newSubFigure();
 			
@@ -494,24 +496,24 @@ public class GseaPlotModule extends CalcModule implements ModernClickListener {
 			
 			
 			axes.setY1AxisLimitAutoRound();
-			axes.setInternalPlotSize(Axes2D.DEFAULT_WIDTH, 500);
+			axes.setInternalSize(DEFAULT_WIDTH, 500);
 			axes.setMargins(100);
 			
-			Plot plot = axes.createNewPlot();
-			plot.getPlotLayers().putZ(new LabelPlotLayer(p1, 0, 0, 10, -10));
-			plot.getPlotLayers().putZ(new RightLabelPlotLayer(p2, allRankedGenes.getRowCount(), 0, -10, -10));
+			Plot plot = axes.newPlot();
+			plot.putZ(new LabelPlotLayer(p1, 0, 0, 10, -10));
+			plot.putZ(new RightLabelPlotLayer(p2, allRankedGenes.getRowCount(), 0, -10, -10));
 
 			
-			plot.getPlotLayers().putZ(new LabelPlotLayer("Size:", allRankedGenes.getRowCount(), 0, -200, -120));
-			plot.getPlotLayers().putZ(new LabelPlotLayer(Integer.toString(sizeMap.get(name)), allRankedGenes.getRowCount(), 0, -100, -120));
+			plot.putZ(new LabelPlotLayer("Size:", allRankedGenes.getRowCount(), 0, -200, -120));
+			plot.putZ(new LabelPlotLayer(Integer.toString(sizeMap.get(name)), allRankedGenes.getRowCount(), 0, -100, -120));
 			//plot.getPlotLayerZModel().setZ(new LabelPlotLayer("ES:", allRankedGenes.getRowCount(), 0, -200, -140));
 			//plot.getPlotLayerZModel().setZ(new LabelPlotLayer(TextUtils.format4DP(es), allRankedGenes.getRowCount(), 0, -100, -140));
-			plot.getPlotLayers().putZ(new LabelPlotLayer("NES:", allRankedGenes.getRowCount(), 0, -200, -100));
-			plot.getPlotLayers().putZ(new LabelPlotLayer(Formatter.number().dp(4).format(nesMap.get(name)), allRankedGenes.getRowCount(), 0, -100, -100));
+			plot.putZ(new LabelPlotLayer("NES:", allRankedGenes.getRowCount(), 0, -200, -100));
+			plot.putZ(new LabelPlotLayer(Formatter.number().dp(4).format(nesMap.get(name)), allRankedGenes.getRowCount(), 0, -100, -100));
 			//plot.getPlotLayerZModel().setZ(new LabelPlotLayer("P:", allRankedGenes.getRowCount(), 0, -200, -100));
 			//plot.getPlotLayerZModel().setZ(new LabelPlotLayer(TextUtils.format4DP(pMap.get(name)), allRankedGenes.getRowCount(), 0, -100, -100));
-			plot.getPlotLayers().putZ(new LabelPlotLayer("FDR:", allRankedGenes.getRowCount(), 0, -200, -80));
-			plot.getPlotLayers().putZ(new LabelPlotLayer(Formatter.number().dp(4).format(fdrMap.get(name)), allRankedGenes.getRowCount(), 0, -100, -80));
+			plot.putZ(new LabelPlotLayer("FDR:", allRankedGenes.getRowCount(), 0, -200, -80));
+			plot.putZ(new LabelPlotLayer(Formatter.number().dp(4).format(fdrMap.get(name)), allRankedGenes.getRowCount(), 0, -100, -80));
 			
 			// Plot the limits as if all genes are present
 			axes.getX1Axis().setLimitsAutoRound(0, allRankedGenes.getRowCount());
@@ -542,16 +544,16 @@ public class GseaPlotModule extends CalcModule implements ModernClickListener {
 			
 			//colorMap.setRange(-1, 1);
 			
-			axes.getCurrentPlot().setColorMap(colorMap);
+			axes.currentPlot().setColorMap(colorMap);
 			
 			// Set the axes ranges etc
 			
 			axes.getX1Axis().setLimitsAutoRound(0, allRankedGenes.getRowCount());
 			axes.getY1Axis().setLimitsAutoRound(0, 1);
-			axes.setInternalPlotSize(Axes2D.DEFAULT_WIDTH, 60);
+			axes.setInternalSize(DEFAULT_WIDTH, 60);
 			axes.setMargins(100);
 			axes.getX1Axis().getTitle().setText("Gene List Index");
-			Axes2D.disableAllFeatures(axes);
+			Axes.disableAllFeatures(axes);
 			
 			//
 			// All the ranked ranked genes
@@ -573,7 +575,7 @@ public class GseaPlotModule extends CalcModule implements ModernClickListener {
 			PlotFactory.createFilledTrapezoidLinePlot(allRankedGenes, axes, series);
 			
 			axes.setMargins(40, 0, 0, 0);
-			axes.setInternalPlotSize(Axes2D.DEFAULT_WIDTH, 200);
+			axes.setInternalSize(DEFAULT_WIDTH, 200);
 			axes.getX1Axis().getTitle().setText("Gene List Index");
 			axes.getY1Axis().getTitle().setText("Ranked List Metric");
 			Axis.disableAllFeatures(axes.getX1Axis());

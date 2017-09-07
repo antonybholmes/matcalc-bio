@@ -16,7 +16,6 @@
 package edu.columbia.rdf.matcalc.bio;
 
 import edu.columbia.rdf.matcalc.ModuleLoader;
-import edu.columbia.rdf.matcalc.bio.toolbox.dna.FastaIOModule;
 import edu.columbia.rdf.matcalc.bio.toolbox.external.genepattern.io.GctIOModule;
 import edu.columbia.rdf.matcalc.bio.toolbox.external.genepattern.io.ResIOModule;
 import edu.columbia.rdf.matcalc.bio.toolbox.external.ucsc.BedGraphIOModule;
@@ -30,6 +29,6 @@ public class BioModuleLoader extends ModuleLoader {
 		addModule(ResIOModule.class);
 		addModule(BedIOModule.class);
 		addModule(BedGraphIOModule.class);
-		addModule(FastaIOModule.class);
+		addModule(FastaReaderModule.class);
 	}
 }

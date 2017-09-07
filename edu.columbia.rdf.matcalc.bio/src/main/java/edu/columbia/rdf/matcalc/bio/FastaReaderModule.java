@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package edu.columbia.rdf.matcalc.bio.toolbox.dna;
+package edu.columbia.rdf.matcalc.bio;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -23,8 +23,8 @@ import java.util.List;
 
 import org.jebtk.bioinformatics.Fasta;
 import org.jebtk.bioinformatics.dna.Sequence;
+import org.jebtk.bioinformatics.genomic.GenomicRegion;
 import org.jebtk.bioinformatics.ui.filters.FastaGuiFileFilter;
-import org.jebtk.bioinformatics.ui.filters.FastaSaveGuiFileFilter;
 import org.jebtk.math.matrix.AnnotatableMatrix;
 import org.jebtk.math.matrix.AnnotationMatrix;
 import org.jebtk.modern.io.GuiFileExtFilter;
@@ -39,16 +39,12 @@ import edu.columbia.rdf.matcalc.toolbox.CalcModule;
  * @author Antony Holmes Holmes
  *
  */
-public class FastaIOModule extends CalcModule  {
+public class FastaReaderModule extends CalcModule  {
 	private static final GuiFileExtFilter OPEN_FILTER = 
 			new FastaGuiFileFilter();
 
-	private static final GuiFileExtFilter SAVE_FILTER = 
-			new FastaSaveGuiFileFilter();
-
-	public FastaIOModule() {
-		registerFileOpenType(OPEN_FILTER);
-		registerFileSaveType(SAVE_FILTER);
+	public FastaReaderModule() {
+		registerFileOpenType(OPEN_FILTER);	
 	}
 	
 	/* (non-Javadoc)
@@ -56,7 +52,7 @@ public class FastaIOModule extends CalcModule  {
 	 */
 	@Override
 	public String getName() {
-		return "FASTA IO";
+		return "Fasta Reader";
 	}
 		
 	@Override
@@ -68,52 +64,6 @@ public class FastaIOModule extends CalcModule  {
 			String delimiter) throws IOException {
 		return toMatrix(file);
 	}		
-
-	@Override
-	public boolean saveFile(final MainMatCalcWindow window,
-			final Path file, 
-			final AnnotationMatrix m) throws IOException {
-		
-		List<Sequence> sequences = toSequences(window, m);
-		
-		if (sequences.size() == 0) {
-			return false;
-		}
-		
-		Fasta.write(file, sequences);
-		
-		return true;
-	}
-	
-	public static List<Sequence> toSequences(final MainMatCalcWindow window,
-			final AnnotationMatrix m) {
-		
-		int c1 = AnnotationMatrix.findColumn(m, "Name");
-		
-		if (c1 == -1) {
-			c1 = AnnotationMatrix.findColumn(m, "DNA Location");
-		}
-		
-		if (c1 == -1) {
-			c1 = AnnotationMatrix.findColumn(m, "Location");
-		}
-		
-		int c2 = AnnotationMatrix.findColumn(m, "DNA Sequence");
-		
-		if (c2 == -2) {
-			return Collections.emptyList();
-		}
-		
-		List<Sequence> sequences = new ArrayList<Sequence>(m.getRowCount());
-		
-		for (int i = 0; i < m.getRowCount(); ++i) {
-			String name = c1 != -1 ? m.getText(i, c1) : "Sequence " + (i + 1);
-			
-			sequences.add(Sequence.create(name, m.getText(i, c2)));
-		}
-
-		return sequences;
-	}
 	
 	public static AnnotationMatrix toMatrix(Path file) throws IOException {
 		return toMatrix(Fasta.parse(file));
@@ -122,18 +72,30 @@ public class FastaIOModule extends CalcModule  {
 	public static AnnotationMatrix toMatrix(List<Sequence> sequences) {
 		
 		AnnotationMatrix ret = AnnotatableMatrix
-				.createAnnotatableMixedMatrix(sequences.size(), 2);
+				.createAnnotatableMixedMatrix(sequences.size(), 3);
+		
+		GenomicRegion.parse(sequences.get(0).getName());
 		
 		ret.setColumnName(0, "Name");
-		ret.setColumnName(1, "DNA Sequence");
-		
-		System.err.println("seqences " + sequences.size());
+		ret.setColumnName(1, "Location");
+		ret.setColumnName(2, "DNA Sequence");
 		
 		for (int i = 0; i < sequences.size(); ++i) {
 			Sequence s = sequences.get(i);
 			
-			ret.set(i, 0, s.getName());
-			ret.set(i, 1, s.toString());
+			String name = s.getName();
+			
+			ret.set(i, 0, name);
+			
+			GenomicRegion r = GenomicRegion.parse(name);
+			
+			if (r != null) {
+				ret.set(i, 1, r.getLocation());
+			} else {
+				ret.set(i, 1, name);
+			}
+			
+			ret.set(i, 2, s.toString());
 		}
 		
 		return ret;
