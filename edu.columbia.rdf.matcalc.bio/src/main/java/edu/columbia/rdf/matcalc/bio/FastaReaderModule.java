@@ -17,8 +17,7 @@ package edu.columbia.rdf.matcalc.bio;
 
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Collection;
 import java.util.List;
 
 import org.jebtk.bioinformatics.Fasta;
@@ -58,10 +57,10 @@ public class FastaReaderModule extends CalcModule  {
 	@Override
 	public AnnotationMatrix autoOpenFile(final MainMatCalcWindow window,
 			final Path file,
-			boolean hasHeader,
-			List<String> skipMatches,
+			int headers,
 			int rowAnnotations,
-			String delimiter) throws IOException {
+			String delimiter,
+			Collection<String> skipLines) throws IOException {
 		return toMatrix(file);
 	}		
 	

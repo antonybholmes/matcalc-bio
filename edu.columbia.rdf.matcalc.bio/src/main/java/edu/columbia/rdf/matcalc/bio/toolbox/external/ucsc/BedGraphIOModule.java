@@ -17,7 +17,7 @@ package edu.columbia.rdf.matcalc.bio.toolbox.external.ucsc;
 
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.List;
+import java.util.Collection;
 
 import org.jebtk.bioinformatics.ext.ucsc.BedGraph;
 import org.jebtk.bioinformatics.ui.external.ucsc.BedGraphGuiFileFilter;
@@ -53,10 +53,10 @@ public class BedGraphIOModule extends CalcModule  {
 	@Override
 	public AnnotationMatrix autoOpenFile(final MainMatCalcWindow window,
 			final Path file,
-			boolean hasHeader, 
-			List<String> skipMatches,
+			int headers,
 			int rowAnnotations,
-			String delimiter) throws IOException {
+			String delimiter,
+			Collection<String> skipLines) throws IOException {
 		return BedGraph.toMatrix(file);
 	}
 }

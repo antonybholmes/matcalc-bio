@@ -500,20 +500,20 @@ public class GseaPlotModule extends CalcModule implements ModernClickListener {
 			axes.setMargins(100);
 			
 			Plot plot = axes.newPlot();
-			plot.putZ(new LabelPlotLayer(p1, 0, 0, 10, -10));
-			plot.putZ(new RightLabelPlotLayer(p2, allRankedGenes.getRowCount(), 0, -10, -10));
+			plot.addChild(new LabelPlotLayer(p1, 0, 0, 10, -10));
+			plot.addChild(new RightLabelPlotLayer(p2, allRankedGenes.getRowCount(), 0, -10, -10));
 
 			
-			plot.putZ(new LabelPlotLayer("Size:", allRankedGenes.getRowCount(), 0, -200, -120));
-			plot.putZ(new LabelPlotLayer(Integer.toString(sizeMap.get(name)), allRankedGenes.getRowCount(), 0, -100, -120));
+			plot.addChild(new LabelPlotLayer("Size:", allRankedGenes.getRowCount(), 0, -200, -120));
+			plot.addChild(new LabelPlotLayer(Integer.toString(sizeMap.get(name)), allRankedGenes.getRowCount(), 0, -100, -120));
 			//plot.getPlotLayerZModel().setZ(new LabelPlotLayer("ES:", allRankedGenes.getRowCount(), 0, -200, -140));
 			//plot.getPlotLayerZModel().setZ(new LabelPlotLayer(TextUtils.format4DP(es), allRankedGenes.getRowCount(), 0, -100, -140));
-			plot.putZ(new LabelPlotLayer("NES:", allRankedGenes.getRowCount(), 0, -200, -100));
-			plot.putZ(new LabelPlotLayer(Formatter.number().dp(4).format(nesMap.get(name)), allRankedGenes.getRowCount(), 0, -100, -100));
+			plot.addChild(new LabelPlotLayer("NES:", allRankedGenes.getRowCount(), 0, -200, -100));
+			plot.addChild(new LabelPlotLayer(Formatter.number().dp(4).format(nesMap.get(name)), allRankedGenes.getRowCount(), 0, -100, -100));
 			//plot.getPlotLayerZModel().setZ(new LabelPlotLayer("P:", allRankedGenes.getRowCount(), 0, -200, -100));
 			//plot.getPlotLayerZModel().setZ(new LabelPlotLayer(TextUtils.format4DP(pMap.get(name)), allRankedGenes.getRowCount(), 0, -100, -100));
-			plot.putZ(new LabelPlotLayer("FDR:", allRankedGenes.getRowCount(), 0, -200, -80));
-			plot.putZ(new LabelPlotLayer(Formatter.number().dp(4).format(fdrMap.get(name)), allRankedGenes.getRowCount(), 0, -100, -80));
+			plot.addChild(new LabelPlotLayer("FDR:", allRankedGenes.getRowCount(), 0, -200, -80));
+			plot.addChild(new LabelPlotLayer(Formatter.number().dp(4).format(fdrMap.get(name)), allRankedGenes.getRowCount(), 0, -100, -80));
 			
 			// Plot the limits as if all genes are present
 			axes.getX1Axis().setLimitsAutoRound(0, allRankedGenes.getRowCount());

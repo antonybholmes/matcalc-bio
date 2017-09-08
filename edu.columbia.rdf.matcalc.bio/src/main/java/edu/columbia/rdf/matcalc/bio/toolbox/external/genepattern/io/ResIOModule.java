@@ -17,7 +17,7 @@ package edu.columbia.rdf.matcalc.bio.toolbox.external.genepattern.io;
 
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.List;
+import java.util.Collection;
 
 import org.jebtk.bioinformatics.ext.genepattern.ResMatrix;
 import org.jebtk.bioinformatics.ui.filters.ResGuiFileFilter;
@@ -55,10 +55,10 @@ public class ResIOModule extends CalcModule  {
 	@Override
 	public AnnotationMatrix autoOpenFile(final MainMatCalcWindow window,
 			final Path file,
-			boolean hasHeader,
-			List<String> skipMatches,
+			int headers,
 			int rowAnnotations,
-			String delimiter) throws IOException {
+			String delimiter,
+			Collection<String> skipLines) throws IOException {
 		
 		ResDialog dialog = new ResDialog(window);
 		
