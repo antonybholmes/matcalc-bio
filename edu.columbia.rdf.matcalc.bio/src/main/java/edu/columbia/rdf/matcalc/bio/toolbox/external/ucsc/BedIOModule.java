@@ -19,7 +19,6 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Collection;
-import java.util.List;
 
 import org.jebtk.bioinformatics.ext.ucsc.Bed;
 import org.jebtk.bioinformatics.genomic.Chromosome;
@@ -32,6 +31,7 @@ import org.jebtk.core.text.TextUtils;
 import org.jebtk.math.matrix.AnnotationMatrix;
 import org.jebtk.modern.io.GuiFileExtFilter;
 
+import edu.columbia.rdf.matcalc.FileType;
 import edu.columbia.rdf.matcalc.MainMatCalcWindow;
 import edu.columbia.rdf.matcalc.toolbox.CalcModule;
 
@@ -62,6 +62,7 @@ public class BedIOModule extends CalcModule  {
 	@Override
 	public AnnotationMatrix autoOpenFile(final MainMatCalcWindow window,
 			final Path file,
+			FileType type,
 			int headers,
 			int rowAnnotations,
 			String delimiter,

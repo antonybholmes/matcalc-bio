@@ -28,6 +28,7 @@ import org.jebtk.math.matrix.AnnotatableMatrix;
 import org.jebtk.math.matrix.AnnotationMatrix;
 import org.jebtk.modern.io.GuiFileExtFilter;
 
+import edu.columbia.rdf.matcalc.FileType;
 import edu.columbia.rdf.matcalc.MainMatCalcWindow;
 import edu.columbia.rdf.matcalc.toolbox.CalcModule;
 
@@ -57,6 +58,7 @@ public class FastaReaderModule extends CalcModule  {
 	@Override
 	public AnnotationMatrix autoOpenFile(final MainMatCalcWindow window,
 			final Path file,
+			FileType type,
 			int headers,
 			int rowAnnotations,
 			String delimiter,
