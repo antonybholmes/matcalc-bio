@@ -3,7 +3,7 @@ package edu.columbia.rdf.matcalc.bio.toolbox.probes;
 import java.io.IOException;
 import java.text.ParseException;
 
-import org.jebtk.math.matrix.AnnotationMatrix;
+import org.jebtk.math.matrix.DataFrame;
 import org.jebtk.math.matrix.MatrixGroup;
 import org.jebtk.math.matrix.utils.MatrixOperations;
 import org.jebtk.modern.UIService;
@@ -49,7 +49,7 @@ public class CollapseModule extends CalcModule implements ModernClickListener {
 	}
 	
 	private void collapse() throws IOException, ParseException {
-		AnnotationMatrix m = mWindow.getCurrentMatrix();
+		DataFrame m = mWindow.getCurrentMatrix();
 
 		CollapseDialog dialog = 
 				new CollapseDialog(mWindow, m, mWindow.getGroups());
@@ -66,7 +66,7 @@ public class CollapseModule extends CalcModule implements ModernClickListener {
 		String collapseName = dialog.getCollapseName();
 		CollapseType collapseType = dialog.getCollapseType();
 
-		AnnotationMatrix c = null;
+		DataFrame c = null;
 
 		switch (collapseType) {
 		case MAX:

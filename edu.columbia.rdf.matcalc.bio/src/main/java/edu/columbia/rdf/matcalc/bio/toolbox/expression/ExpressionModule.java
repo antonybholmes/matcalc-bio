@@ -27,7 +27,7 @@
  */
 package edu.columbia.rdf.matcalc.bio.toolbox.expression;
 
-import org.jebtk.math.matrix.AnnotationMatrix;
+import org.jebtk.math.matrix.DataFrame;
 import org.jebtk.math.ui.matrix.MatrixTransforms;
 import org.jebtk.modern.button.ModernButtonWidget;
 import org.jebtk.modern.event.ModernClickEvent;
@@ -129,7 +129,7 @@ public class ExpressionModule extends CalcModule implements ModernClickListener 
 	 */
 	@Override
 	public final void clicked(ModernClickEvent e) {
-		AnnotationMatrix m = mWindow.getCurrentMatrix();
+		DataFrame m = mWindow.getCurrentMatrix();
 		
 		if (e.getMessage().equals("STDEV")) {
 			mWindow.addToHistory("STDEV Filter", MatrixTransforms.stdDevFilter(mWindow, m, 1.5));

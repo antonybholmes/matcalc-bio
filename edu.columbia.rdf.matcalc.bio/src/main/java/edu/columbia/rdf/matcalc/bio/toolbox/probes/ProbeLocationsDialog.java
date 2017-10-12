@@ -1,6 +1,6 @@
 package edu.columbia.rdf.matcalc.bio.toolbox.probes;
 
-import org.jebtk.math.matrix.AnnotationMatrix;
+import org.jebtk.math.matrix.DataFrame;
 import org.jebtk.modern.UI;
 import org.jebtk.modern.combobox.ModernComboBox;
 import org.jebtk.modern.dialog.ModernDialogTaskWindow;
@@ -14,14 +14,14 @@ import edu.columbia.rdf.matcalc.MatrixRowAnnotationCombo;
 public class ProbeLocationsDialog extends ModernDialogTaskWindow {
 	private static final long serialVersionUID = 1L;
 	
-	private AnnotationMatrix mMatrix;
+	private DataFrame mMatrix;
 
 	private MatrixRowAnnotationCombo mHeaderCombo;
 
 	private ModernComboBox mAnnotationCombo;
 
 
-	public ProbeLocationsDialog(ModernWindow parent, AnnotationMatrix matrix) {
+	public ProbeLocationsDialog(ModernWindow parent, DataFrame matrix) {
 		super(parent);
 		
 		setTitle("Probe Locations");

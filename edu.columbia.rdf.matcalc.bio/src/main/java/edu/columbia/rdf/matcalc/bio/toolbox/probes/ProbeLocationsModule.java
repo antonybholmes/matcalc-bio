@@ -12,8 +12,8 @@ import java.util.Map;
 import org.jebtk.core.io.FileUtils;
 import org.jebtk.core.io.PathUtils;
 import org.jebtk.core.text.TextUtils;
-import org.jebtk.math.matrix.AnnotatableMatrix;
-import org.jebtk.math.matrix.AnnotationMatrix;
+import org.jebtk.math.matrix.DataFrame;
+import org.jebtk.math.matrix.DataFrame;
 import org.jebtk.modern.UIService;
 import org.jebtk.modern.dialog.ModernDialogStatus;
 import org.jebtk.modern.event.ModernClickEvent;
@@ -57,7 +57,7 @@ public class ProbeLocationsModule extends CalcModule implements ModernClickListe
 	}
 	
 	private void addLocations() throws IOException, ParseException {
-		AnnotationMatrix m = mWindow.getCurrentMatrix();
+		DataFrame m = mWindow.getCurrentMatrix();
 
 		ProbeLocationsDialog dialog = 
 				new ProbeLocationsDialog(mWindow, m);
@@ -107,7 +107,7 @@ public class ProbeLocationsModule extends CalcModule implements ModernClickListe
 		
 		locMap.clear();
 		
-		AnnotationMatrix ml = new AnnotatableMatrix(m);
+		DataFrame ml = new DataFrame(m);
 		ml.setTextRowAnnotations("Probe Location (hg19)", locs);
 		
 		mWindow.addToHistory("Probe Locations", ml);

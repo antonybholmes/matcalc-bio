@@ -49,8 +49,8 @@ import org.jebtk.bioinformatics.genomic.GenomicRegion;
 import org.jebtk.bioinformatics.genomic.GenomicRegions;
 import org.jebtk.core.io.FileUtils;
 import org.jebtk.core.io.PathUtils;
-import org.jebtk.math.matrix.AnnotatableMatrix;
-import org.jebtk.math.matrix.AnnotationMatrix;
+import org.jebtk.math.matrix.DataFrame;
+import org.jebtk.math.matrix.DataFrame;
 import org.jebtk.modern.UIService;
 import org.jebtk.modern.button.ModernButton;
 import org.jebtk.modern.dialog.MessageDialogType;
@@ -194,7 +194,7 @@ public class FillGapsModule extends CalcModule implements ModernClickListener  {
 	 * @throws Exception 
 	 */
 	private void annotate() throws Exception {
-		AnnotationMatrix m = mWindow.getCurrentMatrix();
+		DataFrame m = mWindow.getCurrentMatrix();
 
 		if (m == null) {
 			showLoadMatrixError(mWindow);
@@ -542,7 +542,7 @@ public class FillGapsModule extends CalcModule implements ModernClickListener  {
 		segments.get(segment.name).get(segment.chr).add(segment);
 	}
 
-	private static AnnotationMatrix segmentsToMatrix(Map<String, Map<Chromosome, List<Segment>>> segments) {
+	private static DataFrame segmentsToMatrix(Map<String, Map<Chromosome, List<Segment>>> segments) {
 
 		int n = 0;
 
@@ -552,7 +552,7 @@ public class FillGapsModule extends CalcModule implements ModernClickListener  {
 			}
 		}
 
-		AnnotationMatrix ret = AnnotatableMatrix.createAnnotatableMatrix(n, 6);
+		DataFrame ret = DataFrame.createDataFrame(n, 6);
 
 		ret.setColumnName(0, "segment");
 		ret.setColumnName(1, "chromosome");

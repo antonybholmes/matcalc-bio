@@ -34,7 +34,7 @@ import org.apache.batik.transcoder.TranscoderException;
 import org.jebtk.bioinformatics.ui.external.genepattern.ClsGuiFileFilter;
 import org.jebtk.core.io.FileUtils;
 import org.jebtk.graphplot.figure.series.XYSeriesGroup;
-import org.jebtk.math.matrix.AnnotationMatrix;
+import org.jebtk.math.matrix.DataFrame;
 import org.jebtk.modern.UIService;
 import org.jebtk.modern.dialog.MessageDialogType;
 import org.jebtk.modern.dialog.ModernDialogStatus;
@@ -117,7 +117,7 @@ public class ClsModule extends CalcModule implements ModernClickListener {
 	 * @throws TranscoderException the transcoder exception
 	 */
 	private void export(Path pwd) throws IOException {
-		AnnotationMatrix m = mParent.getCurrentMatrix();
+		DataFrame m = mParent.getCurrentMatrix();
 
 		if (m == null) {
 			showLoadMatrixError(mParent);
@@ -136,7 +136,7 @@ public class ClsModule extends CalcModule implements ModernClickListener {
 		}
 	}
 	
-	private boolean save(Path file, AnnotationMatrix m) throws IOException {
+	private boolean save(Path file, DataFrame m) throws IOException {
 		if (file == null) {
 			return false;
 		}
@@ -175,7 +175,7 @@ public class ClsModule extends CalcModule implements ModernClickListener {
 	@Override
 	public boolean saveFile(final MainMatCalcWindow window,
 			final Path file, 
-			final AnnotationMatrix m) throws IOException {
+			final DataFrame m) throws IOException {
 		return save(file, m);
 	}
 }

@@ -58,8 +58,8 @@ import org.jebtk.graphplot.figure.SubFigure;
 import org.jebtk.graphplot.figure.series.XYSeries;
 import org.jebtk.graphplot.plotbox.PlotBoxRowLayout;
 import org.jebtk.math.Linspace;
-import org.jebtk.math.matrix.AnnotatableMatrix;
-import org.jebtk.math.matrix.AnnotationMatrix;
+import org.jebtk.math.matrix.DataFrame;
+import org.jebtk.math.matrix.DataFrame;
 import org.jebtk.math.matrix.Matrix;
 import org.jebtk.modern.UIService;
 import org.jebtk.modern.event.ModernClickEvent;
@@ -232,8 +232,8 @@ public class GseaPlotModule extends CalcModule implements ModernClickListener {
 		// Find where the crossing point is in the full list of ranked genes
 		//
 		
-		AnnotationMatrix allRankedGenes = 
-				AnnotatableMatrix.copyInnerColumns(AnnotationMatrix.parseTxtMatrix(rankedListFile, 
+		DataFrame allRankedGenes = 
+				DataFrame.copyInnerColumns(DataFrame.parseTxtMatrix(rankedListFile, 
 						true,
 						TextUtils.emptyList(),
 						0,
@@ -301,7 +301,7 @@ public class GseaPlotModule extends CalcModule implements ModernClickListener {
 			
 			// Select the xy columns of interest
 			
-			AnnotationMatrix m = AnnotatableMatrix.copyInnerColumns(AnnotationMatrix.parseTxtMatrix(plotFile, 
+			DataFrame m = DataFrame.copyInnerColumns(DataFrame.parseTxtMatrix(plotFile, 
 							true,
 							TextUtils.emptyList(),
 							0,
@@ -345,16 +345,16 @@ public class GseaPlotModule extends CalcModule implements ModernClickListener {
 			// Ranking
 			//
 			
-			AnnotationMatrix rankedM = 
-					AnnotatableMatrix.createNumericalMatrix(m.getRowCount(), 3);
+			DataFrame rankedM = 
+					DataFrame.createNumericalMatrix(m.getRowCount(), 3);
 			
 			rankedM.setColumnName(0, "Ranked x");
 			rankedM.setColumnName(1, "Ranked y");
 			rankedM.setColumnName(1, "Ranked z");
 			rankedM.copyColumn(m, 0, 0);
 			
-			//AnnotationMatrix.setColumn(1, 1, ranked);
-			AnnotationMatrix.setColumn(1, 0, rankedM);
+			//DataFrame.setColumn(1, 1, ranked);
+			DataFrame.setColumn(1, 0, rankedM);
 			
 			// Create the z
 			rankedM.copyColumn(m, 0, 2);
@@ -368,8 +368,8 @@ public class GseaPlotModule extends CalcModule implements ModernClickListener {
 			
 			// We add two extra points to ensure the plot starts and ends
 			// at zero
-			AnnotationMatrix upM = 
-					AnnotatableMatrix.createNumericalMatrix(geneSetCrossingIndex + 2, 2);
+			DataFrame upM = 
+					DataFrame.createNumericalMatrix(geneSetCrossingIndex + 2, 2);
 			
 			upM.setColumnName(0, "GSEA Up x");
 			upM.setColumnName(1, "GSEA Up y");
@@ -401,8 +401,8 @@ public class GseaPlotModule extends CalcModule implements ModernClickListener {
 			PlotFactory.createFilledLinePlot(upM, axes, series);
 			
 			
-			AnnotationMatrix downM = 
-					AnnotatableMatrix.createNumericalMatrix(m.getRowCount() - geneSetCrossingIndex + 2, 2);
+			DataFrame downM = 
+					DataFrame.createNumericalMatrix(m.getRowCount() - geneSetCrossingIndex + 2, 2);
 			
 			downM.setColumnName(0, "GSEA Down x");
 			downM.setColumnName(1, "GSEA Down y");
@@ -453,8 +453,8 @@ public class GseaPlotModule extends CalcModule implements ModernClickListener {
 			
 			int ld = le - ls + 1;
 			
-			AnnotationMatrix leadingM = 
-					AnnotatableMatrix.createAnnotatableMatrix(ld + 1, 2);
+			DataFrame leadingM = 
+					DataFrame.createDataFrame(ld + 1, 2);
 			
 			leadingM.setColumnName(0, "Leading x");
 			leadingM.setColumnName(1, "Leading y");

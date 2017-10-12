@@ -40,7 +40,7 @@ import org.jebtk.core.collections.UniqueArrayList;
 import org.jebtk.core.io.PathUtils;
 import org.jebtk.graphplot.figure.series.XYSeries;
 import org.jebtk.graphplot.figure.series.XYSeriesGroup;
-import org.jebtk.math.matrix.AnnotationMatrix;
+import org.jebtk.math.matrix.DataFrame;
 import org.jebtk.modern.UIService;
 import org.jebtk.modern.dialog.MessageDialogType;
 import org.jebtk.modern.dialog.ModernDialogStatus;
@@ -121,7 +121,7 @@ public class PermuteClsModule extends CalcModule implements ModernClickListener 
 	 * @throws TranscoderException the transcoder exception
 	 */
 	private void export(Path pwd) throws IOException, ParseException {
-		AnnotationMatrix m = mParent.getCurrentMatrix();
+		DataFrame m = mParent.getCurrentMatrix();
 
 		if (m == null) {
 			showLoadMatrixError(mParent);
@@ -162,7 +162,7 @@ public class PermuteClsModule extends CalcModule implements ModernClickListener 
 
 		String prefix = dialog.getPrefix();
 
-		AnnotationMatrix matrix = mParent.getCurrentMatrix();
+		DataFrame matrix = mParent.getCurrentMatrix();
 
 		groups = mParent.getGroups();
 

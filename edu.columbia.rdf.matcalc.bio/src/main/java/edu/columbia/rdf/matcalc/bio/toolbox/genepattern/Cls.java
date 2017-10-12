@@ -38,7 +38,7 @@ import org.jebtk.core.collections.UniqueArrayList;
 import org.jebtk.core.io.FileUtils;
 import org.jebtk.core.text.TextUtils;
 import org.jebtk.graphplot.figure.series.XYSeries;
-import org.jebtk.math.matrix.AnnotationMatrix;
+import org.jebtk.math.matrix.DataFrame;
 
 /**
  * The class Cls.
@@ -60,7 +60,7 @@ public class Cls {
 	 */
 	public static void write(Path file, 
 			List<XYSeries> mGroups, 
-			AnnotationMatrix matrix) throws IOException {
+			DataFrame matrix) throws IOException {
 		// First allocate everyone to the undefined group
 		
 		Map<String, String> groupMap = new HashMap<String, String>();
@@ -91,7 +91,7 @@ public class Cls {
 	public static void write(Path file, 
 			List<String> names,
 			Map<String, String> groupMap,
-			AnnotationMatrix matrix) throws IOException {
+			DataFrame matrix) throws IOException {
 		BufferedWriter writer = FileUtils.newBufferedWriter(file);
 		
 		try {

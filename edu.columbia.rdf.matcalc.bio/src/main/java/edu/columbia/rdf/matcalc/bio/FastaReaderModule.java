@@ -24,8 +24,8 @@ import org.jebtk.bioinformatics.Fasta;
 import org.jebtk.bioinformatics.dna.Sequence;
 import org.jebtk.bioinformatics.genomic.GenomicRegion;
 import org.jebtk.bioinformatics.ui.filters.FastaGuiFileFilter;
-import org.jebtk.math.matrix.AnnotatableMatrix;
-import org.jebtk.math.matrix.AnnotationMatrix;
+import org.jebtk.math.matrix.DataFrame;
+import org.jebtk.math.matrix.DataFrame;
 import org.jebtk.modern.io.GuiFileExtFilter;
 
 import edu.columbia.rdf.matcalc.FileType;
@@ -56,7 +56,7 @@ public class FastaReaderModule extends CalcModule  {
 	}
 		
 	@Override
-	public AnnotationMatrix autoOpenFile(final MainMatCalcWindow window,
+	public DataFrame autoOpenFile(final MainMatCalcWindow window,
 			final Path file,
 			FileType type,
 			int headers,
@@ -66,14 +66,14 @@ public class FastaReaderModule extends CalcModule  {
 		return toMatrix(file);
 	}		
 	
-	public static AnnotationMatrix toMatrix(Path file) throws IOException {
+	public static DataFrame toMatrix(Path file) throws IOException {
 		return toMatrix(Fasta.parse(file));
 	}
 	
-	public static AnnotationMatrix toMatrix(List<Sequence> sequences) {
+	public static DataFrame toMatrix(List<Sequence> sequences) {
 		
-		AnnotationMatrix ret = AnnotatableMatrix
-				.createAnnotatableMixedMatrix(sequences.size(), 3);
+		DataFrame ret = DataFrame
+				.createMixedMatrix(sequences.size(), 3);
 		
 		GenomicRegion.parse(sequences.get(0).getName());
 		

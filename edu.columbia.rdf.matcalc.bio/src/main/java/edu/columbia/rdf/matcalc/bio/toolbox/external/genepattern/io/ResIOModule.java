@@ -21,7 +21,7 @@ import java.util.Collection;
 
 import org.jebtk.bioinformatics.ext.genepattern.ResMatrix;
 import org.jebtk.bioinformatics.ui.filters.ResGuiFileFilter;
-import org.jebtk.math.matrix.AnnotationMatrix;
+import org.jebtk.math.matrix.DataFrame;
 import org.jebtk.modern.dialog.ModernDialogStatus;
 import org.jebtk.modern.io.GuiFileExtFilter;
 
@@ -54,7 +54,7 @@ public class ResIOModule extends CalcModule  {
 			
 
 	@Override
-	public AnnotationMatrix autoOpenFile(final MainMatCalcWindow window,
+	public DataFrame autoOpenFile(final MainMatCalcWindow window,
 			final Path file,
 			FileType type,
 			int headers,
@@ -76,7 +76,7 @@ public class ResIOModule extends CalcModule  {
 	@Override
 	public boolean saveFile(final MainMatCalcWindow window,
 			final Path file, 
-			final AnnotationMatrix m) throws IOException {
+			final DataFrame m) throws IOException {
 		ResMatrix.writeResMatrix(m, file);
 		
 		return true;

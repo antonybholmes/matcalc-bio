@@ -28,7 +28,7 @@ import org.jebtk.core.io.FileUtils;
 import org.jebtk.core.io.Io;
 import org.jebtk.core.text.Join;
 import org.jebtk.core.text.TextUtils;
-import org.jebtk.math.matrix.AnnotationMatrix;
+import org.jebtk.math.matrix.DataFrame;
 import org.jebtk.modern.io.GuiFileExtFilter;
 
 import edu.columbia.rdf.matcalc.FileType;
@@ -60,7 +60,7 @@ public class BedIOModule extends CalcModule  {
 	}
 		
 	@Override
-	public AnnotationMatrix autoOpenFile(final MainMatCalcWindow window,
+	public DataFrame autoOpenFile(final MainMatCalcWindow window,
 			final Path file,
 			FileType type,
 			int headers,
@@ -73,7 +73,7 @@ public class BedIOModule extends CalcModule  {
 	@Override
 	public boolean saveFile(final MainMatCalcWindow window,
 			final Path file, 
-			final AnnotationMatrix m) throws IOException {
+			final DataFrame m) throws IOException {
 		BufferedWriter writer = FileUtils.newBufferedWriter(file);
 
 		try {
@@ -107,7 +107,7 @@ public class BedIOModule extends CalcModule  {
 		return true;
 	}
 	
-	public static GenomicRegion getRegion(final AnnotationMatrix m, int row) {
+	public static GenomicRegion getRegion(final DataFrame m, int row) {
 		GenomicRegion region = null;
 
 		if (Io.isEmptyLine(m.getText(row, 0))) {
@@ -129,7 +129,7 @@ public class BedIOModule extends CalcModule  {
 		return region;
 	}
 	
-	public static boolean isThreeColumnGenomicLocation(AnnotationMatrix m, int row) {
+	public static boolean isThreeColumnGenomicLocation(DataFrame m, int row) {
 		if (!GenomicRegion.isChr(m.getText(row, 0))) {
 			return false;
 		}

@@ -22,7 +22,7 @@ import org.jebtk.core.io.Io;
 import org.jebtk.core.io.PathUtils;
 import org.jebtk.core.text.TextUtils;
 import org.jebtk.math.external.microsoft.Excel;
-import org.jebtk.math.matrix.AnnotationMatrix;
+import org.jebtk.math.matrix.DataFrame;
 import org.jebtk.modern.dataview.ModernDataModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -200,7 +200,7 @@ public class Annotation implements Comparable<Annotation> {
 	
 	
 	
-	public static BinaryGapSearch<Annotation> parseRegions(AnnotationMatrix model) throws ParseException {
+	public static BinaryGapSearch<Annotation> parseRegions(DataFrame model) throws ParseException {
 		BinaryGapSearch<Annotation> gappedSearch =
 				new BinaryGapSearch<Annotation>();
 
@@ -209,7 +209,7 @@ public class Annotation implements Comparable<Annotation> {
 		return gappedSearch;
 	}
 
-	public static FixedGapSearch<Annotation> parseRegionsFixed(AnnotationMatrix model) {
+	public static FixedGapSearch<Annotation> parseRegionsFixed(DataFrame model) {
 		FixedGapSearch<Annotation> gappedSearch = 
 				new FixedGapSearch<Annotation>();
 
@@ -218,7 +218,7 @@ public class Annotation implements Comparable<Annotation> {
 		return gappedSearch;
 	}
 	
-	public static void parseRegions(AnnotationMatrix model,
+	public static void parseRegions(DataFrame model,
 			FixedGapSearch<Annotation> gappedSearch) {
 		for (int i = 0; i < model.getRowCount(); ++i) {
 			
@@ -380,7 +380,7 @@ public class Annotation implements Comparable<Annotation> {
 		}
 	}
 	
-	public static AnnotationMatrix toMatrix(Path file) throws InvalidFormatException, IOException {
+	public static DataFrame toMatrix(Path file) throws InvalidFormatException, IOException {
 		if (PathUtils.getFileExt(file).equals("bed") ||
 				PathUtils.getFileExt(file).equals("bedgraph")) {
 			return Bed.toMatrix(file);
