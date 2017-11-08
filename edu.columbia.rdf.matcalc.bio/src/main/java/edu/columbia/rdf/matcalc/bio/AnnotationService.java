@@ -45,6 +45,7 @@ import org.jebtk.core.collections.DefaultHashMapCreator;
 import org.jebtk.core.collections.DefaultTreeMap;
 import org.jebtk.core.collections.DefaultTreeSetCreator;
 import org.jebtk.core.collections.HashMapCreator;
+import org.jebtk.core.collections.IterMap;
 import org.jebtk.core.io.FileUtils;
 import org.jebtk.core.io.PathUtils;
 import org.jebtk.core.text.TextUtils;
@@ -82,11 +83,11 @@ public class AnnotationService implements Iterable<String> {
 	//private Map<String, Map<Integer, Map<Integer, FixedGapSearch<AnnotationGene>>>> mFixedGapSearchMap = 
 	//		DefaultHashMap.create(new DefaultHashMapCreator<Integer, Map<Integer, FixedGapSearch<AnnotationGene>>>(new HashMapCreator<Integer, FixedGapSearch<AnnotationGene>>()));
 
-	private Map<String, Map<Integer, Map<Integer, FixedGapSearch<AnnotationGene>>>> mSearchMap = 
-			DefaultHashMap.create(new DefaultHashMapCreator<Integer, Map<Integer, FixedGapSearch<AnnotationGene>>>(new HashMapCreator<Integer, FixedGapSearch<AnnotationGene>>()));
+	private IterMap<String, IterMap<Integer, IterMap<Integer, FixedGapSearch<AnnotationGene>>>> mSearchMap = 
+			DefaultHashMap.create(new DefaultHashMapCreator<Integer, IterMap<Integer, FixedGapSearch<AnnotationGene>>>(new HashMapCreator<Integer, FixedGapSearch<AnnotationGene>>()));
 
-	private Map<String, Map<Integer, Map<Integer, BinarySearch<AnnotationGene>>>> mBinarySearchMap = 
-			DefaultHashMap.create(new DefaultHashMapCreator<Integer, Map<Integer, BinarySearch<AnnotationGene>>>(new HashMapCreator<Integer, BinarySearch<AnnotationGene>>()));
+	private IterMap<String, IterMap<Integer, IterMap<Integer, BinarySearch<AnnotationGene>>>> mBinarySearchMap = 
+			DefaultHashMap.create(new DefaultHashMapCreator<Integer, IterMap<Integer, BinarySearch<AnnotationGene>>>(new HashMapCreator<Integer, BinarySearch<AnnotationGene>>()));
 
 	private Map<String, List<String>> mGeneIdMap =
 			new HashMap<String, List<String>>();

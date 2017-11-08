@@ -127,7 +127,7 @@ public class Annotation implements Comparable<Annotation> {
 					if (region != null) {
 						Annotation annotation = new Annotation(region.getName(), region);
 
-						annotations.addFeature(region, annotation);
+						annotations.add(region, annotation);
 						
 						++c;
 					} else {
@@ -165,7 +165,7 @@ public class Annotation implements Comparable<Annotation> {
 
 				Annotation annotation = new Annotation(region.toString(), region);
 
-				gappedSearch.addFeature(region.getChr(), region.getStart(), region.getEnd(), annotation);
+				gappedSearch.add(region, annotation);
 			}
 
 		} finally {
@@ -189,10 +189,7 @@ public class Annotation implements Comparable<Annotation> {
 			
 			Annotation annotation = new Annotation(region.toString(), region);
 
-			gappedSearch.addFeature(region.getChr(), 
-					region.getStart(), 
-					region.getEnd(), 
-					annotation);
+			gappedSearch.add(region, annotation);
 		}
 
 		return gappedSearch;
@@ -238,10 +235,7 @@ public class Annotation implements Comparable<Annotation> {
 			
 			Annotation annotation = new Annotation(region.toString(), region);
 
-			gappedSearch.addFeature(region.getChr(), 
-					region.getStart(), 
-					region.getEnd(), 
-					annotation);
+			gappedSearch.add(region, annotation);
 		}
 	}
 	
@@ -268,7 +262,7 @@ public class Annotation implements Comparable<Annotation> {
 
 				Annotation annotation = new Annotation(region.toString(), region);
 
-				gappedSearch.addFeature(region.getChr(), region.getStart(), region.getEnd(), annotation);
+				gappedSearch.add(region, annotation);
 			}
 
 		} finally {
@@ -293,10 +287,7 @@ public class Annotation implements Comparable<Annotation> {
 			
 			Annotation annotation = new Annotation(region.toString(), region);
 
-			gappedSearch.addFeature(region.getChr(), 
-					region.getStart(), 
-					region.getEnd(), 
-					annotation);
+			gappedSearch.add(region, annotation);
 		}
 
 		return gappedSearch;

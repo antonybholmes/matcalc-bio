@@ -11,11 +11,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-import org.jebtk.bioinformatics.GFF;
 import org.jebtk.bioinformatics.gapsearch.BinarySearch;
 import org.jebtk.bioinformatics.gapsearch.FixedGapSearch;
 import org.jebtk.bioinformatics.gapsearch.GapSearch;
 import org.jebtk.bioinformatics.genomic.Chromosome;
+import org.jebtk.bioinformatics.genomic.GFF3Parser;
 import org.jebtk.bioinformatics.genomic.GenomicRegion;
 import org.jebtk.bioinformatics.genomic.Strand;
 import org.jebtk.core.TextIdProperty;
@@ -369,7 +369,7 @@ public class AnnotationGene implements Comparable<AnnotationGene>, TextIdPropert
 					end += ext3p;
 				}
 
-				gappedSearch.addFeature(region.getChr(), start, end, gene);
+				gappedSearch.add(GenomicRegion.create(region.getChr(), start, end), gene);
 			}
 
 		} finally {
@@ -440,7 +440,7 @@ public class AnnotationGene implements Comparable<AnnotationGene>, TextIdPropert
 				}
 
 				Map<String, String> attributes = 
-						GFF.parseGFF3Attributes(tokens.get(8));
+						GFF3Parser.parseGFF3Attributes(tokens.get(8));
 
 				String symbol = attributes.get("gene_name");
 
@@ -505,7 +505,7 @@ public class AnnotationGene implements Comparable<AnnotationGene>, TextIdPropert
 			Map<String, String> attributes = attributeMap.get(transcript);
 
 			for (String attribute : CollectionUtils.sortKeys(attributes)) {
-				gene.addAltName(GFF.formatAttributeName(attribute), 
+				gene.addAltName(GFF3Parser.formatAttributeName(attribute), 
 						attributes.get(attribute));
 			}
 
@@ -516,7 +516,7 @@ public class AnnotationGene implements Comparable<AnnotationGene>, TextIdPropert
 				end += ext3p;
 			}
 
-			gappedSearch.addFeature(chr, start, end, gene);
+			gappedSearch.add(GenomicRegion.create(chr, start, end), gene);
 		}
 	}
 
@@ -550,10 +550,10 @@ public class AnnotationGene implements Comparable<AnnotationGene>, TextIdPropert
 
 		try {
 			Map<String, String> attributes = 
-					GFF.parseGFF3Attributes(TextUtils.tabSplit(reader.readLine()));
+					GFF3Parser.parseGFF3Attributes(TextUtils.tabSplit(reader.readLine()));
 
 			for (String attribute : CollectionUtils.sortKeys(attributes)) {
-				ret.add(GFF.formatAttributeName(attribute));
+				ret.add(GFF3Parser.formatAttributeName(attribute));
 			}
 		} finally {
 			reader.close();

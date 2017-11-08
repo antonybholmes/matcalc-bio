@@ -585,7 +585,7 @@ public class FillGapsModule extends CalcModule implements ModernClickListener  {
 		BinarySearch<X> search = new BinarySearch<X>();
 		
 		for (X region : regions) {
-			search.addFeature(region, region);
+			search.add(region, region);
 		}
 		
 		return search;

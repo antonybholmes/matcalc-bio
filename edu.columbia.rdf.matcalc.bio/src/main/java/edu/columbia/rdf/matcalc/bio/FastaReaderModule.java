@@ -25,8 +25,6 @@ import org.jebtk.bioinformatics.dna.Sequence;
 import org.jebtk.bioinformatics.genomic.GenomicRegion;
 import org.jebtk.bioinformatics.ui.filters.FastaGuiFileFilter;
 import org.jebtk.math.matrix.DataFrame;
-import org.jebtk.math.matrix.DataFrame;
-import org.jebtk.modern.io.GuiFileExtFilter;
 
 import edu.columbia.rdf.matcalc.FileType;
 import edu.columbia.rdf.matcalc.MainMatCalcWindow;
@@ -40,11 +38,8 @@ import edu.columbia.rdf.matcalc.toolbox.CalcModule;
  *
  */
 public class FastaReaderModule extends CalcModule  {
-	private static final GuiFileExtFilter OPEN_FILTER = 
-			new FastaGuiFileFilter();
-
 	public FastaReaderModule() {
-		registerFileOpenType(OPEN_FILTER);	
+		registerFileOpenType(FastaGuiFileFilter.FASTA_FILTER);	
 	}
 	
 	/* (non-Javadoc)
@@ -52,7 +47,7 @@ public class FastaReaderModule extends CalcModule  {
 	 */
 	@Override
 	public String getName() {
-		return "Fasta Reader";
+		return "FASTA";
 	}
 		
 	@Override
