@@ -95,7 +95,7 @@ public class Cls {
 		BufferedWriter writer = FileUtils.newBufferedWriter(file);
 		
 		try {
-			writer.write(Integer.toString(matrix.getColumnCount()));
+			writer.write(Integer.toString(matrix.getCols()));
 			writer.write(TextUtils.SPACE_DELIMITER);
 			writer.write(Integer.toString(names.size()));
 			writer.write(" 1");
@@ -110,10 +110,10 @@ public class Cls {
 			
 			writer.newLine();
 			
-			for (int i = 0; i < matrix.getColumnCount(); ++i) {
+			for (int i = 0; i < matrix.getCols(); ++i) {
 				writer.write(groupMap.get(matrix.getColumnName(i)));
 				
-				if (i < matrix.getColumnCount() - 1) {
+				if (i < matrix.getCols() - 1) {
 					writer.write(TextUtils.SPACE_DELIMITER);
 				}
 			}

@@ -13,7 +13,8 @@ import org.jebtk.bioinformatics.ext.ucsc.Bed;
 import org.jebtk.bioinformatics.ext.ucsc.BedRegion;
 import org.jebtk.bioinformatics.gapsearch.BinaryGapSearch;
 import org.jebtk.bioinformatics.gapsearch.FixedGapSearch;
-import org.jebtk.bioinformatics.genomic.Chromosome;
+import org.jebtk.bioinformatics.genomic.ChromosomeService;
+import org.jebtk.bioinformatics.genomic.GenomeService;
 import org.jebtk.bioinformatics.genomic.GenomicRegion;
 import org.jebtk.bioinformatics.ui.Bioinformatics;
 import org.jebtk.core.collections.CollectionUtils;
@@ -122,7 +123,7 @@ public class Annotation implements Comparable<Annotation> {
 						continue;
 					}
 
-					BedRegion region = BedRegion.parse(line);
+					BedRegion region = BedRegion.parse(GenomeService.getInstance().guess(file), line);
 
 					if (region != null) {
 						Annotation annotation = new Annotation(region.getName(), region);
@@ -217,14 +218,14 @@ public class Annotation implements Comparable<Annotation> {
 	
 	public static void parseRegions(DataFrame model,
 			FixedGapSearch<Annotation> gappedSearch) {
-		for (int i = 0; i < model.getRowCount(); ++i) {
+		for (int i = 0; i < model.getRows(); ++i) {
 			
 			GenomicRegion region = null;
 			
 			if (GenomicRegion.isGenomicRegion(model.getText(i, 0))) {
 				region = GenomicRegion.parse(model.getText(i, 0));
 			} else {
-				region = new GenomicRegion(Chromosome.parse(model.getText(i, 0)),
+				region = new GenomicRegion(ChromosomeService.getInstance().parse(model.getText(i, 0)),
 						(int)model.getValue(i, 1),
 						(int)model.getValue(i, 2));
 			}

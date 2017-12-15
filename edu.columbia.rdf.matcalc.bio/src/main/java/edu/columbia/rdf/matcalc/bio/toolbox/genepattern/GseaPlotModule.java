@@ -247,14 +247,14 @@ public class GseaPlotModule extends CalcModule implements ModernClickListener {
 		allRankedGenes.setColumnName(1, "Ranked y");
 		
 		
-		Matrix.setColumn(0, Linspace.evenlySpaced(1, allRankedGenes.getRowCount()), allRankedGenes);
+		Matrix.setColumn(0, Linspace.evenlySpaced(1, allRankedGenes.getRows()), allRankedGenes);
 		
-		System.err.println("aha " + allRankedGenes.getValue(allRankedGenes.getRowCount() - 1, 0) + " " + allRankedGenes.getValue(allRankedGenes.getRowCount() - 1, 1));
+		System.err.println("aha " + allRankedGenes.getValue(allRankedGenes.getRows() - 1, 0) + " " + allRankedGenes.getValue(allRankedGenes.getRows() - 1, 1));
 		
 		
 		int crossingIndex = -1;
 		
-		for (int i = 0; i < allRankedGenes.getRowCount(); ++i) {
+		for (int i = 0; i < allRankedGenes.getRows(); ++i) {
 			double v = allRankedGenes.getValue(i, 1);
 			
 			if (Mathematics.isInvalidNumber(v)) {
@@ -319,7 +319,7 @@ public class GseaPlotModule extends CalcModule implements ModernClickListener {
 			int geneSetCrossingIndex = -1;
 			double crossingX = -1;
 			
-			for (int i = 0; i < m.getRowCount(); ++i) {
+			for (int i = 0; i < m.getRows(); ++i) {
 				if (m.getValue(i, 1) < 0) {
 					geneSetCrossingIndex = i;
 					
@@ -346,7 +346,7 @@ public class GseaPlotModule extends CalcModule implements ModernClickListener {
 			//
 			
 			DataFrame rankedM = 
-					DataFrame.createNumericalMatrix(m.getRowCount(), 3);
+					DataFrame.createNumericalMatrix(m.getRows(), 3);
 			
 			rankedM.setColumnName(0, "Ranked x");
 			rankedM.setColumnName(1, "Ranked y");
@@ -359,10 +359,10 @@ public class GseaPlotModule extends CalcModule implements ModernClickListener {
 			// Create the z
 			rankedM.copyColumn(m, 0, 2);
 			
-			for (int i = 0; i < rankedM.getRowCount(); ++i) {
+			for (int i = 0; i < rankedM.getRows(); ++i) {
 				rankedM.set(i, 
 						2, 
-						(crossingIndex - rankedM.getValue(i, 2)) / (allRankedGenes.getRowCount() / 2));
+						(crossingIndex - rankedM.getValue(i, 2)) / (allRankedGenes.getRows() / 2));
 			}
 			
 			
@@ -377,8 +377,8 @@ public class GseaPlotModule extends CalcModule implements ModernClickListener {
 			// Set the y = 0 end points
 			upM.set(0, 0, 1);
 			upM.set(0, 1, 0);
-			upM.set(upM.getRowCount() - 1, 0, crossingX);
-			upM.set(upM.getRowCount() - 1, 1, 0);
+			upM.set(upM.getRows() - 1, 0, crossingX);
+			upM.set(upM.getRows() - 1, 1, 0);
 			
 			for (int i = 0; i < geneSetCrossingIndex; ++i) {
 				upM.set(i + 1, 0, m.get(i, 0));
@@ -402,17 +402,17 @@ public class GseaPlotModule extends CalcModule implements ModernClickListener {
 			
 			
 			DataFrame downM = 
-					DataFrame.createNumericalMatrix(m.getRowCount() - geneSetCrossingIndex + 2, 2);
+					DataFrame.createNumericalMatrix(m.getRows() - geneSetCrossingIndex + 2, 2);
 			
 			downM.setColumnName(0, "GSEA Down x");
 			downM.setColumnName(1, "GSEA Down y");
 			
 			downM.set(0, 0, crossingX);
 			downM.set(0, 1, 0);
-			downM.set(downM.getRowCount() - 1, 0, allRankedGenes.getRowCount());
-			downM.set(downM.getRowCount() - 1, 1, 0);
+			downM.set(downM.getRows() - 1, 0, allRankedGenes.getRows());
+			downM.set(downM.getRows() - 1, 1, 0);
 			
-			for (int i = 0; i < m.getRowCount() - geneSetCrossingIndex; ++i) {
+			for (int i = 0; i < m.getRows() - geneSetCrossingIndex; ++i) {
 				
 				downM.set(i + 1, 0, m.getValue(i + geneSetCrossingIndex, 0));
 				downM.set(i + 1, 1, m.getValue(i + geneSetCrossingIndex, 1));
@@ -444,7 +444,7 @@ public class GseaPlotModule extends CalcModule implements ModernClickListener {
 			int ls = Integer.MAX_VALUE;
 			int le = Integer.MIN_VALUE;
 			
-			for (int i = 0; i < m.getRowCount(); ++i) {
+			for (int i = 0; i < m.getRows(); ++i) {
 				if (m.getText(i, 2).equals("Yes")) {
 					ls = Math.min(ls, i);
 					le = Math.max(le, i);
@@ -479,8 +479,8 @@ public class GseaPlotModule extends CalcModule implements ModernClickListener {
 					leadingM.set(i, 1, m.get(ls + i, 1));
 				}
 				
-				leadingM.set(leadingM.getRowCount() - 1, 0, allRankedGenes.getRowCount());
-				leadingM.set(leadingM.getRowCount() - 1, 1, 0);
+				leadingM.set(leadingM.getRows() - 1, 0, allRankedGenes.getRows());
+				leadingM.set(leadingM.getRows() - 1, 1, 0);
 			}
 			
 			series = new XYSeries("Leading", color);
@@ -501,22 +501,22 @@ public class GseaPlotModule extends CalcModule implements ModernClickListener {
 			
 			Plot plot = axes.newPlot();
 			plot.addChild(new LabelPlotLayer(p1, 0, 0, 10, -10));
-			plot.addChild(new RightLabelPlotLayer(p2, allRankedGenes.getRowCount(), 0, -10, -10));
+			plot.addChild(new RightLabelPlotLayer(p2, allRankedGenes.getRows(), 0, -10, -10));
 
 			
-			plot.addChild(new LabelPlotLayer("Size:", allRankedGenes.getRowCount(), 0, -200, -120));
-			plot.addChild(new LabelPlotLayer(Integer.toString(sizeMap.get(name)), allRankedGenes.getRowCount(), 0, -100, -120));
+			plot.addChild(new LabelPlotLayer("Size:", allRankedGenes.getRows(), 0, -200, -120));
+			plot.addChild(new LabelPlotLayer(Integer.toString(sizeMap.get(name)), allRankedGenes.getRows(), 0, -100, -120));
 			//plot.getPlotLayerZModel().setZ(new LabelPlotLayer("ES:", allRankedGenes.getRowCount(), 0, -200, -140));
 			//plot.getPlotLayerZModel().setZ(new LabelPlotLayer(TextUtils.format4DP(es), allRankedGenes.getRowCount(), 0, -100, -140));
-			plot.addChild(new LabelPlotLayer("NES:", allRankedGenes.getRowCount(), 0, -200, -100));
-			plot.addChild(new LabelPlotLayer(Formatter.number().dp(4).format(nesMap.get(name)), allRankedGenes.getRowCount(), 0, -100, -100));
+			plot.addChild(new LabelPlotLayer("NES:", allRankedGenes.getRows(), 0, -200, -100));
+			plot.addChild(new LabelPlotLayer(Formatter.number().dp(4).format(nesMap.get(name)), allRankedGenes.getRows(), 0, -100, -100));
 			//plot.getPlotLayerZModel().setZ(new LabelPlotLayer("P:", allRankedGenes.getRowCount(), 0, -200, -100));
 			//plot.getPlotLayerZModel().setZ(new LabelPlotLayer(TextUtils.format4DP(pMap.get(name)), allRankedGenes.getRowCount(), 0, -100, -100));
-			plot.addChild(new LabelPlotLayer("FDR:", allRankedGenes.getRowCount(), 0, -200, -80));
-			plot.addChild(new LabelPlotLayer(Formatter.number().dp(4).format(fdrMap.get(name)), allRankedGenes.getRowCount(), 0, -100, -80));
+			plot.addChild(new LabelPlotLayer("FDR:", allRankedGenes.getRows(), 0, -200, -80));
+			plot.addChild(new LabelPlotLayer(Formatter.number().dp(4).format(fdrMap.get(name)), allRankedGenes.getRows(), 0, -100, -80));
 			
 			// Plot the limits as if all genes are present
-			axes.getX1Axis().setLimitsAutoRound(0, allRankedGenes.getRowCount());
+			axes.getX1Axis().setLimitsAutoRound(0, allRankedGenes.getRows());
 			axes.getX1Axis().getTitle().setText("Gene List Index");
 			axes.getY1Axis().getTitle().setText("Running Enrichment Score");
 			axes.getY1Axis().setShowZerothLine(true);
@@ -548,7 +548,7 @@ public class GseaPlotModule extends CalcModule implements ModernClickListener {
 			
 			// Set the axes ranges etc
 			
-			axes.getX1Axis().setLimitsAutoRound(0, allRankedGenes.getRowCount());
+			axes.getX1Axis().setLimitsAutoRound(0, allRankedGenes.getRows());
 			axes.getY1Axis().setLimitsAutoRound(0, 1);
 			axes.setInternalSize(DEFAULT_WIDTH, 60);
 			axes.setMargins(100);

@@ -21,7 +21,7 @@ import java.nio.file.Path;
 import java.util.Collection;
 
 import org.jebtk.bioinformatics.ext.ucsc.Bed;
-import org.jebtk.bioinformatics.genomic.Chromosome;
+import org.jebtk.bioinformatics.genomic.ChromosomeService;
 import org.jebtk.bioinformatics.genomic.GenomicRegion;
 import org.jebtk.bioinformatics.ui.external.ucsc.BedGuiFileFilter;
 import org.jebtk.core.io.FileUtils;
@@ -80,7 +80,7 @@ public class BedIOModule extends CalcModule  {
 			writer.write("track name=\"Locations\" description=\"Locations\"");
 			writer.newLine();
 
-			for (int i = 0; i < m.getRowCount(); ++i) {
+			for (int i = 0; i < m.getRows(); ++i) {
 				GenomicRegion r = getRegion(m, i);
 				
 				if (r != null) {
@@ -119,7 +119,7 @@ public class BedIOModule extends CalcModule  {
 		} else if (isThreeColumnGenomicLocation(m, row)) {
 			// three column format
 
-			region = new GenomicRegion(Chromosome.parse(m.getText(row, 0)),
+			region = new GenomicRegion(ChromosomeService.getInstance().parse(m.getText(row, 0)),
 					Integer.parseInt(m.getText(row, 1)),
 					Integer.parseInt(m.getText(row, 2)));
 		} else {

@@ -95,7 +95,7 @@ public class ProbeLocationsModule extends CalcModule implements ModernClickListe
 			reader.close();
 		}
 		
-		List<String> locs = new ArrayList<String>(m.getRowCount());
+		List<String> locs = new ArrayList<String>(m.getRows());
 
 		for (String p : m.getRowAnnotationText(dialog.getRowAnnotation())) {
 			if (locMap.containsKey(p)) {

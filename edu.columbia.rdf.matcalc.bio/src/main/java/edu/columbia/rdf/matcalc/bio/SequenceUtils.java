@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.jebtk.bioinformatics.dna.Sequence;
 import org.jebtk.bioinformatics.genomic.Chromosome;
+import org.jebtk.bioinformatics.genomic.ChromosomeService;
 import org.jebtk.bioinformatics.genomic.GenomicRegion;
 import org.jebtk.math.matrix.DataFrame;
 
@@ -22,7 +23,7 @@ public class SequenceUtils {
 		int idCol = -1;
 
 		// Find a column refering to a genomic location
-		for (int i = 0; i < m.getColumnCount(); ++i) {
+		for (int i = 0; i < m.getCols(); ++i) {
 			if (GenomicRegion.isGenomicRegion(m.getText(0, i))) {
 				dnaLocationColumn = i;
 				break;
@@ -31,7 +32,7 @@ public class SequenceUtils {
 
 		// If this is not found test whether we have chr, start and end columns
 		if (dnaLocationColumn == -1) {
-			for (int i = 0; i < m.getColumnCount(); ++i) {
+			for (int i = 0; i < m.getCols(); ++i) {
 				if (Chromosome.isChr(m.getText(0, i))) {
 					chrCol = i;
 					break;
@@ -51,7 +52,7 @@ public class SequenceUtils {
 
 		int dnaColumn = -1;
 
-		for (int i = 0; i < m.getColumnCount(); ++i) {
+		for (int i = 0; i < m.getCols(); ++i) {
 			if (isDna(m.getText(0, i))) {
 				dnaColumn = i;
 				break;
@@ -63,18 +64,18 @@ public class SequenceUtils {
 		}
 
 		List<SearchSequence> sequences = 
-				new ArrayList<SearchSequence>(m.getRowCount());
+				new ArrayList<SearchSequence>(m.getRows());
 
 		if (dnaLocationColumn != -1) {
-			for (int i = 0; i < m.getRowCount(); ++i) {
+			for (int i = 0; i < m.getRows(); ++i) {
 				GenomicRegion region = GenomicRegion.parse(m.getText(i, dnaLocationColumn));
 				String dna = m.getText(i, dnaColumn);
 				
 				sequences.add(new SearchSequence(region, Sequence.create(dna)));
 			}
 		} else if (dnaLocationColumn != -1){
-			for (int i = 0; i < m.getRowCount(); ++i) {
-				GenomicRegion region = GenomicRegion.create(Chromosome.parse(m.getText(i, chrCol)), 
+			for (int i = 0; i < m.getRows(); ++i) {
+				GenomicRegion region = GenomicRegion.create(ChromosomeService.getInstance().parse(m.getText(i, chrCol)), 
 						(int)m.getValue(i, startCol), 
 						(int)m.getValue(i, endCol));
 				
@@ -83,7 +84,7 @@ public class SequenceUtils {
 				sequences.add(new SearchSequence(region, Sequence.create(dna)));
 			}
 		} else {
-			for (int i = 0; i < m.getRowCount(); ++i) {
+			for (int i = 0; i < m.getRows(); ++i) {
 				String id = m.getText(i, idCol);
 				
 				String dna = m.getText(i, dnaColumn);

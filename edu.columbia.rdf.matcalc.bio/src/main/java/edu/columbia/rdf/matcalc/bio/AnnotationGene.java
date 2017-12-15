@@ -15,20 +15,23 @@ import org.jebtk.bioinformatics.gapsearch.BinarySearch;
 import org.jebtk.bioinformatics.gapsearch.FixedGapSearch;
 import org.jebtk.bioinformatics.gapsearch.GapSearch;
 import org.jebtk.bioinformatics.genomic.Chromosome;
+import org.jebtk.bioinformatics.genomic.ChromosomeService;
 import org.jebtk.bioinformatics.genomic.GFF3Parser;
 import org.jebtk.bioinformatics.genomic.GenomicRegion;
 import org.jebtk.bioinformatics.genomic.Strand;
 import org.jebtk.core.TextIdProperty;
-import org.jebtk.core.collections.ArrayListMultiMap;
+import org.jebtk.core.collections.ArrayListCreator;
 import org.jebtk.core.collections.CollectionUtils;
-import org.jebtk.core.collections.ListMultiMap;
+import org.jebtk.core.collections.DefaultHashMap;
+import org.jebtk.core.collections.DefaultHashMapCreator;
+import org.jebtk.core.collections.IterMap;
 import org.jebtk.core.io.FileUtils;
 import org.jebtk.core.io.Io;
 import org.jebtk.core.text.Join;
 import org.jebtk.core.text.Splitter;
 import org.jebtk.core.text.TextUtils;
 
-public class AnnotationGene implements Comparable<AnnotationGene>, TextIdProperty {
+public class AnnotationGene extends GenomicRegion implements TextIdProperty {
 	private static final int SYMBOL_COL = 0;
 	private static final int CHR_COL = 1;
 	private static final int STRAND_COL = 2;
@@ -40,7 +43,6 @@ public class AnnotationGene implements Comparable<AnnotationGene>, TextIdPropert
 	private static final int ALT_COL = 8;
 
 	private Strand mStrand;
-	private GenomicRegion mRegion;
 
 	private List<GenomicRegion> mExons = new ArrayList<GenomicRegion>();
 
@@ -62,19 +64,16 @@ public class AnnotationGene implements Comparable<AnnotationGene>, TextIdPropert
 	public AnnotationGene(String id,
 			Strand strand,
 			GenomicRegion region) {
+		super(region);
+
 		mId = id;
 		mStrand = strand;
-		mRegion = region;
 
 		if (mStrand == Strand.SENSE) {
 			mTss = new GenomicRegion(region.getChr(), region.getStart(), region.getStart());
 		} else {
 			mTss = new GenomicRegion(region.getChr(), region.getEnd(), region.getEnd());
 		}
-	}
-
-	public GenomicRegion getRegion() {
-		return mRegion;
 	}
 
 	public Strand getStrand() {
@@ -148,20 +147,6 @@ public class AnnotationGene implements Comparable<AnnotationGene>, TextIdPropert
 		}
 	}
 
-	@Override
-	public int hashCode() {
-		return mId.hashCode();
-	}
-
-	@Override
-	public int compareTo(AnnotationGene g) {
-		if (mId.equals(g.mId)) {
-			return mRegion.compareTo(g.mRegion);
-		} else {
-			return mId.compareTo(g.mId);
-		}
-	}
-
 	/**
 	 * Returns the TSS of the gene accounting for the strand.
 	 * 
@@ -170,9 +155,9 @@ public class AnnotationGene implements Comparable<AnnotationGene>, TextIdPropert
 	 */
 	public static int getTss(AnnotationGene gene) {
 		if (gene.mStrand == Strand.SENSE) {
-			return gene.mRegion.getStart();
+			return gene.getStart();
 		} else {
-			return gene.mRegion.getEnd();
+			return gene.getEnd();
 		}
 	}
 
@@ -200,9 +185,9 @@ public class AnnotationGene implements Comparable<AnnotationGene>, TextIdPropert
 	 */
 	public static int getTssMidDist(AnnotationGene gene, int mid) {
 		if (gene.mStrand == Strand.SENSE) {
-			return mid - gene.mRegion.getStart();
+			return mid - gene.getStart();
 		} else {
-			return gene.mRegion.getEnd() - mid;
+			return gene.getEnd() - mid;
 		}
 	}
 
@@ -325,7 +310,7 @@ public class AnnotationGene implements Comparable<AnnotationGene>, TextIdPropert
 
 				String symbol = tokens.get(SYMBOL_COL);	
 
-				Chromosome chr = Chromosome.parse(tokens.get(CHR_COL));
+				Chromosome chr = ChromosomeService.getInstance().parse(tokens.get(CHR_COL));
 				Strand strand = Strand.parse(tokens.get(STRAND_COL));
 
 				// UCSC convention
@@ -413,8 +398,8 @@ public class AnnotationGene implements Comparable<AnnotationGene>, TextIdPropert
 
 		Splitter splitter = Splitter.onTab();
 
-		ListMultiMap<String, GenomicRegion> exonMap =
-				ArrayListMultiMap.create();
+		IterMap<String, IterMap<Chromosome, List<GenomicRegion>>> exonMap =
+				DefaultHashMap.create(new DefaultHashMapCreator<Chromosome, List<GenomicRegion>>(new ArrayListCreator<GenomicRegion>()));
 
 		Map<String, String> symbolMap =
 				new HashMap<String, String>();
@@ -454,7 +439,7 @@ public class AnnotationGene implements Comparable<AnnotationGene>, TextIdPropert
 					continue;
 				}
 
-				Chromosome chr = Chromosome.parse(tokens.get(0));
+				Chromosome chr = ChromosomeService.getInstance().parse(tokens.get(0));
 				Strand strand = Strand.parse(tokens.get(6));
 
 				// UCSC convention
@@ -464,7 +449,7 @@ public class AnnotationGene implements Comparable<AnnotationGene>, TextIdPropert
 				GenomicRegion region = 
 						new GenomicRegion(chr, start, end, strand);
 
-				exonMap.get(transcript).add(region);
+				exonMap.get(transcript).get(chr).add(region);
 
 				symbolMap.put(transcript, symbol);
 
@@ -477,46 +462,50 @@ public class AnnotationGene implements Comparable<AnnotationGene>, TextIdPropert
 		}
 
 		for (String transcript : exonMap) {
-			int start = Integer.MAX_VALUE;
-			int end = Integer.MIN_VALUE;
+			for (Chromosome chr : exonMap.get(transcript)) {
+				int start = Integer.MAX_VALUE;
+				int end = Integer.MIN_VALUE;
 
-			for (GenomicRegion r : exonMap.get(transcript)) {
-				start = Math.min(start, r.getStart());
-				end = Math.max(end, r.getEnd());
+				List<GenomicRegion> regions = exonMap.get(transcript).get(chr);
+				
+				for (GenomicRegion r : regions) {
+					start = Math.min(start, r.getStart());
+					end = Math.max(end, r.getEnd());
+				}
+
+				GenomicRegion exon = regions.get(0);
+
+				//Chromosome chr = exon.getChr();
+
+				// Use the first exon to get the strand
+				Strand strand = exon.getStrand();
+
+				String symbol = symbolMap.get(transcript);
+
+				AnnotationGene gene = new AnnotationGene(symbol, 
+						strand, 
+						new GenomicRegion(chr, start, end));
+
+				for (GenomicRegion r : regions) {
+					gene.getExons().add(r);
+				}
+
+				Map<String, String> attributes = attributeMap.get(transcript);
+
+				for (String attribute : CollectionUtils.sortKeys(attributes)) {
+					gene.addAltName(GFF3Parser.formatAttributeName(attribute), 
+							attributes.get(attribute));
+				}
+
+				// Extend to create promotor region
+				if (Strand.isSense(strand)) {
+					start -= ext5p;
+				} else {
+					end += ext3p;
+				}
+
+				gappedSearch.add(GenomicRegion.create(chr, start, end), gene);
 			}
-
-			GenomicRegion exon = exonMap.get(transcript).get(0);
-
-			Chromosome chr = exon.getChr();
-
-			// Use the first exon to get the strand
-			Strand strand = exon.getStrand();
-
-			String symbol = symbolMap.get(transcript);
-
-			AnnotationGene gene = new AnnotationGene(symbol, 
-					strand, 
-					new GenomicRegion(chr, start, end));
-
-			for (GenomicRegion r : exonMap.get(transcript)) {
-				gene.getExons().add(r);
-			}
-
-			Map<String, String> attributes = attributeMap.get(transcript);
-
-			for (String attribute : CollectionUtils.sortKeys(attributes)) {
-				gene.addAltName(GFF3Parser.formatAttributeName(attribute), 
-						attributes.get(attribute));
-			}
-
-			// Extend to create promotor region
-			if (Strand.isSense(strand)) {
-				start -= ext5p;
-			} else {
-				end += ext3p;
-			}
-
-			gappedSearch.add(GenomicRegion.create(chr, start, end), gene);
 		}
 	}
 

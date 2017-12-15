@@ -40,6 +40,7 @@ import java.util.TreeMap;
 
 import org.jebtk.bioinformatics.gapsearch.BinarySearch;
 import org.jebtk.bioinformatics.gapsearch.FixedGapSearch;
+import org.jebtk.bioinformatics.genomic.GTB2Parser;
 import org.jebtk.core.collections.DefaultHashMap;
 import org.jebtk.core.collections.DefaultHashMapCreator;
 import org.jebtk.core.collections.DefaultTreeMap;
