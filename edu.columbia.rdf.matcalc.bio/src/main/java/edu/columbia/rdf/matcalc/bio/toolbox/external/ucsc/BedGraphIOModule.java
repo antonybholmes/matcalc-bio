@@ -28,37 +28,32 @@ import edu.columbia.rdf.matcalc.FileType;
 import edu.columbia.rdf.matcalc.MainMatCalcWindow;
 import edu.columbia.rdf.matcalc.toolbox.CalcModule;
 
-
 /**
  * Allow users to open and save Broad GCT files
  *
  * @author Antony Holmes Holmes
  *
  */
-public class BedGraphIOModule extends CalcModule  {
-	private static final GuiFileExtFilter FILTER = new BedGraphGuiFileFilter();
+public class BedGraphIOModule extends CalcModule {
+  private static final GuiFileExtFilter FILTER = new BedGraphGuiFileFilter();
 
+  public BedGraphIOModule() {
+    registerFileOpenType(FILTER);
+  }
 
-	public BedGraphIOModule() {
-		registerFileOpenType(FILTER);
-	}
-	
-	/* (non-Javadoc)
-	 * @see org.abh.lib.NameProperty#getName()
-	 */
-	@Override
-	public String getName() {
-		return "BedGraph IO";
-	}
+  /*
+   * (non-Javadoc)
+   * 
+   * @see org.abh.lib.NameProperty#getName()
+   */
+  @Override
+  public String getName() {
+    return "BedGraph IO";
+  }
 
-	@Override
-	public DataFrame autoOpenFile(final MainMatCalcWindow window,
-			final Path file,
-			FileType type,
-			int headers,
-			int rowAnnotations,
-			String delimiter,
-			Collection<String> skipLines) throws IOException {
-		return BedGraph.toMatrix(file);
-	}
+  @Override
+  public DataFrame autoOpenFile(final MainMatCalcWindow window, final Path file, FileType type, int headers,
+      int rowAnnotations, String delimiter, Collection<String> skipLines) throws IOException {
+    return BedGraph.toMatrix(file);
+  }
 }

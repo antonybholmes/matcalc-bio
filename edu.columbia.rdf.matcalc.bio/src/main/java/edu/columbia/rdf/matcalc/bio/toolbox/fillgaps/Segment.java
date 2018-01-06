@@ -33,42 +33,44 @@ import org.jebtk.bioinformatics.genomic.Chromosome;
  * The class Segment.
  */
 public class Segment implements Comparable<Segment> {
-	
-	/**
-	 * The sample.
-	 */
-	public String name;
-	
-	/**
-	 * The chromosome.
-	 */
-	public Chromosome chr;
-	
-	/**
-	 * The start.
-	 */
-	public int start;
-	
-	/**
-	 * The end.
-	 */
-	public int end;
-	
-	/**
-	 * The markers.
-	 */
-	public int markers;
-	
-	/**
-	 * The copy number mean.
-	 */
-	public double copyNumberMean;
 
-	/* (non-Javadoc)
-	 * @see java.lang.Comparable#compareTo(java.lang.Object)
-	 */
-	@Override
-	public int compareTo(Segment s) {
-		return start - s.start;
-	}
+  /**
+   * The sample.
+   */
+  public String name;
+
+  /**
+   * The chromosome.
+   */
+  public Chromosome chr;
+
+  /**
+   * The start.
+   */
+  public int start;
+
+  /**
+   * The end.
+   */
+  public int end;
+
+  /**
+   * The markers.
+   */
+  public int markers;
+
+  /**
+   * The copy number mean.
+   */
+  public double copyNumberMean;
+
+  /*
+   * (non-Javadoc)
+   * 
+   * @see java.lang.Comparable#compareTo(java.lang.Object)
+   */
+  @Override
+  public int compareTo(Segment s) {
+    return start - s.start;
+  }
 }

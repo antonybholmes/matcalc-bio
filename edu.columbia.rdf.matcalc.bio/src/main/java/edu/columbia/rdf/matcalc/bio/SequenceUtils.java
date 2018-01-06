@@ -11,105 +11,98 @@ import org.jebtk.bioinformatics.genomic.GenomicRegion;
 import org.jebtk.math.matrix.DataFrame;
 
 public class SequenceUtils {
-	private SequenceUtils() {
-		// Do nothing
-	}
-	
-	public static List<SearchSequence> matrixToSequences(DataFrame m) {
-		int dnaLocationColumn = -1;
-		int chrCol = -1;
-		int startCol = -1;
-		int endCol = -1;
-		int idCol = -1;
+  private SequenceUtils() {
+    // Do nothing
+  }
 
-		// Find a column refering to a genomic location
-		for (int i = 0; i < m.getCols(); ++i) {
-			if (GenomicRegion.isGenomicRegion(m.getText(0, i))) {
-				dnaLocationColumn = i;
-				break;
-			}
-		}
+  public static List<SearchSequence> matrixToSequences(DataFrame m) {
+    int dnaLocationColumn = -1;
+    int chrCol = -1;
+    int startCol = -1;
+    int endCol = -1;
+    int idCol = -1;
 
-		// If this is not found test whether we have chr, start and end columns
-		if (dnaLocationColumn == -1) {
-			for (int i = 0; i < m.getCols(); ++i) {
-				if (Chromosome.isChr(m.getText(0, i))) {
-					chrCol = i;
-					break;
-				}
-			}
+    // Find a column refering to a genomic location
+    for (int i = 0; i < m.getCols(); ++i) {
+      if (GenomicRegion.isGenomicRegion(m.getText(0, i))) {
+        dnaLocationColumn = i;
+        break;
+      }
+    }
 
-			if (chrCol != -1) {
-				startCol = chrCol + 1;
-				endCol = chrCol + 2;
-			}
-		}
-		
-		// Last resort pick the first column as an id
-		if (chrCol == -1) {
-			idCol = 0;
-		}
+    // If this is not found test whether we have chr, start and end columns
+    if (dnaLocationColumn == -1) {
+      for (int i = 0; i < m.getCols(); ++i) {
+        if (Chromosome.isChr(m.getText(0, i))) {
+          chrCol = i;
+          break;
+        }
+      }
 
-		int dnaColumn = -1;
+      if (chrCol != -1) {
+        startCol = chrCol + 1;
+        endCol = chrCol + 2;
+      }
+    }
 
-		for (int i = 0; i < m.getCols(); ++i) {
-			if (isDna(m.getText(0, i))) {
-				dnaColumn = i;
-				break;
-			}
-		}
+    // Last resort pick the first column as an id
+    if (chrCol == -1) {
+      idCol = 0;
+    }
 
-		if (dnaColumn == -1) {
-			return Collections.emptyList();
-		}
+    int dnaColumn = -1;
 
-		List<SearchSequence> sequences = 
-				new ArrayList<SearchSequence>(m.getRows());
+    for (int i = 0; i < m.getCols(); ++i) {
+      if (isDna(m.getText(0, i))) {
+        dnaColumn = i;
+        break;
+      }
+    }
 
-		if (dnaLocationColumn != -1) {
-			for (int i = 0; i < m.getRows(); ++i) {
-				GenomicRegion region = GenomicRegion.parse(m.getText(i, dnaLocationColumn));
-				String dna = m.getText(i, dnaColumn);
-				
-				sequences.add(new SearchSequence(region, Sequence.create(dna)));
-			}
-		} else if (dnaLocationColumn != -1){
-			for (int i = 0; i < m.getRows(); ++i) {
-				GenomicRegion region = GenomicRegion.create(ChromosomeService.getInstance().parse(m.getText(i, chrCol)), 
-						(int)m.getValue(i, startCol), 
-						(int)m.getValue(i, endCol));
-				
-				String dna = m.getText(i, dnaColumn);
-				
-				sequences.add(new SearchSequence(region, Sequence.create(dna)));
-			}
-		} else {
-			for (int i = 0; i < m.getRows(); ++i) {
-				String id = m.getText(i, idCol);
-				
-				String dna = m.getText(i, dnaColumn);
-				
-				sequences.add(new SearchSequence(id, Sequence.create(dna)));
-			}
-		}
+    if (dnaColumn == -1) {
+      return Collections.emptyList();
+    }
 
-		return sequences;
-	}
-	
+    List<SearchSequence> sequences = new ArrayList<SearchSequence>(m.getRows());
 
-	
+    if (dnaLocationColumn != -1) {
+      for (int i = 0; i < m.getRows(); ++i) {
+        GenomicRegion region = GenomicRegion.parse(m.getText(i, dnaLocationColumn));
+        String dna = m.getText(i, dnaColumn);
 
-	/**
-	 * The DNA sequence must be at least 10 bp long to be considered useful.
-	 * This is to stop short labels in columns such as 'a' from being
-	 * misinterpreted as DNA.
-	 * 
-	 * @param text
-	 * @return
-	 */
-	public static boolean isDna(String text) {
-		return Sequence.DNA_REGEX.matcher(text).matches() && text.length() > 5;
-	}
+        sequences.add(new SearchSequence(region, Sequence.create(dna)));
+      }
+    } else if (dnaLocationColumn != -1) {
+      for (int i = 0; i < m.getRows(); ++i) {
+        GenomicRegion region = GenomicRegion.create(ChromosomeService.getInstance().parse(m.getText(i, chrCol)),
+            (int) m.getValue(i, startCol), (int) m.getValue(i, endCol));
 
+        String dna = m.getText(i, dnaColumn);
+
+        sequences.add(new SearchSequence(region, Sequence.create(dna)));
+      }
+    } else {
+      for (int i = 0; i < m.getRows(); ++i) {
+        String id = m.getText(i, idCol);
+
+        String dna = m.getText(i, dnaColumn);
+
+        sequences.add(new SearchSequence(id, Sequence.create(dna)));
+      }
+    }
+
+    return sequences;
+  }
+
+  /**
+   * The DNA sequence must be at least 10 bp long to be considered useful. This is
+   * to stop short labels in columns such as 'a' from being misinterpreted as DNA.
+   * 
+   * @param text
+   * @return
+   */
+  public static boolean isDna(String text) {
+    return Sequence.DNA_REGEX.matcher(text).matches() && text.length() > 5;
+  }
 
 }

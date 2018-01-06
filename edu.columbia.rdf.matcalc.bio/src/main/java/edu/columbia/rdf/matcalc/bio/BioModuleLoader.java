@@ -21,14 +21,12 @@ import edu.columbia.rdf.matcalc.bio.toolbox.external.genepattern.io.ResIOModule;
 import edu.columbia.rdf.matcalc.bio.toolbox.external.ucsc.BedGraphIOModule;
 import edu.columbia.rdf.matcalc.bio.toolbox.external.ucsc.BedIOModule;
 
-
-
 public class BioModuleLoader extends ModuleLoader {
-	public BioModuleLoader() {
-		addModule(GctIOModule.class);
-		addModule(ResIOModule.class);
-		addModule(BedIOModule.class);
-		addModule(BedGraphIOModule.class);
-		addModule(FastaReaderModule.class);
-	}
+  public BioModuleLoader() {
+    addModule(GctIOModule.class);
+    addModule(ResIOModule.class);
+    addModule(BedIOModule.class);
+    addModule(BedGraphIOModule.class);
+    addModule(FastaReaderModule.class);
+  }
 }

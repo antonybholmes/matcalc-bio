@@ -45,83 +45,83 @@ import org.jebtk.math.matrix.DataFrame;
  */
 public class Cls {
 
-	/**
-	 * The constant UNDEF_GROUP.
-	 */
-	public static final String UNDEF_GROUP = "na";
+  /**
+   * The constant UNDEF_GROUP.
+   */
+  public static final String UNDEF_GROUP = "na";
 
-	/**
-	 * Write.
-	 *
-	 * @param file the file
-	 * @param mGroups the m groups
-	 * @param matrix the matrix
-	 * @throws IOException Signals that an I/O exception has occurred.
-	 */
-	public static void write(Path file, 
-			List<XYSeries> mGroups, 
-			DataFrame matrix) throws IOException {
-		// First allocate everyone to the undefined group
-		
-		Map<String, String> groupMap = new HashMap<String, String>();
-		
-		for (String name : matrix.getColumnNames()) {
-			groupMap.put(name, UNDEF_GROUP);
-		}
-		
-		for (XYSeries series : mGroups) {
-			List<Integer> indices = XYSeries.findColumnIndices(matrix, series);
-			
-			for (int i : indices) {
-				groupMap.put(matrix.getColumnName(i), series.getName());
-			}
-		}
-		
-		// Now make a list of the unique group names in the order they appear
-		
-		List<String> names = new UniqueArrayList<String>();
-		
-		for (String name : matrix.getColumnNames()) {
-			names.add(groupMap.get(name));
-		}
-		
-		write(file, names, groupMap, matrix);
-	}
-	
-	public static void write(Path file, 
-			List<String> names,
-			Map<String, String> groupMap,
-			DataFrame matrix) throws IOException {
-		BufferedWriter writer = FileUtils.newBufferedWriter(file);
-		
-		try {
-			writer.write(Integer.toString(matrix.getCols()));
-			writer.write(TextUtils.SPACE_DELIMITER);
-			writer.write(Integer.toString(names.size()));
-			writer.write(" 1");
-			writer.newLine();
-			
-			writer.write("#");
-			
-			for (String name : names) {
-				writer.write(TextUtils.SPACE_DELIMITER);
-				writer.write(name);
-			}
-			
-			writer.newLine();
-			
-			for (int i = 0; i < matrix.getCols(); ++i) {
-				writer.write(groupMap.get(matrix.getColumnName(i)));
-				
-				if (i < matrix.getCols() - 1) {
-					writer.write(TextUtils.SPACE_DELIMITER);
-				}
-			}
-			
-			writer.newLine();
-		} finally {
-			writer.close();
-		}
-		
-	}
+  /**
+   * Write.
+   *
+   * @param file
+   *          the file
+   * @param mGroups
+   *          the m groups
+   * @param matrix
+   *          the matrix
+   * @throws IOException
+   *           Signals that an I/O exception has occurred.
+   */
+  public static void write(Path file, List<XYSeries> mGroups, DataFrame matrix) throws IOException {
+    // First allocate everyone to the undefined group
+
+    Map<String, String> groupMap = new HashMap<String, String>();
+
+    for (String name : matrix.getColumnNames()) {
+      groupMap.put(name, UNDEF_GROUP);
+    }
+
+    for (XYSeries series : mGroups) {
+      List<Integer> indices = XYSeries.findColumnIndices(matrix, series);
+
+      for (int i : indices) {
+        groupMap.put(matrix.getColumnName(i), series.getName());
+      }
+    }
+
+    // Now make a list of the unique group names in the order they appear
+
+    List<String> names = new UniqueArrayList<String>();
+
+    for (String name : matrix.getColumnNames()) {
+      names.add(groupMap.get(name));
+    }
+
+    write(file, names, groupMap, matrix);
+  }
+
+  public static void write(Path file, List<String> names, Map<String, String> groupMap, DataFrame matrix)
+      throws IOException {
+    BufferedWriter writer = FileUtils.newBufferedWriter(file);
+
+    try {
+      writer.write(Integer.toString(matrix.getCols()));
+      writer.write(TextUtils.SPACE_DELIMITER);
+      writer.write(Integer.toString(names.size()));
+      writer.write(" 1");
+      writer.newLine();
+
+      writer.write("#");
+
+      for (String name : names) {
+        writer.write(TextUtils.SPACE_DELIMITER);
+        writer.write(name);
+      }
+
+      writer.newLine();
+
+      for (int i = 0; i < matrix.getCols(); ++i) {
+        writer.write(groupMap.get(matrix.getColumnName(i)));
+
+        if (i < matrix.getCols() - 1) {
+          writer.write(TextUtils.SPACE_DELIMITER);
+        }
+      }
+
+      writer.newLine();
+    } finally {
+      writer.close();
+    }
+
+  }
 }

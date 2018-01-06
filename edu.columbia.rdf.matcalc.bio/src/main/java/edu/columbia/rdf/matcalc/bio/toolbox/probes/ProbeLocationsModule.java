@@ -24,92 +24,89 @@ import edu.columbia.rdf.matcalc.MainMatCalcWindow;
 import edu.columbia.rdf.matcalc.toolbox.CalcModule;
 
 public class ProbeLocationsModule extends CalcModule implements ModernClickListener {
-	private MainMatCalcWindow mWindow;
+  private MainMatCalcWindow mWindow;
 
-	public static final Path PROBE_RES_DIR = 
-			PathUtils.getPath("res/modules/probes/locations");
-	
-	@Override
-	public String getName() {
-		return "Probe Locations";
-	}
+  public static final Path PROBE_RES_DIR = PathUtils.getPath("res/modules/probes/locations");
 
-	@Override
-	public void init(MainMatCalcWindow window) {
-		mWindow = window;
+  @Override
+  public String getName() {
+    return "Probe Locations";
+  }
 
-		RibbonLargeButton button = new RibbonLargeButton("Probe Locations", 
-				UIService.getInstance().loadIcon("probes", 24));
-		
-		button.addClickListener(this);
-		mWindow.getRibbon().getToolbar("Bioinformatics").getSection("Probes").add(button);
-	}
+  @Override
+  public void init(MainMatCalcWindow window) {
+    mWindow = window;
 
-	@Override
-	public void clicked(ModernClickEvent e) {
-		try {
-			addLocations();
-		} catch (IOException ex) {
-			ex.printStackTrace();
-		} catch (ParseException e1) {
-			e1.printStackTrace();
-		}
-	}
-	
-	private void addLocations() throws IOException, ParseException {
-		DataFrame m = mWindow.getCurrentMatrix();
+    RibbonLargeButton button = new RibbonLargeButton("Probe Locations", UIService.getInstance().loadIcon("probes", 24));
 
-		ProbeLocationsDialog dialog = 
-				new ProbeLocationsDialog(mWindow, m);
+    button.addClickListener(this);
+    mWindow.getRibbon().getToolbar("Bioinformatics").getSection("Probes").add(button);
+  }
 
-		dialog.setVisible(true);
+  @Override
+  public void clicked(ModernClickEvent e) {
+    try {
+      addLocations();
+    } catch (IOException ex) {
+      ex.printStackTrace();
+    } catch (ParseException e1) {
+      e1.printStackTrace();
+    }
+  }
 
-		if (dialog.getStatus() == ModernDialogStatus.CANCEL) {
-			return;
-		}
-		
-		Path file = PROBE_RES_DIR.resolve(dialog.getAnnotation() + ".probe_locations.txt.gz");
-		
-		BufferedReader reader = FileUtils.newBufferedReader(file);
-		
-		String line;
-		List<String> tokens;
-		String probe;
-		String loc;
-		
-		Map<String, String> locMap = new HashMap<String, String>();
-		
-		try {
-			reader.readLine();
-			
-			while ((line = reader.readLine()) != null) {
-				tokens = TextUtils.tabSplit(line);
-				
-				probe = tokens.get(0);
-				
-				loc = tokens.get(1) + ":" + tokens.get(2) + "-" + tokens.get(3);
-				
-				locMap.put(probe, loc);
-			}
-		} finally {
-			reader.close();
-		}
-		
-		List<String> locs = new ArrayList<String>(m.getRows());
+  private void addLocations() throws IOException, ParseException {
+    DataFrame m = mWindow.getCurrentMatrix();
 
-		for (String p : m.getRowAnnotationText(dialog.getRowAnnotation())) {
-			if (locMap.containsKey(p)) {
-				locs.add(locMap.get(p));
-			} else {
-				locs.add(TextUtils.NA);
-			}
-		}
-		
-		locMap.clear();
-		
-		DataFrame ml = new DataFrame(m);
-		ml.setTextRowAnnotations("Probe Location (hg19)", locs);
-		
-		mWindow.addToHistory("Probe Locations", ml);
-	}
+    ProbeLocationsDialog dialog = new ProbeLocationsDialog(mWindow, m);
+
+    dialog.setVisible(true);
+
+    if (dialog.getStatus() == ModernDialogStatus.CANCEL) {
+      return;
+    }
+
+    Path file = PROBE_RES_DIR.resolve(dialog.getAnnotation() + ".probe_locations.txt.gz");
+
+    BufferedReader reader = FileUtils.newBufferedReader(file);
+
+    String line;
+    List<String> tokens;
+    String probe;
+    String loc;
+
+    Map<String, String> locMap = new HashMap<String, String>();
+
+    try {
+      reader.readLine();
+
+      while ((line = reader.readLine()) != null) {
+        tokens = TextUtils.tabSplit(line);
+
+        probe = tokens.get(0);
+
+        loc = tokens.get(1) + ":" + tokens.get(2) + "-" + tokens.get(3);
+
+        locMap.put(probe, loc);
+      }
+    } finally {
+      reader.close();
+    }
+
+    List<String> locs = new ArrayList<String>(m.getRows());
+
+    for (String p : m.getRowAnnotationText(dialog.getRowAnnotation())) {
+      if (locMap.containsKey(p)) {
+        locs.add(locMap.get(p));
+      } else {
+        locs.add(TextUtils.NA);
+      }
+    }
+
+    locMap.clear();
+
+    DataFrame ml = new DataFrame(m);
+    ml.setTextRowAnnotations("Probe Location (hg19)", locs);
+
+    mWindow.addToHistory("Probe Locations", ml);
+  }
 }

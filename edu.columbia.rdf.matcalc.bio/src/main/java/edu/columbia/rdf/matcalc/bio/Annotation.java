@@ -28,360 +28,321 @@ import org.jebtk.modern.dataview.ModernDataModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 public class Annotation implements Comparable<Annotation> {
-	private String mName;
-	private GenomicRegion mRegion;
-	
-	private static final Logger LOG = 
-			LoggerFactory.getLogger(Annotation.class);
+  private String mName;
+  private GenomicRegion mRegion;
 
+  private static final Logger LOG = LoggerFactory.getLogger(Annotation.class);
 
-	public Annotation(String name, GenomicRegion region) {
-		mName = name;
-		mRegion = region;
-	}
+  public Annotation(String name, GenomicRegion region) {
+    mName = name;
+    mRegion = region;
+  }
 
-	public String getName() {
-		return mName;
-	}
+  public String getName() {
+    return mName;
+  }
 
-	public GenomicRegion getRegion() {
-		return mRegion;
-	}
-	
-	@Override
-	public int compareTo(Annotation a) {
-		return mName.compareTo(a.mName);
-	}
+  public GenomicRegion getRegion() {
+    return mRegion;
+  }
 
-	public static Map<String, BinaryGapSearch<Annotation>> parseBedEnhancers(Path file) throws IOException, ParseException {
-		return parseBedEnhancers(CollectionUtils.asList(file));
-	}
-	
-	public static Map<String, BinaryGapSearch<Annotation>> parseBedEnhancers(List<Path> files) throws IOException, ParseException {
-		Map<String, BinaryGapSearch<Annotation>> map =
-				new HashMap<String, BinaryGapSearch<Annotation>>();
+  @Override
+  public int compareTo(Annotation a) {
+    return mName.compareTo(a.mName);
+  }
 
-		for (Path file : files) {
-			
+  public static Map<String, BinaryGapSearch<Annotation>> parseBedEnhancers(Path file)
+      throws IOException, ParseException {
+    return parseBedEnhancers(CollectionUtils.asList(file));
+  }
 
-			String name = file.getFileName().toString().substring(0, file.getFileName().toString().length() - 4);
-			
-			System.err.println("Loading " + file + " " + name);
-			
-			map.put(name, parseBed(file));
-		}
+  public static Map<String, BinaryGapSearch<Annotation>> parseBedEnhancers(List<Path> files)
+      throws IOException, ParseException {
+    Map<String, BinaryGapSearch<Annotation>> map = new HashMap<String, BinaryGapSearch<Annotation>>();
 
-		return map;
-	}
-	
-	public static BinaryGapSearch<Annotation> parseBed(Path file) throws IOException {
-		return parseBed(CollectionUtils.asList(file));
-	}
-	
-	public static BinaryGapSearch<Annotation> parseBed(List<Path> files) throws IOException {
-		BinaryGapSearch<Annotation> annotations = new BinaryGapSearch<Annotation>();
+    for (Path file : files) {
 
-		parseBed(files, annotations);
+      String name = file.getFileName().toString().substring(0, file.getFileName().toString().length() - 4);
 
-		return annotations;
-	}
-	
-	public static FixedGapSearch<Annotation> parseBedFixed(Path file) throws IOException {
-		return parseBedFixed(CollectionUtils.asList(file));
-	}
-	
-	public static FixedGapSearch<Annotation> parseBedFixed(List<Path> files) throws IOException {
-		FixedGapSearch<Annotation> annotations = new FixedGapSearch<Annotation>();
+      System.err.println("Loading " + file + " " + name);
 
-		parseBed(files, annotations);
+      map.put(name, parseBed(file));
+    }
 
-		return annotations;
-	}
-	
-	public static void parseBed(List<Path> files,
-			FixedGapSearch<Annotation> annotations) throws IOException {
-		for (Path file : files) {
-			System.err.println("Loading BED " + file);
-	
-			// check for header
-			
-			BufferedReader reader = FileUtils.newBufferedReader(file);
+    return map;
+  }
 
-			String line;
-			
-			int c = 0;
-			
-			try {
-				while ((line = reader.readLine()) != null) {
-					if (Io.isEmptyLine(line)) {
-						continue;
-					}
-					
-					if (line.startsWith("track")) {
-						continue;
-					}
+  public static BinaryGapSearch<Annotation> parseBed(Path file) throws IOException {
+    return parseBed(CollectionUtils.asList(file));
+  }
 
-					BedRegion region = BedRegion.parse(GenomeService.getInstance().guess(file), line);
+  public static BinaryGapSearch<Annotation> parseBed(List<Path> files) throws IOException {
+    BinaryGapSearch<Annotation> annotations = new BinaryGapSearch<Annotation>();
 
-					if (region != null) {
-						Annotation annotation = new Annotation(region.getName(), region);
+    parseBed(files, annotations);
 
-						annotations.add(region, annotation);
-						
-						++c;
-					} else {
-						LOG.info("Invalid region (ignored): {}", line);
-					}
-				}
-			} finally {
-				reader.close();
-			}
-			
-			LOG.info("BED file contained {} lines.", c);
-		}
-	}
+    return annotations;
+  }
 
-	public static BinaryGapSearch<Annotation> parsePeaks(Path file) throws IOException, ParseException {
-		BinaryGapSearch<Annotation> gappedSearch =
-				new BinaryGapSearch<Annotation>();
+  public static FixedGapSearch<Annotation> parseBedFixed(Path file) throws IOException {
+    return parseBedFixed(CollectionUtils.asList(file));
+  }
 
-		LOG.info("Parsing {}...", file);
+  public static FixedGapSearch<Annotation> parseBedFixed(List<Path> files) throws IOException {
+    FixedGapSearch<Annotation> annotations = new FixedGapSearch<Annotation>();
 
-		BufferedReader reader = FileUtils.newBufferedReader(file);
+    parseBed(files, annotations);
 
-		String line;
-		List<String> tokens;
+    return annotations;
+  }
 
-		try {
-			while ((line = reader.readLine()) != null) {
-				if (Io.isEmptyLine(line)) {
-					continue;
-				}
+  public static void parseBed(List<Path> files, FixedGapSearch<Annotation> annotations) throws IOException {
+    for (Path file : files) {
+      System.err.println("Loading BED " + file);
 
-				tokens = TextUtils.tabSplit(line);
-				
-				GenomicRegion region = GenomicRegion.parse(tokens.get(0));
+      // check for header
 
-				Annotation annotation = new Annotation(region.toString(), region);
+      BufferedReader reader = FileUtils.newBufferedReader(file);
 
-				gappedSearch.add(region, annotation);
-			}
+      String line;
 
-		} finally {
-			reader.close();
-		}
+      int c = 0;
 
-		return gappedSearch;
-	}
-	
-	public static BinaryGapSearch<Annotation> parsePeaks(ModernDataModel model) {
-		BinaryGapSearch<Annotation> gappedSearch =
-				new BinaryGapSearch<Annotation>();
+      try {
+        while ((line = reader.readLine()) != null) {
+          if (Io.isEmptyLine(line)) {
+            continue;
+          }
 
-		for (int i = 0; i < model.getRowCount(); ++i) {
-			GenomicRegion region = 
-					GenomicRegion.parse(model.getValueAsString(i, 0));
+          if (line.startsWith("track")) {
+            continue;
+          }
 
-			if (region == null) {
-				continue;
-			}
-			
-			Annotation annotation = new Annotation(region.toString(), region);
+          BedRegion region = BedRegion.parse(GenomeService.getInstance().guess(file), line);
 
-			gappedSearch.add(region, annotation);
-		}
+          if (region != null) {
+            Annotation annotation = new Annotation(region.getName(), region);
 
-		return gappedSearch;
-	}
-	
-	
-	
-	public static BinaryGapSearch<Annotation> parseRegions(DataFrame model) throws ParseException {
-		BinaryGapSearch<Annotation> gappedSearch =
-				new BinaryGapSearch<Annotation>();
+            annotations.add(region, annotation);
 
-		parseRegions(model, gappedSearch);
+            ++c;
+          } else {
+            LOG.info("Invalid region (ignored): {}", line);
+          }
+        }
+      } finally {
+        reader.close();
+      }
 
-		return gappedSearch;
-	}
+      LOG.info("BED file contained {} lines.", c);
+    }
+  }
 
-	public static FixedGapSearch<Annotation> parseRegionsFixed(DataFrame model) {
-		FixedGapSearch<Annotation> gappedSearch = 
-				new FixedGapSearch<Annotation>();
+  public static BinaryGapSearch<Annotation> parsePeaks(Path file) throws IOException, ParseException {
+    BinaryGapSearch<Annotation> gappedSearch = new BinaryGapSearch<Annotation>();
 
-		parseRegions(model, gappedSearch);
+    LOG.info("Parsing {}...", file);
 
-		return gappedSearch;
-	}
-	
-	public static void parseRegions(DataFrame model,
-			FixedGapSearch<Annotation> gappedSearch) {
-		for (int i = 0; i < model.getRows(); ++i) {
-			
-			GenomicRegion region = null;
-			
-			if (GenomicRegion.isGenomicRegion(model.getText(i, 0))) {
-				region = GenomicRegion.parse(model.getText(i, 0));
-			} else {
-				region = new GenomicRegion(ChromosomeService.getInstance().parse(model.getText(i, 0)),
-						(int)model.getValue(i, 1),
-						(int)model.getValue(i, 2));
-			}
+    BufferedReader reader = FileUtils.newBufferedReader(file);
 
-			if (region == null) {
-				continue;
-			}
-			
-			Annotation annotation = new Annotation(region.toString(), region);
+    String line;
+    List<String> tokens;
 
-			gappedSearch.add(region, annotation);
-		}
-	}
-	
-	public static FixedGapSearch<Annotation> parseRegionsFixed(Path file) throws IOException, ParseException {
-		FixedGapSearch<Annotation> gappedSearch =
-				new FixedGapSearch<Annotation>();
+    try {
+      while ((line = reader.readLine()) != null) {
+        if (Io.isEmptyLine(line)) {
+          continue;
+        }
 
-		System.err.println("Loading " + file);
+        tokens = TextUtils.tabSplit(line);
 
-		BufferedReader reader = FileUtils.newBufferedReader(file);
+        GenomicRegion region = GenomicRegion.parse(tokens.get(0));
 
-		String line;
-		List<String> tokens;
+        Annotation annotation = new Annotation(region.toString(), region);
 
-		try {
-			while ((line = reader.readLine()) != null) {
-				if (Io.isEmptyLine(line)) {
-					continue;
-				}
+        gappedSearch.add(region, annotation);
+      }
 
-				tokens = TextUtils.tabSplit(line);
-				
-				GenomicRegion region = GenomicRegion.parse(tokens.get(0));
+    } finally {
+      reader.close();
+    }
 
-				Annotation annotation = new Annotation(region.toString(), region);
+    return gappedSearch;
+  }
 
-				gappedSearch.add(region, annotation);
-			}
+  public static BinaryGapSearch<Annotation> parsePeaks(ModernDataModel model) {
+    BinaryGapSearch<Annotation> gappedSearch = new BinaryGapSearch<Annotation>();
 
-		} finally {
-			reader.close();
-		}
+    for (int i = 0; i < model.getRowCount(); ++i) {
+      GenomicRegion region = GenomicRegion.parse(model.getValueAsString(i, 0));
 
-		return gappedSearch;
-	}
-	
-	public static FixedGapSearch<Annotation> parsePeaksFixed(ModernDataModel model,
-			int header) throws ParseException {
-		FixedGapSearch<Annotation> gappedSearch =
-				new FixedGapSearch<Annotation>();
+      if (region == null) {
+        continue;
+      }
 
-		for (int i = 0; i < model.getRowCount(); ++i) {
-			GenomicRegion region = 
-					GenomicRegion.parse(model.getValueAsString(i, header));
+      Annotation annotation = new Annotation(region.toString(), region);
 
-			if (region == null) {
-				continue;
-			}
-			
-			Annotation annotation = new Annotation(region.toString(), region);
+      gappedSearch.add(region, annotation);
+    }
 
-			gappedSearch.add(region, annotation);
-		}
+    return gappedSearch;
+  }
 
-		return gappedSearch;
-	}
-	
-	public static FixedGapSearch<Annotation> parseFixed(Path file, int header) throws IOException, InvalidFormatException, ParseException {
-		FixedGapSearch<Annotation> gappedSearch;
-		
-		if (PathUtils.getFileExt(file).equals("bed")) {
-			gappedSearch = Annotation.parseBedFixed(file);
-		} else if (PathUtils.getFileExt(file).equals("bedgraph")) {
-			gappedSearch = Annotation.parseBedFixed(file);
-		} else {
-			ModernDataModel model = Bioinformatics.getModel(file,
-					true,
-					TextUtils.emptyList(),
-					0,
-					TextUtils.TAB_DELIMITER);
+  public static BinaryGapSearch<Annotation> parseRegions(DataFrame model) throws ParseException {
+    BinaryGapSearch<Annotation> gappedSearch = new BinaryGapSearch<Annotation>();
 
-			gappedSearch = parsePeaksFixed(model, header);
-		}
-		
-		return gappedSearch;
-	}
-	
+    parseRegions(model, gappedSearch);
 
-	public static void main(String[] args) throws IOException {
-		/*
-		List<Path> files = ArrayUtils.toList(new Path("res/enhancers/human/Bladder.bed"));
+    return gappedSearch;
+  }
 
-		GappedSearch<Annotation> gappedSearch =
-				Annotation.parseBED(files);
+  public static FixedGapSearch<Annotation> parseRegionsFixed(DataFrame model) {
+    FixedGapSearch<Annotation> gappedSearch = new FixedGapSearch<Annotation>();
 
-		GappedSearchRange<Annotation> results = 
-				gappedSearch.getFeatures(Chromosome.CHR11, 65238140, 114070355);
+    parseRegions(model, gappedSearch);
 
-		for (GappedSearchFeatures<Annotation> annotations : results) {
-			System.err.println("Position " + annotations.getPosition());
+    return gappedSearch;
+  }
 
-			for (Annotation annotation : annotations) {
-				System.err.println("name " + annotation.getName() + " " + annotation.getRegion());
-			}
-		}
-		*/
-	}
+  public static void parseRegions(DataFrame model, FixedGapSearch<Annotation> gappedSearch) {
+    for (int i = 0; i < model.getRows(); ++i) {
 
-	/**
-	 * Parse a file of genomic locations.
-	 * 
-	 * @param file
-	 * @return
-	 * @throws InvalidFormatException
-	 * @throws ParseException
-	 * @throws IOException
-	 */
-	public static FixedGapSearch<Annotation> parse(Path file) throws InvalidFormatException, ParseException, IOException {
-		if (PathUtils.getFileExt(file).equals("bed") ||
-				PathUtils.getFileExt(file).equals("bedgraph")) {
-			return parseBed(file);
-		} else {
-			return parseRegions(Excel.convertToMatrix(file, 
-					true,
-					TextUtils.emptyList(),
-					0,
-					TextUtils.TAB_DELIMITER));
-		}
+      GenomicRegion region = null;
 
-	}
+      if (GenomicRegion.isGenomicRegion(model.getText(i, 0))) {
+        region = GenomicRegion.parse(model.getText(i, 0));
+      } else {
+        region = new GenomicRegion(ChromosomeService.getInstance().parse(model.getText(i, 0)),
+            (int) model.getValue(i, 1), (int) model.getValue(i, 2));
+      }
 
-	
-	public static FixedGapSearch<Annotation> parseFixed(Path file) throws InvalidFormatException, IOException {
-		if (PathUtils.getFileExt(file).equals("bed") ||
-				PathUtils.getFileExt(file).equals("bedgraph")) {
-			return parseBedFixed(file);
-		} else {
-			return parseRegionsFixed(Excel.convertToMatrix(file, 
-					true,
-					TextUtils.emptyList(),
-					0,
-					TextUtils.TAB_DELIMITER));
-		}
-	}
-	
-	public static DataFrame toMatrix(Path file) throws InvalidFormatException, IOException {
-		if (PathUtils.getFileExt(file).equals("bed") ||
-				PathUtils.getFileExt(file).equals("bedgraph")) {
-			return Bed.toMatrix(file);
-		} else {
-			return Excel.convertToMatrix(file,
-					true,
-					TextUtils.emptyList(),
-					0,
-					TextUtils.TAB_DELIMITER);
-		}
-	}
+      if (region == null) {
+        continue;
+      }
+
+      Annotation annotation = new Annotation(region.toString(), region);
+
+      gappedSearch.add(region, annotation);
+    }
+  }
+
+  public static FixedGapSearch<Annotation> parseRegionsFixed(Path file) throws IOException, ParseException {
+    FixedGapSearch<Annotation> gappedSearch = new FixedGapSearch<Annotation>();
+
+    System.err.println("Loading " + file);
+
+    BufferedReader reader = FileUtils.newBufferedReader(file);
+
+    String line;
+    List<String> tokens;
+
+    try {
+      while ((line = reader.readLine()) != null) {
+        if (Io.isEmptyLine(line)) {
+          continue;
+        }
+
+        tokens = TextUtils.tabSplit(line);
+
+        GenomicRegion region = GenomicRegion.parse(tokens.get(0));
+
+        Annotation annotation = new Annotation(region.toString(), region);
+
+        gappedSearch.add(region, annotation);
+      }
+
+    } finally {
+      reader.close();
+    }
+
+    return gappedSearch;
+  }
+
+  public static FixedGapSearch<Annotation> parsePeaksFixed(ModernDataModel model, int header) throws ParseException {
+    FixedGapSearch<Annotation> gappedSearch = new FixedGapSearch<Annotation>();
+
+    for (int i = 0; i < model.getRowCount(); ++i) {
+      GenomicRegion region = GenomicRegion.parse(model.getValueAsString(i, header));
+
+      if (region == null) {
+        continue;
+      }
+
+      Annotation annotation = new Annotation(region.toString(), region);
+
+      gappedSearch.add(region, annotation);
+    }
+
+    return gappedSearch;
+  }
+
+  public static FixedGapSearch<Annotation> parseFixed(Path file, int header)
+      throws IOException, InvalidFormatException, ParseException {
+    FixedGapSearch<Annotation> gappedSearch;
+
+    if (PathUtils.getFileExt(file).equals("bed")) {
+      gappedSearch = Annotation.parseBedFixed(file);
+    } else if (PathUtils.getFileExt(file).equals("bedgraph")) {
+      gappedSearch = Annotation.parseBedFixed(file);
+    } else {
+      ModernDataModel model = Bioinformatics.getModel(file, true, TextUtils.emptyList(), 0, TextUtils.TAB_DELIMITER);
+
+      gappedSearch = parsePeaksFixed(model, header);
+    }
+
+    return gappedSearch;
+  }
+
+  public static void main(String[] args) throws IOException {
+    /*
+     * List<Path> files = ArrayUtils.toList(new
+     * Path("res/enhancers/human/Bladder.bed"));
+     * 
+     * GappedSearch<Annotation> gappedSearch = Annotation.parseBED(files);
+     * 
+     * GappedSearchRange<Annotation> results =
+     * gappedSearch.getFeatures(Chromosome.CHR11, 65238140, 114070355);
+     * 
+     * for (GappedSearchFeatures<Annotation> annotations : results) {
+     * System.err.println("Position " + annotations.getPosition());
+     * 
+     * for (Annotation annotation : annotations) { System.err.println("name " +
+     * annotation.getName() + " " + annotation.getRegion()); } }
+     */
+  }
+
+  /**
+   * Parse a file of genomic locations.
+   * 
+   * @param file
+   * @return
+   * @throws InvalidFormatException
+   * @throws ParseException
+   * @throws IOException
+   */
+  public static FixedGapSearch<Annotation> parse(Path file) throws InvalidFormatException, ParseException, IOException {
+    if (PathUtils.getFileExt(file).equals("bed") || PathUtils.getFileExt(file).equals("bedgraph")) {
+      return parseBed(file);
+    } else {
+      return parseRegions(Excel.convertToMatrix(file, true, TextUtils.emptyList(), 0, TextUtils.TAB_DELIMITER));
+    }
+
+  }
+
+  public static FixedGapSearch<Annotation> parseFixed(Path file) throws InvalidFormatException, IOException {
+    if (PathUtils.getFileExt(file).equals("bed") || PathUtils.getFileExt(file).equals("bedgraph")) {
+      return parseBedFixed(file);
+    } else {
+      return parseRegionsFixed(Excel.convertToMatrix(file, true, TextUtils.emptyList(), 0, TextUtils.TAB_DELIMITER));
+    }
+  }
+
+  public static DataFrame toMatrix(Path file) throws InvalidFormatException, IOException {
+    if (PathUtils.getFileExt(file).equals("bed") || PathUtils.getFileExt(file).equals("bedgraph")) {
+      return Bed.toMatrix(file);
+    } else {
+      return Excel.convertToMatrix(file, true, TextUtils.emptyList(), 0, TextUtils.TAB_DELIMITER);
+    }
+  }
 }

@@ -44,102 +44,105 @@ import edu.columbia.rdf.matcalc.MainMatCalcWindow;
 import edu.columbia.rdf.matcalc.toolbox.CalcModule;
 
 /**
- * Merges designated segments together using the merge column. Consecutive rows with the same
- * merge id will be merged together. Coordinates and copy number will be adjusted but
- * genes, cytobands etc are not.
+ * Merges designated segments together using the merge column. Consecutive rows
+ * with the same merge id will be merged together. Coordinates and copy number
+ * will be adjusted but genes, cytobands etc are not.
  *
  * @author Antony Holmes Holmes
  *
  */
-public class ExpressionModule extends CalcModule implements ModernClickListener {	
-	public static final double SEGMENT_MEAN_ZERO = 0.0001;
+public class ExpressionModule extends CalcModule implements ModernClickListener {
+  public static final double SEGMENT_MEAN_ZERO = 0.0001;
 
+  /*
+   * private RibbonLargeButton2 mStvDevButton = new RibbonLargeButton2("STDEV",
+   * UIResources.getInstance().loadIcon("std_dev", 32),
+   * "Standard Deviation Filter",
+   * "Filter out rows whose standard deviation does not meet a threshold.");
+   * 
+   * 
+   * private RibbonLargeButton2 mMinExpButton = new RibbonLargeButton2("Min",
+   * "Expression", UIResources.getInstance().loadIcon("min_exp", 32),
+   * "Minimum Expression",
+   * "Filter out rows that do not contain a specified number of cells with a minimum value."
+   * );
+   */
 
-	/*
-	private RibbonLargeButton2 mStvDevButton = new RibbonLargeButton2("STDEV", 
-			UIResources.getInstance().loadIcon("std_dev", 32),
-			"Standard Deviation Filter",
-			"Filter out rows whose standard deviation does not meet a threshold.");
+  private static final ModernIcon EXPRESSION_ICON = new Raster32Icon(
+      new FilterVectorIcon(ThemeService.getInstance().colors().getBlueTheme().getColor(5),
+          ThemeService.getInstance().colors().getBlueTheme().getColor(4)));
 
+  /**
+   * The member window.
+   */
+  private MainMatCalcWindow mWindow;
 
-	private RibbonLargeButton2 mMinExpButton = new RibbonLargeButton2("Min", "Expression", 
-			UIResources.getInstance().loadIcon("min_exp", 32),
-			"Minimum Expression",
-			"Filter out rows that do not contain a specified number of cells with a minimum value.");
-	*/
+  private ModernButtonWidget mButton;
 
-	private static final ModernIcon EXPRESSION_ICON =
-			new Raster32Icon(new FilterVectorIcon(ThemeService.getInstance().colors().getBlueTheme().getColor(5),
-					ThemeService.getInstance().colors().getBlueTheme().getColor(4)));
+  /*
+   * (non-Javadoc)
+   * 
+   * @see org.abh.lib.NameProperty#getName()
+   */
+  @Override
+  public String getName() {
+    return "Expression";
+  }
 
+  /*
+   * (non-Javadoc)
+   * 
+   * @see edu.columbia.rdf.apps.matcalc.modules.Module#init(edu.columbia.rdf.apps.
+   * matcalc.MainMatCalcWindow)
+   */
+  @Override
+  public void init(MainMatCalcWindow window) {
+    mWindow = window;
 
-	/**
-	 * The member window.
-	 */
-	private MainMatCalcWindow mWindow;
+    // mStvDevButton.addClickListener(this);
+    // mWindow.getRibbon().getToolbar("Bioinformatics").getSection("Expression").add(mStvDevButton);
+    // mMinExpButton.addClickListener(this);
+    // mWindow.getRibbon().getToolbar("Bioinformatics").getSection("Expression").add(mMinExpButton);
 
+    ModernPopupMenu popup = new ModernPopupMenu();
 
-	private ModernButtonWidget mButton;
+    popup.addMenuItem(
+        new ModernTwoLineMenuItem("STDEV", "Rows must have a minimum standard deviation.", EXPRESSION_ICON));
+    popup.addMenuItem(new ModernTwoLineMenuItem("Mean", "Rows must have a minimum mean.", EXPRESSION_ICON));
+    popup.addMenuItem(new ModernTwoLineMenuItem("Minimum Expression", "Rows must have a minimum value in some columns.",
+        EXPRESSION_ICON));
 
-	/* (non-Javadoc)
-	 * @see org.abh.lib.NameProperty#getName()
-	 */
-	@Override
-	public String getName() {
-		return "Expression";
-	}
+    mButton = new RibbonLargeDropDownButton("Expression", EXPRESSION_ICON, popup);
+    mButton.setShowText(false);
 
-	/* (non-Javadoc)
-	 * @see edu.columbia.rdf.apps.matcalc.modules.Module#init(edu.columbia.rdf.apps.matcalc.MainMatCalcWindow)
-	 */
-	@Override
-	public void init(MainMatCalcWindow window) {
-		mWindow = window;
+    mWindow.getRibbon().getToolbar("Data").getSection("Filter").add(mButton);
 
-		//mStvDevButton.addClickListener(this);
-		//mWindow.getRibbon().getToolbar("Bioinformatics").getSection("Expression").add(mStvDevButton);
-		//mMinExpButton.addClickListener(this);
-		//mWindow.getRibbon().getToolbar("Bioinformatics").getSection("Expression").add(mMinExpButton);
+    mButton.addClickListener(this);
+  }
 
-		ModernPopupMenu popup = new ModernPopupMenu();
-		
-		popup.addMenuItem(new ModernTwoLineMenuItem("STDEV", 
-				"Rows must have a minimum standard deviation.", 
-				EXPRESSION_ICON));
-		popup.addMenuItem(new ModernTwoLineMenuItem("Mean",
-				"Rows must have a minimum mean.",
-				EXPRESSION_ICON));
-		popup.addMenuItem(new ModernTwoLineMenuItem("Minimum Expression",
-				"Rows must have a minimum value in some columns.",
-				EXPRESSION_ICON));
-		
-		
-		mButton = new RibbonLargeDropDownButton("Expression", EXPRESSION_ICON, popup);
-		mButton.setShowText(false);
-		
-		mWindow.getRibbon().getToolbar("Data").getSection("Filter").add(mButton);
-		
-		mButton.addClickListener(this);
-	}
+  /*
+   * (non-Javadoc)
+   * 
+   * @see
+   * org.abh.lib.ui.modern.event.ModernClickListener#clicked(org.abh.lib.ui.modern
+   * .event.ModernClickEvent)
+   */
+  @Override
+  public final void clicked(ModernClickEvent e) {
+    DataFrame m = mWindow.getCurrentMatrix();
 
+    if (e.getMessage().equals("STDEV")) {
+      mWindow.addToHistory("STDEV Filter", MatrixTransforms.stdDevFilter(mWindow, m, 1.5));
+    } else if (e.getMessage().equals("Mean")) {
+      mWindow.addToHistory("STDEV Filter", MatrixTransforms.meanFilter(mWindow, m, 1.5));
+    } else if (e.getMessage().equals("Minimum Expression")) {
+      mWindow.addToHistory("Minimum Expression Filter", MatrixTransforms.minExpFilter(mWindow, m, 100, 2)); // new
+                                                                                                            // MinExpFilterMatrixTransform(this,
+                                                                                                            // getCurrentMatrix(),
+                                                                                                            // 100, 2));
 
-
-	/* (non-Javadoc)
-	 * @see org.abh.lib.ui.modern.event.ModernClickListener#clicked(org.abh.lib.ui.modern.event.ModernClickEvent)
-	 */
-	@Override
-	public final void clicked(ModernClickEvent e) {
-		DataFrame m = mWindow.getCurrentMatrix();
-		
-		if (e.getMessage().equals("STDEV")) {
-			mWindow.addToHistory("STDEV Filter", MatrixTransforms.stdDevFilter(mWindow, m, 1.5));
-		} else if (e.getMessage().equals("Mean")) {
-			mWindow.addToHistory("STDEV Filter", MatrixTransforms.meanFilter(mWindow, m, 1.5));
-		} else if (e.getMessage().equals("Minimum Expression")) {
-			mWindow.addToHistory("Minimum Expression Filter", MatrixTransforms.minExpFilter(mWindow, m, 100, 2)); //new MinExpFilterMatrixTransform(this, getCurrentMatrix(), 100, 2));
-
-		} else {
-			// Do nothing
-		}
-	}
+    } else {
+      // Do nothing
+    }
+  }
 }

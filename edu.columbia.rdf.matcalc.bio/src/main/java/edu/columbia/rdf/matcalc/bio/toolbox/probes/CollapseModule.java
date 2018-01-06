@@ -18,82 +18,79 @@ import edu.columbia.rdf.matcalc.toolbox.core.collapse.CollapseDialog;
 import edu.columbia.rdf.matcalc.toolbox.core.collapse.CollapseType;
 
 public class CollapseModule extends CalcModule implements ModernClickListener {
-	private MainMatCalcWindow mWindow;
+  private MainMatCalcWindow mWindow;
 
-	@Override
-	public String getName() {
-		return "Collapse";
-	}
+  @Override
+  public String getName() {
+    return "Collapse";
+  }
 
-	@Override
-	public void init(MainMatCalcWindow window) {
-		mWindow = window;
+  @Override
+  public void init(MainMatCalcWindow window) {
+    mWindow = window;
 
-		RibbonLargeButton button = new RibbonLargeButton("Collapse Rows",
-				UIService.getInstance().loadIcon("collapse", 32),
-					"Collapse Rows",
-					"Collapse rows by annotation, e.g. probe ids.");
-			button.addClickListener(this);
-		mWindow.getRibbon().getToolbar("Annotation").getSection("Probes").add(button);
-	}
+    RibbonLargeButton button = new RibbonLargeButton("Collapse Rows", UIService.getInstance().loadIcon("collapse", 32),
+        "Collapse Rows", "Collapse rows by annotation, e.g. probe ids.");
+    button.addClickListener(this);
+    mWindow.getRibbon().getToolbar("Annotation").getSection("Probes").add(button);
+  }
 
-	@Override
-	public void clicked(ModernClickEvent e) {
-		try {
-			collapse();
-		} catch (IOException ex) {
-			ex.printStackTrace();
-		} catch (ParseException e1) {
-			e1.printStackTrace();
-		}
-	}
-	
-	private void collapse() throws IOException, ParseException {
-		DataFrame m = mWindow.getCurrentMatrix();
+  @Override
+  public void clicked(ModernClickEvent e) {
+    try {
+      collapse();
+    } catch (IOException ex) {
+      ex.printStackTrace();
+    } catch (ParseException e1) {
+      e1.printStackTrace();
+    }
+  }
 
-		CollapseDialog dialog = 
-				new CollapseDialog(mWindow, m, mWindow.getGroups());
+  private void collapse() throws IOException, ParseException {
+    DataFrame m = mWindow.getCurrentMatrix();
 
-		dialog.setVisible(true);
+    CollapseDialog dialog = new CollapseDialog(mWindow, m, mWindow.getGroups());
 
-		if (dialog.getStatus() == ModernDialogStatus.CANCEL) {
-			return;
-		}
-		
-		MatrixGroup group1 = dialog.getGroup1();
-		MatrixGroup group2 = dialog.getGroup2();
+    dialog.setVisible(true);
 
-		String collapseName = dialog.getCollapseName();
-		CollapseType collapseType = dialog.getCollapseType();
+    if (dialog.getStatus() == ModernDialogStatus.CANCEL) {
+      return;
+    }
 
-		DataFrame c = null;
+    MatrixGroup group1 = dialog.getGroup1();
+    MatrixGroup group2 = dialog.getGroup2();
 
-		switch (collapseType) {
-		case MAX:
-			c = MatrixOperations.collapseMax(m, collapseName);
-			break;
-		case MIN:
-			c = MatrixOperations.collapseMin(m, collapseName);
-			break;
-		case MAX_STDEV:
-			c = MatrixOperations.collapseMaxStdDev(m, collapseName);
-			break;
-		case MAX_MEAN:
-			c = MatrixOperations.collapseMaxMean(m, collapseName);
-			break;
-		case MAX_MEDIAN:
-			c = MatrixOperations.collapseMaxMedian(m, collapseName);
-			break;
-		case MAX_TSTAT:
-			c = MatrixOperations.addTStat(m, group1, group2);
-			mWindow.addToHistory("Add T-Stats", c);
-			c = MatrixOperations.collapseMaxTStat(c, collapseName); 
-			break;
-		default:
-			c = m;
-			break;
-		}
+    String collapseName = dialog.getCollapseName();
+    CollapseType collapseType = dialog.getCollapseType();
 
-		mWindow.addToHistory("Collapse rows", c);
-	}
+    DataFrame c = null;
+
+    switch (collapseType) {
+    case MAX:
+      c = MatrixOperations.collapseMax(m, collapseName);
+      break;
+    case MIN:
+      c = MatrixOperations.collapseMin(m, collapseName);
+      break;
+    case MAX_STDEV:
+      c = MatrixOperations.collapseMaxStdDev(m, collapseName);
+      break;
+    case MAX_MEAN:
+      c = MatrixOperations.collapseMaxMean(m, collapseName);
+      break;
+    case MAX_MEDIAN:
+      c = MatrixOperations.collapseMaxMedian(m, collapseName);
+      break;
+    case MAX_TSTAT:
+      c = MatrixOperations.addTStat(m, group1, group2);
+      mWindow.addToHistory("Add T-Stats", c);
+      c = MatrixOperations.collapseMaxTStat(c, collapseName);
+      break;
+    default:
+      c = m;
+      break;
+    }
+
+    mWindow.addToHistory("Collapse rows", c);
+  }
 }

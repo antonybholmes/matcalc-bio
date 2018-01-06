@@ -29,56 +29,49 @@ import edu.columbia.rdf.matcalc.FileType;
 import edu.columbia.rdf.matcalc.MainMatCalcWindow;
 import edu.columbia.rdf.matcalc.toolbox.CalcModule;
 
-
 /**
  * Allow users to open and save Broad RES files
  *
  * @author Antony Holmes Holmes
  *
  */
-public class ResIOModule extends CalcModule  {
-	private static final GuiFileExtFilter FILTER = new ResGuiFileFilter();
+public class ResIOModule extends CalcModule {
+  private static final GuiFileExtFilter FILTER = new ResGuiFileFilter();
 
-	public ResIOModule() {
-		registerFileOpenType(FILTER);
-		registerFileSaveType(FILTER);
-	}
+  public ResIOModule() {
+    registerFileOpenType(FILTER);
+    registerFileSaveType(FILTER);
+  }
 
-	/* (non-Javadoc)
-	 * @see org.abh.lib.NameProperty#getName()
-	 */
-	@Override
-	public String getName() {
-		return "RES IO";
-	}
-			
+  /*
+   * (non-Javadoc)
+   * 
+   * @see org.abh.lib.NameProperty#getName()
+   */
+  @Override
+  public String getName() {
+    return "RES IO";
+  }
 
-	@Override
-	public DataFrame autoOpenFile(final MainMatCalcWindow window,
-			final Path file,
-			FileType type,
-			int headers,
-			int rowAnnotations,
-			String delimiter,
-			Collection<String> skipLines) throws IOException {
-		
-		ResDialog dialog = new ResDialog(window);
-		
-		dialog.setVisible(true);
-		
-		if (dialog.getStatus() == ModernDialogStatus.CANCEL) {
-			return null;
-		}
-		
-		return ResMatrix.parseMatrix(file, dialog.getKeepCols());
-	}	
+  @Override
+  public DataFrame autoOpenFile(final MainMatCalcWindow window, final Path file, FileType type, int headers,
+      int rowAnnotations, String delimiter, Collection<String> skipLines) throws IOException {
 
-	@Override
-	public boolean saveFile(final MainMatCalcWindow window,
-			final Path file, 
-			final DataFrame m) throws IOException {
-		ResMatrix.writeResMatrix(m, file);
-		
-		return true;
-	}
+    ResDialog dialog = new ResDialog(window);
+
+    dialog.setVisible(true);
+
+    if (dialog.getStatus() == ModernDialogStatus.CANCEL) {
+      return null;
+    }
+
+    return ResMatrix.parseMatrix(file, dialog.getKeepCols());
+  }
+
+  @Override
+  public boolean saveFile(final MainMatCalcWindow window, final Path file, final DataFrame m) throws IOException {
+    ResMatrix.writeResMatrix(m, file);
+
+    return true;
+  }
 }

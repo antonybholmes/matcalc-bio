@@ -28,47 +28,40 @@ import edu.columbia.rdf.matcalc.FileType;
 import edu.columbia.rdf.matcalc.MainMatCalcWindow;
 import edu.columbia.rdf.matcalc.toolbox.CalcModule;
 
-
 /**
  * Allow users to open and save Broad GCT files
  *
  * @author Antony Holmes Holmes
  *
  */
-public class GctIOModule extends CalcModule  {
-	private static final GuiFileExtFilter FILTER = new GctGuiFileFilter();
+public class GctIOModule extends CalcModule {
+  private static final GuiFileExtFilter FILTER = new GctGuiFileFilter();
 
-	public GctIOModule() {
-		registerFileOpenType(FILTER);
-		registerFileSaveType(FILTER);
-	}
+  public GctIOModule() {
+    registerFileOpenType(FILTER);
+    registerFileSaveType(FILTER);
+  }
 
-	/* (non-Javadoc)
-	 * @see org.abh.lib.NameProperty#getName()
-	 */
-	@Override
-	public String getName() {
-		return "GCT IO";
-	}
-			
+  /*
+   * (non-Javadoc)
+   * 
+   * @see org.abh.lib.NameProperty#getName()
+   */
+  @Override
+  public String getName() {
+    return "GCT IO";
+  }
 
-	@Override
-	public DataFrame autoOpenFile(final MainMatCalcWindow window,
-			final Path file,
-			FileType type,
-			int headers,
-			int rowAnnotations,
-			String delimiter,
-			Collection<String> skipLines) throws IOException {
-		return GctMatrix.parseMatrix(file);
-	}	
+  @Override
+  public DataFrame autoOpenFile(final MainMatCalcWindow window, final Path file, FileType type, int headers,
+      int rowAnnotations, String delimiter, Collection<String> skipLines) throws IOException {
+    return GctMatrix.parseMatrix(file);
+  }
 
-	@Override
-	public boolean saveFile(final MainMatCalcWindow window,
-			final Path file, 
-			final DataFrame m) throws IOException {
-		GctMatrix.writeGctMatrix(m, file);
-		
-		return true;
-	}
+  @Override
+  public boolean saveFile(final MainMatCalcWindow window, final Path file, final DataFrame m) throws IOException {
+    GctMatrix.writeGctMatrix(m, file);
+
+    return true;
+  }
 }

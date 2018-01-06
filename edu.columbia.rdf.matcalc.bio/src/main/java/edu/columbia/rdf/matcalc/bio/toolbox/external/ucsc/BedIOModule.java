@@ -35,113 +35,102 @@ import edu.columbia.rdf.matcalc.FileType;
 import edu.columbia.rdf.matcalc.MainMatCalcWindow;
 import edu.columbia.rdf.matcalc.toolbox.CalcModule;
 
-
 /**
  * Allow users to open and save Broad GCT files
  *
  * @author Antony Holmes Holmes
  *
  */
-public class BedIOModule extends CalcModule  {
-	private static final GuiFileExtFilter FILTER = new BedGuiFileFilter();
+public class BedIOModule extends CalcModule {
+  private static final GuiFileExtFilter FILTER = new BedGuiFileFilter();
 
+  public BedIOModule() {
+    registerFileOpenType(FILTER);
+    registerFileSaveType(FILTER);
+  }
 
-	public BedIOModule() {
-		registerFileOpenType(FILTER);
-		registerFileSaveType(FILTER);
-	}
-	
-	/* (non-Javadoc)
-	 * @see org.abh.lib.NameProperty#getName()
-	 */
-	@Override
-	public String getName() {
-		return "BED IO";
-	}
-		
-	@Override
-	public DataFrame autoOpenFile(final MainMatCalcWindow window,
-			final Path file,
-			FileType type,
-			int headers,
-			int rowAnnotations,
-			String delimiter,
-			Collection<String> skipLines) throws IOException {
-		return Bed.toMatrix(file);
-	}		
+  /*
+   * (non-Javadoc)
+   * 
+   * @see org.abh.lib.NameProperty#getName()
+   */
+  @Override
+  public String getName() {
+    return "BED IO";
+  }
 
-	@Override
-	public boolean saveFile(final MainMatCalcWindow window,
-			final Path file, 
-			final DataFrame m) throws IOException {
-		BufferedWriter writer = FileUtils.newBufferedWriter(file);
+  @Override
+  public DataFrame autoOpenFile(final MainMatCalcWindow window, final Path file, FileType type, int headers,
+      int rowAnnotations, String delimiter, Collection<String> skipLines) throws IOException {
+    return Bed.toMatrix(file);
+  }
 
-		try {
-			writer.write("track name=\"Locations\" description=\"Locations\"");
-			writer.newLine();
+  @Override
+  public boolean saveFile(final MainMatCalcWindow window, final Path file, final DataFrame m) throws IOException {
+    BufferedWriter writer = FileUtils.newBufferedWriter(file);
 
-			for (int i = 0; i < m.getRows(); ++i) {
-				GenomicRegion r = getRegion(m, i);
-				
-				if (r != null) {
-					writer.write(Join.onTab().values(r.getChr(), r.getStart(), r.getEnd(), r.getLocation()).toString());
-				
-					writer.newLine();
-				}
-				
-				/*
-				String s = m.getText(i, 0) + ":" + m.getText(i, 1) + "-" + m.getText(i, 2);
-				
-				writer.write(Join.onTab().values(m.getText(i, 0), 
-						m.getText(i, 1),
-						m.getText(i, 2),
-						s).toString());
-				*/
-				
-				
-			}
-		} finally {
-			writer.close();
-		}
-		
-		return true;
-	}
-	
-	public static GenomicRegion getRegion(final DataFrame m, int row) {
-		GenomicRegion region = null;
+    try {
+      writer.write("track name=\"Locations\" description=\"Locations\"");
+      writer.newLine();
 
-		if (Io.isEmptyLine(m.getText(row, 0))) {
-			region = null;
-		} else if (m.getText(row, 0).contains(TextUtils.NA)) {
-			region = null;
-		} else if (GenomicRegion.isGenomicRegion(m.getText(row, 0))) {
-			region = GenomicRegion.parse(m.getText(row, 0));
-		} else if (isThreeColumnGenomicLocation(m, row)) {
-			// three column format
+      for (int i = 0; i < m.getRows(); ++i) {
+        GenomicRegion r = getRegion(m, i);
 
-			region = new GenomicRegion(ChromosomeService.getInstance().parse(m.getText(row, 0)),
-					Integer.parseInt(m.getText(row, 1)),
-					Integer.parseInt(m.getText(row, 2)));
-		} else {
-			region = null;
-		}
-		
-		return region;
-	}
-	
-	public static boolean isThreeColumnGenomicLocation(DataFrame m, int row) {
-		if (!GenomicRegion.isChr(m.getText(row, 0))) {
-			return false;
-		}
+        if (r != null) {
+          writer.write(Join.onTab().values(r.getChr(), r.getStart(), r.getEnd(), r.getLocation()).toString());
 
-		if (!TextUtils.isNumber(m.getText(row, 1))) {
-			return false;
-		}
+          writer.newLine();
+        }
 
-		if (!TextUtils.isNumber(m.getText(row, 2))) {
-			return false;
-		}
+        /*
+         * String s = m.getText(i, 0) + ":" + m.getText(i, 1) + "-" + m.getText(i, 2);
+         * 
+         * writer.write(Join.onTab().values(m.getText(i, 0), m.getText(i, 1),
+         * m.getText(i, 2), s).toString());
+         */
 
-		return true;
-	}
+      }
+    } finally {
+      writer.close();
+    }
+
+    return true;
+  }
+
+  public static GenomicRegion getRegion(final DataFrame m, int row) {
+    GenomicRegion region = null;
+
+    if (Io.isEmptyLine(m.getText(row, 0))) {
+      region = null;
+    } else if (m.getText(row, 0).contains(TextUtils.NA)) {
+      region = null;
+    } else if (GenomicRegion.isGenomicRegion(m.getText(row, 0))) {
+      region = GenomicRegion.parse(m.getText(row, 0));
+    } else if (isThreeColumnGenomicLocation(m, row)) {
+      // three column format
+
+      region = new GenomicRegion(ChromosomeService.getInstance().parse(m.getText(row, 0)),
+          Integer.parseInt(m.getText(row, 1)), Integer.parseInt(m.getText(row, 2)));
+    } else {
+      region = null;
+    }
+
+    return region;
+  }
+
+  public static boolean isThreeColumnGenomicLocation(DataFrame m, int row) {
+    if (!GenomicRegion.isChr(m.getText(row, 0))) {
+      return false;
+    }
+
+    if (!TextUtils.isNumber(m.getText(row, 1))) {
+      return false;
+    }
+
+    if (!TextUtils.isNumber(m.getText(row, 2))) {
+      return false;
+    }
+
+    return true;
+  }
 }

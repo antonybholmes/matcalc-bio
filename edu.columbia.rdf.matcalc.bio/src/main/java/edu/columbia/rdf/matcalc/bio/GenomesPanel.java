@@ -25,72 +25,70 @@ import org.jebtk.modern.tree.ModernCheckTreeMode;
  *
  */
 public class GenomesPanel extends ModernComponent {
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	private ModernCheckTree<String> mTree;
+  private ModernCheckTree<String> mTree;
 
-	private ModernButton mSelectAllButton =
-			new ModernDialogFlatButton("Select All");
+  private ModernButton mSelectAllButton = new ModernDialogFlatButton("Select All");
 
-	private boolean mCheckAll = true;
+  private boolean mCheckAll = true;
 
-	public GenomesPanel() {
-		this(ModernCheckTreeMode.MIN_ONE);
-	}
+  public GenomesPanel() {
+    this(ModernCheckTreeMode.MIN_ONE);
+  }
 
-	public GenomesPanel(ModernCheckTreeMode mode) {
+  public GenomesPanel(ModernCheckTreeMode mode) {
 
-		try {
-			mTree = AnnotationService.getInstance().createTree(mode);
+    try {
+      mTree = AnnotationService.getInstance().createTree(mode);
 
-			ModernScrollPane scrollPane = new ModernScrollPane(mTree)
-					.setHorizontalScrollBarPolicy(ScrollBarPolicy.NEVER);
+      ModernScrollPane scrollPane = new ModernScrollPane(mTree).setHorizontalScrollBarPolicy(ScrollBarPolicy.NEVER);
 
-			setBody(scrollPane); //new ModernContentPanel(scrollPane));
-			
-			// Set a default
-			((CheckTreeNode<String>)mTree.getChildByPath("/ucsc/hg19/ucsc_refseq_hg19")).setChecked(true);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+      setBody(scrollPane); // new ModernContentPanel(scrollPane));
 
-		if (mode == ModernCheckTreeMode.MULTI || 
-				mode == ModernCheckTreeMode.MIN_ONE) {
-			Box box = new HSpacedBox();
-			box.setBorder(TOP_BORDER);
-			box.add(mSelectAllButton);
-			setFooter(box);
-		}
+      // Set a default
+      ((CheckTreeNode<String>) mTree.getChildByPath("/ucsc/hg19/ucsc_refseq_hg19")).setChecked(true);
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
 
-		mSelectAllButton.addClickListener(new ModernClickListener(){
+    if (mode == ModernCheckTreeMode.MULTI || mode == ModernCheckTreeMode.MIN_ONE) {
+      Box box = new HSpacedBox();
+      box.setBorder(TOP_BORDER);
+      box.add(mSelectAllButton);
+      setFooter(box);
+    }
 
-			@Override
-			public void clicked(ModernClickEvent e) {
-				mTree.setChecked(mCheckAll);
+    mSelectAllButton.addClickListener(new ModernClickListener() {
 
-				mCheckAll = !mCheckAll;
-			}});
-	}
+      @Override
+      public void clicked(ModernClickEvent e) {
+        mTree.setChecked(mCheckAll);
 
-	public List<String> getGenomes() {
-		List<CheckTreeNode<String>> nodes = mTree.getCheckedNodes();
+        mCheckAll = !mCheckAll;
+      }
+    });
+  }
 
-		List<String> ret = new ArrayList<String>(nodes.size());
+  public List<String> getGenomes() {
+    List<CheckTreeNode<String>> nodes = mTree.getCheckedNodes();
 
-		for (CheckTreeNode<String> node : nodes) {
-			ret.add(node.getName());
-		}
+    List<String> ret = new ArrayList<String>(nodes.size());
 
-		return ret;
-	}
+    for (CheckTreeNode<String> node : nodes) {
+      ret.add(node.getName());
+    }
 
-	public String getGenome() {
-		List<String> genomes = getGenomes();
+    return ret;
+  }
 
-		if (genomes.size() > 0) {
-			return genomes.get(0);
-		} else {
-			return null;
-		}
-	}
+  public String getGenome() {
+    List<String> genomes = getGenomes();
+
+    if (genomes.size() > 0) {
+      return genomes.get(0);
+    } else {
+      return null;
+    }
+  }
 }

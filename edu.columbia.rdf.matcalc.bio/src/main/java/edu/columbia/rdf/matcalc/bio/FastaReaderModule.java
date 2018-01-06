@@ -30,70 +30,65 @@ import edu.columbia.rdf.matcalc.FileType;
 import edu.columbia.rdf.matcalc.MainMatCalcWindow;
 import edu.columbia.rdf.matcalc.toolbox.CalcModule;
 
-
 /**
  * Allow users to open and save Broad GCT files
  *
  * @author Antony Holmes Holmes
  *
  */
-public class FastaReaderModule extends CalcModule  {
-	public FastaReaderModule() {
-		registerFileOpenType(FastaGuiFileFilter.FASTA_FILTER);	
-	}
-	
-	/* (non-Javadoc)
-	 * @see org.abh.lib.NameProperty#getName()
-	 */
-	@Override
-	public String getName() {
-		return "FASTA";
-	}
-		
-	@Override
-	public DataFrame autoOpenFile(final MainMatCalcWindow window,
-			final Path file,
-			FileType type,
-			int headers,
-			int rowAnnotations,
-			String delimiter,
-			Collection<String> skipLines) throws IOException {
-		return toMatrix(file);
-	}		
-	
-	public static DataFrame toMatrix(Path file) throws IOException {
-		return toMatrix(Fasta.parse(file));
-	}
-	
-	public static DataFrame toMatrix(List<Sequence> sequences) {
-		
-		DataFrame ret = DataFrame
-				.createMixedMatrix(sequences.size(), 3);
-		
-		GenomicRegion.parse(sequences.get(0).getName());
-		
-		ret.setColumnName(0, "Name");
-		ret.setColumnName(1, "Location");
-		ret.setColumnName(2, "DNA Sequence");
-		
-		for (int i = 0; i < sequences.size(); ++i) {
-			Sequence s = sequences.get(i);
-			
-			String name = s.getName();
-			
-			ret.set(i, 0, name);
-			
-			GenomicRegion r = GenomicRegion.parse(name);
-			
-			if (r != null) {
-				ret.set(i, 1, r.getLocation());
-			} else {
-				ret.set(i, 1, name);
-			}
-			
-			ret.set(i, 2, s.toString());
-		}
-		
-		return ret;
-	}
+public class FastaReaderModule extends CalcModule {
+  public FastaReaderModule() {
+    registerFileOpenType(FastaGuiFileFilter.FASTA_FILTER);
+  }
+
+  /*
+   * (non-Javadoc)
+   * 
+   * @see org.abh.lib.NameProperty#getName()
+   */
+  @Override
+  public String getName() {
+    return "FASTA";
+  }
+
+  @Override
+  public DataFrame autoOpenFile(final MainMatCalcWindow window, final Path file, FileType type, int headers,
+      int rowAnnotations, String delimiter, Collection<String> skipLines) throws IOException {
+    return toMatrix(file);
+  }
+
+  public static DataFrame toMatrix(Path file) throws IOException {
+    return toMatrix(Fasta.parse(file));
+  }
+
+  public static DataFrame toMatrix(List<Sequence> sequences) {
+
+    DataFrame ret = DataFrame.createMixedMatrix(sequences.size(), 3);
+
+    GenomicRegion.parse(sequences.get(0).getName());
+
+    ret.setColumnName(0, "Name");
+    ret.setColumnName(1, "Location");
+    ret.setColumnName(2, "DNA Sequence");
+
+    for (int i = 0; i < sequences.size(); ++i) {
+      Sequence s = sequences.get(i);
+
+      String name = s.getName();
+
+      ret.set(i, 0, name);
+
+      GenomicRegion r = GenomicRegion.parse(name);
+
+      if (r != null) {
+        ret.set(i, 1, r.getLocation());
+      } else {
+        ret.set(i, 1, name);
+      }
+
+      ret.set(i, 2, s.toString());
+    }
+
+    return ret;
+  }
 }

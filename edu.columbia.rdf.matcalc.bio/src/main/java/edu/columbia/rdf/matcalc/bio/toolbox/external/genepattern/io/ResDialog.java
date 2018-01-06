@@ -37,36 +37,38 @@ import org.jebtk.modern.window.ModernWindow;
  *
  */
 public class ResDialog extends ModernQuestionInputDialog {
-	
-	/**
-	 * The constant serialVersionUID.
-	 */
-	private static final long serialVersionUID = 1L;
-	
 
-	/**
-	 * Instantiates a new modern int input dialog.
-	 *
-	 * @param parent the parent
-	 * @param title the title
-	 * @param prompt the prompt
-	 * @param value the value
-	 * @param min the min
-	 * @param max the max
-	 */
-	public ResDialog(ModernWindow parent) {
-		super(parent,
-				"RES File Import",
-				"Keep Absent/Present calls?",
-				"matcalc.import.genepattern.filetypes.res.help.url");
-	}
+  /**
+   * The constant serialVersionUID.
+   */
+  private static final long serialVersionUID = 1L;
 
-	/**
-	 * Gets the value.
-	 *
-	 * @return the value
-	 */
-	public boolean getKeepCols() {
-		return getAnswer();
-	}
+  /**
+   * Instantiates a new modern int input dialog.
+   *
+   * @param parent
+   *          the parent
+   * @param title
+   *          the title
+   * @param prompt
+   *          the prompt
+   * @param value
+   *          the value
+   * @param min
+   *          the min
+   * @param max
+   *          the max
+   */
+  public ResDialog(ModernWindow parent) {
+    super(parent, "RES File Import", "Keep Absent/Present calls?", "matcalc.import.genepattern.filetypes.res.help.url");
+  }
+
+  /**
+   * Gets the value.
+   *
+   * @return the value
+   */
+  public boolean getKeepCols() {
+    return getAnswer();
+  }
 }

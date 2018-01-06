@@ -39,145 +39,142 @@ import org.jebtk.modern.widget.ModernWidget;
 import org.jebtk.modern.window.ModernWindow;
 import org.jebtk.modern.window.WindowWidgetFocusEvents;
 
-
 public class FillGapsDialog extends ModernDialogTaskWindow {
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	private Map<String, Path> mBedFileMap = null;
+  private Map<String, Path> mBedFileMap = null;
 
-	private Map<String, Map<String, String>> mDescriptionMap;
-	
-	private Map<String, String> mNameMap = new TreeMap<String, String>();
+  private Map<String, Map<String, String>> mDescriptionMap;
 
-	private ModernComboBox mAnnotationCombo = 
-			new ModernComboBox(new Dimension(300, ModernWidget.WIDGET_HEIGHT));
-	
-	private ModernList<String> mSampleList = new ModernList<String>();
-	
-	private ModernButtonWidget mLoadButton = 
-			new ModernDialogFlatButton("Load...", UIService.getInstance().loadIcon("open", 16));
-	
-	private ModernNumericalTextField mMeanZeroField = 
-			new ModernClipboardNumericalTextField(FillGapsModule.SEGMENT_MEAN_ZERO);
+  private Map<String, String> mNameMap = new TreeMap<String, String>();
 
-	private List<String> mSamples = null;
+  private ModernComboBox mAnnotationCombo = new ModernComboBox(new Dimension(300, ModernWidget.WIDGET_HEIGHT));
 
-	public FillGapsDialog(ModernWindow parent,
-			Map<String, Path> bedFileMap, 
-			Map<String, Map<String, String>> descriptionMap) {
-		super(parent);
+  private ModernList<String> mSampleList = new ModernList<String>();
 
-		mBedFileMap = bedFileMap;
-		mDescriptionMap = descriptionMap;
-		
-		for (String name : mBedFileMap.keySet()) {
-			mNameMap.put(mDescriptionMap.get(name).get("description"), name);
-		}
+  private ModernButtonWidget mLoadButton = new ModernDialogFlatButton("Load...",
+      UIService.getInstance().loadIcon("open", 16));
 
-		setTitle("Fill Gaps");
+  private ModernNumericalTextField mMeanZeroField = new ModernClipboardNumericalTextField(
+      FillGapsModule.SEGMENT_MEAN_ZERO);
 
-		createUi();
+  private List<String> mSamples = null;
 
-		setup();
-	}
+  public FillGapsDialog(ModernWindow parent, Map<String, Path> bedFileMap,
+      Map<String, Map<String, String>> descriptionMap) {
+    super(parent);
 
-	private void setup() {
-		addWindowListener(new WindowWidgetFocusEvents(mOkButton));
+    mBedFileMap = bedFileMap;
+    mDescriptionMap = descriptionMap;
 
-		mLoadButton.addClickListener(new ModernClickListener() {
+    for (String name : mBedFileMap.keySet()) {
+      mNameMap.put(mDescriptionMap.get(name).get("description"), name);
+    }
 
-			@Override
-			public void clicked(ModernClickEvent e) {
-				try {
-					loadSamples();
-				} catch (InvalidFormatException | IOException e1) {
-					e1.printStackTrace();
-				}
-			}});
+    setTitle("Fill Gaps");
 
-		setResizable(true);
+    createUi();
 
-		setSize(720, 520);
+    setup();
+  }
 
-		UI.centerWindowToScreen(this);
-	}
+  private void setup() {
+    addWindowListener(new WindowWidgetFocusEvents(mOkButton));
 
-	private final void createUi() {
-		Box content = VBox.create();
-		
-		content.add(new ModernSubHeadingLabel("Annotation"));
-		
-		content.add(ModernPanel.createVGap());
-		
-		for (String name : mNameMap.keySet()) {
-			mAnnotationCombo.addScrollMenuItem(name);
-		}
-		
-		content.add(mAnnotationCombo);
-		
-		content.add(UI.createVGap(30));
-		
-		content.add(new ModernSubHeadingLabel("Samples"));
-		
-		content.add(ModernPanel.createVGap());
-		
-		Box box = HBox.create();
-		
-		ModernLineBorderPanel panel = 
-				new ModernLineBorderPanel(new ModernScrollPane(mSampleList), new Dimension(500, 200));
-		panel.setAlignmentY(TOP_ALIGNMENT);
-		box.add(panel);
-		
-		box.add(ModernWidget.createHGap());
-		
-		Box box2 = VBox.create();
-		box2.setAlignmentY(TOP_ALIGNMENT);
-		box2.add(mLoadButton);
-		
-		box.add(box2);
-		
-		content.add(box);
-		
-		content.add(UI.createVGap(30));
-		
-		box2 = HBox.create();
-		box2.add(new ModernAutoSizeLabel("Mean Zero", 100));
-		box2.add(new ModernTextBorderPanel(mMeanZeroField, 100));
-		
-		content.add(box2);
-		
-		//content.setBorder(BorderService.getInstance().createBorder(10));
-		
-		setDialogCardContent(content);
-	}
-	
-	private void loadSamples() throws IOException, InvalidFormatException {
-		Path file = ExcelDialog.open(mParent).xlsx().getFile(RecentFilesService.getInstance().getPwd());
+    mLoadButton.addClickListener(new ModernClickListener() {
 
-		if (file == null) {
-			return;
-		}
-		
-		mSamples = CollectionUtils.sort(CollectionUtils.unique(Excel.getTextFromFile(file, true)));
-		
-		ModernListModel<String> model = new ModernListModel<String>();
-		
-		for (String sample : mSamples) {
-			model.addValue(sample);
-		}
-		
-		mSampleList.setModel(model);
-	}
+      @Override
+      public void clicked(ModernClickEvent e) {
+        try {
+          loadSamples();
+        } catch (InvalidFormatException | IOException e1) {
+          e1.printStackTrace();
+        }
+      }
+    });
 
-	public String getAnnotation() {
-		return mNameMap.get(mAnnotationCombo.getText());
-	}
+    setResizable(true);
 
-	public List<String> getSamples() {
-		return mSamples;
-	}
+    setSize(720, 520);
 
-	public double getMeanZero() throws ParseException {
-		return mMeanZeroField.getAsDouble();
-	}
+    UI.centerWindowToScreen(this);
+  }
+
+  private final void createUi() {
+    Box content = VBox.create();
+
+    content.add(new ModernSubHeadingLabel("Annotation"));
+
+    content.add(ModernPanel.createVGap());
+
+    for (String name : mNameMap.keySet()) {
+      mAnnotationCombo.addScrollMenuItem(name);
+    }
+
+    content.add(mAnnotationCombo);
+
+    content.add(UI.createVGap(30));
+
+    content.add(new ModernSubHeadingLabel("Samples"));
+
+    content.add(ModernPanel.createVGap());
+
+    Box box = HBox.create();
+
+    ModernLineBorderPanel panel = new ModernLineBorderPanel(new ModernScrollPane(mSampleList), new Dimension(500, 200));
+    panel.setAlignmentY(TOP_ALIGNMENT);
+    box.add(panel);
+
+    box.add(ModernWidget.createHGap());
+
+    Box box2 = VBox.create();
+    box2.setAlignmentY(TOP_ALIGNMENT);
+    box2.add(mLoadButton);
+
+    box.add(box2);
+
+    content.add(box);
+
+    content.add(UI.createVGap(30));
+
+    box2 = HBox.create();
+    box2.add(new ModernAutoSizeLabel("Mean Zero", 100));
+    box2.add(new ModernTextBorderPanel(mMeanZeroField, 100));
+
+    content.add(box2);
+
+    // content.setBorder(BorderService.getInstance().createBorder(10));
+
+    setDialogCardContent(content);
+  }
+
+  private void loadSamples() throws IOException, InvalidFormatException {
+    Path file = ExcelDialog.open(mParent).xlsx().getFile(RecentFilesService.getInstance().getPwd());
+
+    if (file == null) {
+      return;
+    }
+
+    mSamples = CollectionUtils.sort(CollectionUtils.unique(Excel.getTextFromFile(file, true)));
+
+    ModernListModel<String> model = new ModernListModel<String>();
+
+    for (String sample : mSamples) {
+      model.addValue(sample);
+    }
+
+    mSampleList.setModel(model);
+  }
+
+  public String getAnnotation() {
+    return mNameMap.get(mAnnotationCombo.getText());
+  }
+
+  public List<String> getSamples() {
+    return mSamples;
+  }
+
+  public double getMeanZero() throws ParseException {
+    return mMeanZeroField.getAsDouble();
+  }
 }

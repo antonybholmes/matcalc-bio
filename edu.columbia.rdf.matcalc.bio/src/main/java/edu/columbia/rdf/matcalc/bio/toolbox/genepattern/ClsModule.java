@@ -54,128 +54,136 @@ import edu.columbia.rdf.matcalc.toolbox.CalcModule;
  */
 public class ClsModule extends CalcModule implements ModernClickListener {
 
-	private static final GuiFileExtFilter SAVE_CLS_FILTER = 
-			new ClsGuiFileFilter();
-	/**
-	 * The member parent.
-	 */
-	private MainMatCalcWindow mParent;
+  private static final GuiFileExtFilter SAVE_CLS_FILTER = new ClsGuiFileFilter();
+  /**
+   * The member parent.
+   */
+  private MainMatCalcWindow mParent;
 
-	/* (non-Javadoc)
-	 * @see org.abh.lib.NameProperty#getName()
-	 */
-	@Override
-	public String getName() {
-		return "CLS";
-	}
+  /*
+   * (non-Javadoc)
+   * 
+   * @see org.abh.lib.NameProperty#getName()
+   */
+  @Override
+  public String getName() {
+    return "CLS";
+  }
 
-	/* (non-Javadoc)
-	 * @see edu.columbia.rdf.apps.matcalc.modules.Module#init(edu.columbia.rdf.apps.matcalc.MainMatCalcWindow)
-	 */
-	@Override
-	public void init(MainMatCalcWindow window) {
-		mParent = window;
+  /*
+   * (non-Javadoc)
+   * 
+   * @see edu.columbia.rdf.apps.matcalc.modules.Module#init(edu.columbia.rdf.apps.
+   * matcalc.MainMatCalcWindow)
+   */
+  @Override
+  public void init(MainMatCalcWindow window) {
+    mParent = window;
 
-		RibbonLargeButton button = new RibbonLargeButton("Export CLS", 
-				UIService.getInstance().loadIcon("save", 24),
-				"Export CLS",
-				"Export a GenePattern CLS using the groups.");
-		button.addClickListener(this);
+    RibbonLargeButton button = new RibbonLargeButton("Export CLS", UIService.getInstance().loadIcon("save", 24),
+        "Export CLS", "Export a GenePattern CLS using the groups.");
+    button.addClickListener(this);
 
-		mParent.getRibbon().getToolbar("Bioinformatics").getSection("GenePattern").add(button);
-		
-		registerFileSaveType(SAVE_CLS_FILTER);
-	}
+    mParent.getRibbon().getToolbar("Bioinformatics").getSection("GenePattern").add(button);
 
-	/* (non-Javadoc)
-	 * @see org.abh.lib.ui.modern.event.ModernClickListener#clicked(org.abh.lib.ui.modern.event.ModernClickEvent)
-	 */
-	@Override
-	public void clicked(ModernClickEvent e) {
-		try {
-			export();
-		} catch (IOException e1) {
-			e1.printStackTrace();
-		}
-	}
+    registerFileSaveType(SAVE_CLS_FILTER);
+  }
 
-	/**
-	 * Export.
-	 *
-	 * @throws IOException Signals that an I/O exception has occurred.
-	 * @throws TranscoderException the transcoder exception
-	 */
-	private void export() throws IOException {
-		export(RecentFilesService.getInstance().getPwd());
-	}
+  /*
+   * (non-Javadoc)
+   * 
+   * @see
+   * org.abh.lib.ui.modern.event.ModernClickListener#clicked(org.abh.lib.ui.modern
+   * .event.ModernClickEvent)
+   */
+  @Override
+  public void clicked(ModernClickEvent e) {
+    try {
+      export();
+    } catch (IOException e1) {
+      e1.printStackTrace();
+    }
+  }
 
-	/**
-	 * Export matrix.
-	 *
-	 * @param pwd the pwd
-	 * @throws IOException Signals that an I/O exception has occurred.
-	 * @throws TranscoderException the transcoder exception
-	 */
-	private void export(Path pwd) throws IOException {
-		DataFrame m = mParent.getCurrentMatrix();
+  /**
+   * Export.
+   *
+   * @throws IOException
+   *           Signals that an I/O exception has occurred.
+   * @throws TranscoderException
+   *           the transcoder exception
+   */
+  private void export() throws IOException {
+    export(RecentFilesService.getInstance().getPwd());
+  }
 
-		if (m == null) {
-			showLoadMatrixError(mParent);
+  /**
+   * Export matrix.
+   *
+   * @param pwd
+   *          the pwd
+   * @throws IOException
+   *           Signals that an I/O exception has occurred.
+   * @throws TranscoderException
+   *           the transcoder exception
+   */
+  private void export(Path pwd) throws IOException {
+    DataFrame m = mParent.getCurrentMatrix();
 
-			return;
-		}
-		
-		Path file = FileDialog.saveFile(mParent, 
-				pwd,
-				new ClsGuiFileFilter());
-		
-		boolean status = save(file, m);
+    if (m == null) {
+      showLoadMatrixError(mParent);
 
-		if (status) {
-			ModernMessageDialog.createFileSavedDialog(mParent, file);
-		}
-	}
-	
-	private boolean save(Path file, DataFrame m) throws IOException {
-		if (file == null) {
-			return false;
-		}
+      return;
+    }
 
-		if (FileUtils.exists(file)) {
-			ModernDialogStatus status = ModernMessageDialog.createFileReplaceDialog(mParent, file);
-			
-			if (status == ModernDialogStatus.CANCEL) {
-				return false;
-			}
-		}
-		
-		XYSeriesGroup groups = mParent.getGroups();
-		
-		if (groups.size() == 0) {
-			ModernMessageDialog.createDialog(mParent, 
-					"You must create some groups.", 
-					MessageDialogType.WARNING);
-			
-			return false;
-		}
-		
-		Cls.write(file, mParent.getGroups(), m);
+    Path file = FileDialog.saveFile(mParent, pwd, new ClsGuiFileFilter());
 
-		return true;
-	}
-	
-	//@Override
-	//public GuiFileExtFilter getSaveFileFilter() {
-	//	return SAVE_CLS_FILTER;
-	//}
-	
-	/* (non-Javadoc)
-	 * @see org.matcalc.toolbox.CalcModule#openFile(org.matcalc.MainMatCalcWindow, java.nio.file.Path, boolean, int)
-	 */
-	@Override
-	public boolean saveFile(final MainMatCalcWindow window,
-			final Path file, 
-			final DataFrame m) throws IOException {
-		return save(file, m);
-	}
+    boolean status = save(file, m);
+
+    if (status) {
+      ModernMessageDialog.createFileSavedDialog(mParent, file);
+    }
+  }
+
+  private boolean save(Path file, DataFrame m) throws IOException {
+    if (file == null) {
+      return false;
+    }
+
+    if (FileUtils.exists(file)) {
+      ModernDialogStatus status = ModernMessageDialog.createFileReplaceDialog(mParent, file);
+
+      if (status == ModernDialogStatus.CANCEL) {
+        return false;
+      }
+    }
+
+    XYSeriesGroup groups = mParent.getGroups();
+
+    if (groups.size() == 0) {
+      ModernMessageDialog.createDialog(mParent, "You must create some groups.", MessageDialogType.WARNING);
+
+      return false;
+    }
+
+    Cls.write(file, mParent.getGroups(), m);
+
+    return true;
+  }
+
+  // @Override
+  // public GuiFileExtFilter getSaveFileFilter() {
+  // return SAVE_CLS_FILTER;
+  // }
+
+  /*
+   * (non-Javadoc)
+   * 
+   * @see org.matcalc.toolbox.CalcModule#openFile(org.matcalc.MainMatCalcWindow,
+   * java.nio.file.Path, boolean, int)
+   */
+  @Override
+  public boolean saveFile(final MainMatCalcWindow window, final Path file, final DataFrame m) throws IOException {
+    return save(file, m);
+  }
 }

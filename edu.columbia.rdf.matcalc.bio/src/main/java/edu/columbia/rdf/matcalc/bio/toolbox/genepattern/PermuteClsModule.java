@@ -58,180 +58,181 @@ import edu.columbia.rdf.matcalc.toolbox.CalcModule;
  */
 public class PermuteClsModule extends CalcModule implements ModernClickListener {
 
-	/**
-	 * The member parent.
-	 */
-	private MainMatCalcWindow mParent;
+  /**
+   * The member parent.
+   */
+  private MainMatCalcWindow mParent;
 
-	/* (non-Javadoc)
-	 * @see org.abh.lib.NameProperty#getName()
-	 */
-	@Override
-	public String getName() {
-		return "CLS";
-	}
+  /*
+   * (non-Javadoc)
+   * 
+   * @see org.abh.lib.NameProperty#getName()
+   */
+  @Override
+  public String getName() {
+    return "CLS";
+  }
 
-	/* (non-Javadoc)
-	 * @see edu.columbia.rdf.apps.matcalc.modules.Module#init(edu.columbia.rdf.apps.matcalc.MainMatCalcWindow)
-	 */
-	@Override
-	public void init(MainMatCalcWindow window) {
-		mParent = window;
+  /*
+   * (non-Javadoc)
+   * 
+   * @see edu.columbia.rdf.apps.matcalc.modules.Module#init(edu.columbia.rdf.apps.
+   * matcalc.MainMatCalcWindow)
+   */
+  @Override
+  public void init(MainMatCalcWindow window) {
+    mParent = window;
 
-		RibbonLargeButton button = new RibbonLargeButton("Permute CLS", 
-				UIService.getInstance().loadIcon("save", 24),
-				"Permute CLS",
-				"Create random permutations of a GenePattern CLS using the groups.");
-		button.addClickListener(this);
+    RibbonLargeButton button = new RibbonLargeButton("Permute CLS", UIService.getInstance().loadIcon("save", 24),
+        "Permute CLS", "Create random permutations of a GenePattern CLS using the groups.");
+    button.addClickListener(this);
 
-		mParent.getRibbon().getToolbar("Bioinformatics").getSection("GenePattern").add(button);
-	}
+    mParent.getRibbon().getToolbar("Bioinformatics").getSection("GenePattern").add(button);
+  }
 
-	/* (non-Javadoc)
-	 * @see org.abh.lib.ui.modern.event.ModernClickListener#clicked(org.abh.lib.ui.modern.event.ModernClickEvent)
-	 */
-	@Override
-	public void clicked(ModernClickEvent e) {
-		try {
-			permute();
-		} catch (IOException e1) {
-			e1.printStackTrace();
-		} catch (ParseException e1) {
-			e1.printStackTrace();
-		}
-	}
+  /*
+   * (non-Javadoc)
+   * 
+   * @see
+   * org.abh.lib.ui.modern.event.ModernClickListener#clicked(org.abh.lib.ui.modern
+   * .event.ModernClickEvent)
+   */
+  @Override
+  public void clicked(ModernClickEvent e) {
+    try {
+      permute();
+    } catch (IOException e1) {
+      e1.printStackTrace();
+    } catch (ParseException e1) {
+      e1.printStackTrace();
+    }
+  }
 
-	/**
-	 * Export.
-	 *
-	 * @throws IOException Signals that an I/O exception has occurred.
-	 * @throws ParseException 
-	 * @throws TranscoderException the transcoder exception
-	 */
-	private void permute() throws IOException, ParseException {
-		export(RecentFilesService.getInstance().getPwd());
-	}
+  /**
+   * Export.
+   *
+   * @throws IOException
+   *           Signals that an I/O exception has occurred.
+   * @throws ParseException
+   * @throws TranscoderException
+   *           the transcoder exception
+   */
+  private void permute() throws IOException, ParseException {
+    export(RecentFilesService.getInstance().getPwd());
+  }
 
-	/**
-	 * Export matrix.
-	 *
-	 * @param pwd the pwd
-	 * @throws IOException Signals that an I/O exception has occurred.
-	 * @throws ParseException 
-	 * @throws TranscoderException the transcoder exception
-	 */
-	private void export(Path pwd) throws IOException, ParseException {
-		DataFrame m = mParent.getCurrentMatrix();
+  /**
+   * Export matrix.
+   *
+   * @param pwd
+   *          the pwd
+   * @throws IOException
+   *           Signals that an I/O exception has occurred.
+   * @throws ParseException
+   * @throws TranscoderException
+   *           the transcoder exception
+   */
+  private void export(Path pwd) throws IOException, ParseException {
+    DataFrame m = mParent.getCurrentMatrix();
 
-		if (m == null) {
-			showLoadMatrixError(mParent);
+    if (m == null) {
+      showLoadMatrixError(mParent);
 
-			return;
-		}
+      return;
+    }
 
-		XYSeriesGroup groups = mParent.getGroups();
+    XYSeriesGroup groups = mParent.getGroups();
 
-		if (groups.size() < 2) {
-			ModernMessageDialog.createDialog(mParent, 
-					"You must create some groups.", 
-					MessageDialogType.WARNING);
+    if (groups.size() < 2) {
+      ModernMessageDialog.createDialog(mParent, "You must create some groups.", MessageDialogType.WARNING);
 
-			return;
-		}
+      return;
+    }
 
+    PermuteDialog dialog = new PermuteDialog(mParent, mParent.getGroups());
 
-		PermuteDialog dialog = new PermuteDialog(mParent, mParent.getGroups());
+    dialog.setVisible(true);
 
-		dialog.setVisible(true);
+    if (dialog.getStatus() == ModernDialogStatus.CANCEL) {
+      return;
+    }
 
-		if (dialog.getStatus() == ModernDialogStatus.CANCEL) {
-			return;
-		}
+    int reps = dialog.getPermutations();
 
-		int reps = dialog.getPermutations();
+    if (reps < 1) {
+      ModernMessageDialog.createDialog(mParent, "You must create at least one permutation.", MessageDialogType.WARNING);
 
-		if (reps < 1) {
-			ModernMessageDialog.createDialog(mParent, 
-					"You must create at least one permutation.", 
-					MessageDialogType.WARNING);
+      return;
+    }
 
-			return;
-		}
+    Path dir = dialog.getDir();
 
-		Path dir = dialog.getDir();
+    String prefix = dialog.getPrefix();
 
-		String prefix = dialog.getPrefix();
+    DataFrame matrix = mParent.getCurrentMatrix();
 
-		DataFrame matrix = mParent.getCurrentMatrix();
+    groups = mParent.getGroups();
 
-		groups = mParent.getGroups();
+    boolean sampleWithReplacement = dialog.getSampleWithReplacement();
 
+    XYSeries group1 = dialog.getGroup1();
+    int size1 = dialog.getSample1Size();
 
+    XYSeries group2 = dialog.getGroup2();
+    int size2 = dialog.getSample2Size();
 
-		boolean sampleWithReplacement = dialog.getSampleWithReplacement();
+    List<Integer> indices1 = XYSeries.findColumnIndices(matrix, group1);
+    List<Integer> indices2 = XYSeries.findColumnIndices(matrix, group2);
 
-		XYSeries group1 = dialog.getGroup1();
-		int size1 = dialog.getSample1Size();
+    // Create multiple files
+    for (int rep = 0; rep < reps; ++rep) {
+      Path file = dir.resolve(prefix + "_" + (rep + 1) + ".cls");
 
-		XYSeries group2 = dialog.getGroup2();
-		int size2 = dialog.getSample2Size();
+      System.err.println("Creating CLS " + file);
 
-		List<Integer> indices1 = XYSeries.findColumnIndices(matrix, group1);
-		List<Integer> indices2 = XYSeries.findColumnIndices(matrix, group2);
+      Map<String, String> groupMap = new HashMap<String, String>();
 
-		// Create multiple files
-		for (int rep = 0; rep < reps; ++rep) {
-			Path file = dir.resolve(prefix + "_" + (rep + 1) + ".cls");
+      for (String name : matrix.getColumnNames()) {
+        groupMap.put(name, Cls.UNDEF_GROUP);
+      }
 
-			System.err.println("Creating CLS " + file);
+      List<Integer> subIndices1;
+      List<Integer> subIndices2;
 
-			Map<String, String> groupMap = new HashMap<String, String>();
+      if (sampleWithReplacement) {
+        subIndices1 = Mathematics.randSubsetWithReplacement(indices1, size1);
+        subIndices2 = Mathematics.randSubsetWithReplacement(indices2, size2);
+      } else {
+        subIndices1 = Mathematics.randSubsetWithoutReplacement(indices1, size1);
+        subIndices2 = Mathematics.randSubsetWithoutReplacement(indices2, size2);
+      }
 
-			for (String name : matrix.getColumnNames()) {
-				groupMap.put(name, Cls.UNDEF_GROUP);
-			}
+      for (int i : subIndices1) {
+        groupMap.put(matrix.getColumnName(i), group1.getName());
+      }
 
-			List<Integer> subIndices1;
-			List<Integer> subIndices2; 
+      for (int i : subIndices2) {
+        groupMap.put(matrix.getColumnName(i), group2.getName());
+      }
 
-			if (sampleWithReplacement) {
-				subIndices1 = Mathematics.randSubsetWithReplacement(indices1, size1);
-				subIndices2 = Mathematics.randSubsetWithReplacement(indices2, size2);
-			} else {
-				subIndices1 = Mathematics.randSubsetWithoutReplacement(indices1, size1);
-				subIndices2 = Mathematics.randSubsetWithoutReplacement(indices2, size2);
-			}
+      // Now make a list of the unique group names in the order they appear
 
-			for (int i : subIndices1) {
-				groupMap.put(matrix.getColumnName(i), group1.getName());
-			}
+      List<String> names = new UniqueArrayList<String>();
 
-			for (int i : subIndices2) {
-				groupMap.put(matrix.getColumnName(i), group2.getName());
-			}
+      for (String name : matrix.getColumnNames()) {
+        names.add(groupMap.get(name));
+      }
 
-			// Now make a list of the unique group names in the order they appear
+      Cls.write(file, names, groupMap, matrix);
 
-			List<String> names = new UniqueArrayList<String>();
+    }
 
-			for (String name : matrix.getColumnNames()) {
-				names.add(groupMap.get(name));
-			}
-
-			Cls.write(file, names, groupMap, matrix);
-
-		}
-
-		if (reps == 1) {
-			ModernMessageDialog.createDialog(mParent, 
-					MessageDialogType.INFORMATION,
-					"The CLS file has been saved in:",
-					PathUtils.toString(dir));
-		} else {
-			ModernMessageDialog.createDialog(mParent, 
-					MessageDialogType.INFORMATION,
-					"The " + reps + " CLS files have been saved in:",
-					PathUtils.toString(dir));
-		}
-	}
+    if (reps == 1) {
+      ModernMessageDialog.createDialog(mParent, MessageDialogType.INFORMATION, "The CLS file has been saved in:",
+          PathUtils.toString(dir));
+    } else {
+      ModernMessageDialog.createDialog(mParent, MessageDialogType.INFORMATION,
+          "The " + reps + " CLS files have been saved in:", PathUtils.toString(dir));
+    }
+  }
 }
