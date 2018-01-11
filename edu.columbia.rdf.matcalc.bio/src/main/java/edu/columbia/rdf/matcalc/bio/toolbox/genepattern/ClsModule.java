@@ -73,18 +73,21 @@ public class ClsModule extends CalcModule implements ModernClickListener {
   /*
    * (non-Javadoc)
    * 
-   * @see edu.columbia.rdf.apps.matcalc.modules.Module#init(edu.columbia.rdf.apps.
+   * @see
+   * edu.columbia.rdf.apps.matcalc.modules.Module#init(edu.columbia.rdf.apps.
    * matcalc.MainMatCalcWindow)
    */
   @Override
   public void init(MainMatCalcWindow window) {
     mParent = window;
 
-    RibbonLargeButton button = new RibbonLargeButton("Export CLS", UIService.getInstance().loadIcon("save", 24),
-        "Export CLS", "Export a GenePattern CLS using the groups.");
+    RibbonLargeButton button = new RibbonLargeButton("Export CLS",
+        UIService.getInstance().loadIcon("save", 24), "Export CLS",
+        "Export a GenePattern CLS using the groups.");
     button.addClickListener(this);
 
-    mParent.getRibbon().getToolbar("Bioinformatics").getSection("GenePattern").add(button);
+    mParent.getRibbon().getToolbar("Bioinformatics").getSection("GenePattern")
+        .add(button);
 
     registerFileSaveType(SAVE_CLS_FILTER);
   }
@@ -93,8 +96,8 @@ public class ClsModule extends CalcModule implements ModernClickListener {
    * (non-Javadoc)
    * 
    * @see
-   * org.abh.lib.ui.modern.event.ModernClickListener#clicked(org.abh.lib.ui.modern
-   * .event.ModernClickEvent)
+   * org.abh.lib.ui.modern.event.ModernClickListener#clicked(org.abh.lib.ui.
+   * modern .event.ModernClickEvent)
    */
   @Override
   public void clicked(ModernClickEvent e) {
@@ -108,10 +111,8 @@ public class ClsModule extends CalcModule implements ModernClickListener {
   /**
    * Export.
    *
-   * @throws IOException
-   *           Signals that an I/O exception has occurred.
-   * @throws TranscoderException
-   *           the transcoder exception
+   * @throws IOException Signals that an I/O exception has occurred.
+   * @throws TranscoderException the transcoder exception
    */
   private void export() throws IOException {
     export(RecentFilesService.getInstance().getPwd());
@@ -120,12 +121,9 @@ public class ClsModule extends CalcModule implements ModernClickListener {
   /**
    * Export matrix.
    *
-   * @param pwd
-   *          the pwd
-   * @throws IOException
-   *           Signals that an I/O exception has occurred.
-   * @throws TranscoderException
-   *           the transcoder exception
+   * @param pwd the pwd
+   * @throws IOException Signals that an I/O exception has occurred.
+   * @throws TranscoderException the transcoder exception
    */
   private void export(Path pwd) throws IOException {
     DataFrame m = mParent.getCurrentMatrix();
@@ -151,7 +149,8 @@ public class ClsModule extends CalcModule implements ModernClickListener {
     }
 
     if (FileUtils.exists(file)) {
-      ModernDialogStatus status = ModernMessageDialog.createFileReplaceDialog(mParent, file);
+      ModernDialogStatus status = ModernMessageDialog
+          .createFileReplaceDialog(mParent, file);
 
       if (status == ModernDialogStatus.CANCEL) {
         return false;
@@ -161,7 +160,9 @@ public class ClsModule extends CalcModule implements ModernClickListener {
     XYSeriesGroup groups = mParent.getGroups();
 
     if (groups.size() == 0) {
-      ModernMessageDialog.createDialog(mParent, "You must create some groups.", MessageDialogType.WARNING);
+      ModernMessageDialog.createDialog(mParent,
+          "You must create some groups.",
+          MessageDialogType.WARNING);
 
       return false;
     }
@@ -183,7 +184,9 @@ public class ClsModule extends CalcModule implements ModernClickListener {
    * java.nio.file.Path, boolean, int)
    */
   @Override
-  public boolean saveFile(final MainMatCalcWindow window, final Path file, final DataFrame m) throws IOException {
+  public boolean saveFile(final MainMatCalcWindow window,
+      final Path file,
+      final DataFrame m) throws IOException {
     return save(file, m);
   }
 }

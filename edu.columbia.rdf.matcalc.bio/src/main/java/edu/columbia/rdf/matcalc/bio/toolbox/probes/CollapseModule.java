@@ -29,10 +29,12 @@ public class CollapseModule extends CalcModule implements ModernClickListener {
   public void init(MainMatCalcWindow window) {
     mWindow = window;
 
-    RibbonLargeButton button = new RibbonLargeButton("Collapse Rows", UIService.getInstance().loadIcon("collapse", 32),
-        "Collapse Rows", "Collapse rows by annotation, e.g. probe ids.");
+    RibbonLargeButton button = new RibbonLargeButton("Collapse Rows",
+        UIService.getInstance().loadIcon("collapse", 32), "Collapse Rows",
+        "Collapse rows by annotation, e.g. probe ids.");
     button.addClickListener(this);
-    mWindow.getRibbon().getToolbar("Annotation").getSection("Probes").add(button);
+    mWindow.getRibbon().getToolbar("Annotation").getSection("Probes")
+        .add(button);
   }
 
   @Override

@@ -48,7 +48,8 @@ public class FillGapsDialog extends ModernDialogTaskWindow {
 
   private Map<String, String> mNameMap = new TreeMap<String, String>();
 
-  private ModernComboBox mAnnotationCombo = new ModernComboBox(new Dimension(300, ModernWidget.WIDGET_HEIGHT));
+  private ModernComboBox mAnnotationCombo = new ModernComboBox(
+      new Dimension(300, ModernWidget.WIDGET_HEIGHT));
 
   private ModernList<String> mSampleList = new ModernList<String>();
 
@@ -121,7 +122,8 @@ public class FillGapsDialog extends ModernDialogTaskWindow {
 
     Box box = HBox.create();
 
-    ModernLineBorderPanel panel = new ModernLineBorderPanel(new ModernScrollPane(mSampleList), new Dimension(500, 200));
+    ModernLineBorderPanel panel = new ModernLineBorderPanel(
+        new ModernScrollPane(mSampleList), new Dimension(500, 200));
     panel.setAlignmentY(TOP_ALIGNMENT);
     box.add(panel);
 
@@ -149,13 +151,15 @@ public class FillGapsDialog extends ModernDialogTaskWindow {
   }
 
   private void loadSamples() throws IOException, InvalidFormatException {
-    Path file = ExcelDialog.open(mParent).xlsx().getFile(RecentFilesService.getInstance().getPwd());
+    Path file = ExcelDialog.open(mParent).xlsx()
+        .getFile(RecentFilesService.getInstance().getPwd());
 
     if (file == null) {
       return;
     }
 
-    mSamples = CollectionUtils.sort(CollectionUtils.unique(Excel.getTextFromFile(file, true)));
+    mSamples = CollectionUtils
+        .sort(CollectionUtils.unique(Excel.getTextFromFile(file, true)));
 
     ModernListModel<String> model = new ModernListModel<String>();
 

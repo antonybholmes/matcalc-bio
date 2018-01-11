@@ -12,14 +12,12 @@ import org.jebtk.modern.ModernComponent;
 import org.jebtk.modern.UI;
 import org.jebtk.modern.button.CheckBox;
 import org.jebtk.modern.button.ModernCheckSwitch;
-import org.jebtk.modern.collapsepane.ModernSubCollapsePane;
 import org.jebtk.modern.event.ModernClickEvent;
 import org.jebtk.modern.event.ModernClickListener;
 import org.jebtk.modern.panel.VBox;
 import org.jebtk.modern.scrollpane.ModernScrollPane;
 import org.jebtk.modern.scrollpane.ScrollBarPolicy;
 import org.jebtk.modern.text.ModernSubHeadingLabel;
-import org.jebtk.modern.widget.ModernWidget;
 
 /**
  * List available annotations organized by genome that a user can select from.
@@ -56,7 +54,8 @@ public class AnnotationSidePanel extends ModernComponent {
         box.add(new ModernSubHeadingLabel(genome));
         box.add(UI.createVGap(5));
 
-        for (String name : AnnotationService.getInstance().annotations(genome)) {
+        for (String name : AnnotationService.getInstance()
+            .annotations(genome)) {
 
           ModernCheckSwitch button = new ModernCheckSwitch(name);
           button.setBorder(LEFT_BORDER);
@@ -75,7 +74,8 @@ public class AnnotationSidePanel extends ModernComponent {
 
     // box.setBorder(BORDER);
 
-    setBody(new ModernScrollPane(box).setHorizontalScrollBarPolicy(ScrollBarPolicy.NEVER));
+    setBody(new ModernScrollPane(box)
+        .setHorizontalScrollBarPolicy(ScrollBarPolicy.NEVER));
 
     setBorder(DOUBLE_BORDER);
 

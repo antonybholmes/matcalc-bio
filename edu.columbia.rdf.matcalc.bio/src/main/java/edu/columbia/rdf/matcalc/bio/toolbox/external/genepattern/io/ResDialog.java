@@ -46,21 +46,16 @@ public class ResDialog extends ModernQuestionInputDialog {
   /**
    * Instantiates a new modern int input dialog.
    *
-   * @param parent
-   *          the parent
-   * @param title
-   *          the title
-   * @param prompt
-   *          the prompt
-   * @param value
-   *          the value
-   * @param min
-   *          the min
-   * @param max
-   *          the max
+   * @param parent the parent
+   * @param title the title
+   * @param prompt the prompt
+   * @param value the value
+   * @param min the min
+   * @param max the max
    */
   public ResDialog(ModernWindow parent) {
-    super(parent, "RES File Import", "Keep Absent/Present calls?", "matcalc.import.genepattern.filetypes.res.help.url");
+    super(parent, "RES File Import", "Keep Absent/Present calls?",
+        "matcalc.import.genepattern.filetypes.res.help.url");
   }
 
   /**

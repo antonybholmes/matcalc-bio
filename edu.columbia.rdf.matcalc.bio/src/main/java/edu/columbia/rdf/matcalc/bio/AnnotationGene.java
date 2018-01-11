@@ -48,9 +48,11 @@ public class AnnotationGene extends GenomicRegion implements TextIdProperty {
 
   private Map<String, String> mAltMap = new HashMap<String, String>();
 
-  private static final Pattern SYMBOL_REGEX = Pattern.compile("gene_name=\"(.+?)\"");
+  private static final Pattern SYMBOL_REGEX = Pattern
+      .compile("gene_name=\"(.+?)\"");
 
-  private static final Pattern TRANSCRIPT_REGEX = Pattern.compile("transcript_id=\"(.+?)\"");
+  private static final Pattern TRANSCRIPT_REGEX = Pattern
+      .compile("transcript_id=\"(.+?)\"");
 
   private GenomicRegion mTss = null;
   private String mId = null;
@@ -66,9 +68,11 @@ public class AnnotationGene extends GenomicRegion implements TextIdProperty {
     mStrand = strand;
 
     if (mStrand == Strand.SENSE) {
-      mTss = new GenomicRegion(region.getChr(), region.getStart(), region.getStart());
+      mTss = new GenomicRegion(region.getChr(), region.getStart(),
+          region.getStart());
     } else {
-      mTss = new GenomicRegion(region.getChr(), region.getEnd(), region.getEnd());
+      mTss = new GenomicRegion(region.getChr(), region.getEnd(),
+          region.getEnd());
     }
   }
 
@@ -83,7 +87,12 @@ public class AnnotationGene extends GenomicRegion implements TextIdProperty {
 
   public String getSymbol() {
     if (mSymbolType == null) {
-      mSymbolType = CollectionUtils.contains(mAltMap, "Gene Name", "gene_name", "gene_symbol", "symbol", "Symbol");
+      mSymbolType = CollectionUtils.contains(mAltMap,
+          "Gene Name",
+          "gene_name",
+          "gene_symbol",
+          "symbol",
+          "Symbol");
     }
 
     return getAltName(mSymbolType);
@@ -100,7 +109,8 @@ public class AnnotationGene extends GenomicRegion implements TextIdProperty {
   public void addAltName(String type, String name) {
     mAltMap.put(type, name);
 
-    mText = mId + " " + TextUtils.parenthesis(Join.onComma().values(CollectionUtils.toList(mAltMap)));
+    mText = mId + " " + TextUtils
+        .parenthesis(Join.onComma().values(CollectionUtils.toList(mAltMap)));
   }
 
   public Collection<String> getAltTypes() {
@@ -108,8 +118,8 @@ public class AnnotationGene extends GenomicRegion implements TextIdProperty {
   }
 
   /**
-   * Genes can have multiple alternative names/ids associated with them depending
-   * on the database.
+   * Genes can have multiple alternative names/ids associated with them
+   * depending on the database.
    * 
    * @param type
    * @return
@@ -151,8 +161,8 @@ public class AnnotationGene extends GenomicRegion implements TextIdProperty {
   }
 
   /**
-   * Get the distance from the mid point of a region to a gene accounting for the
-   * strand.
+   * Get the distance from the mid point of a region to a gene accounting for
+   * the strand.
    * 
    * @param gene
    * @param region
@@ -182,7 +192,8 @@ public class AnnotationGene extends GenomicRegion implements TextIdProperty {
 
   public String getEntrez() {
     if (mEntrezType == null) {
-      mEntrezType = CollectionUtils.contains(mAltMap, "Entrez Id", "entrez_id", "entrez", "Entrez");
+      mEntrezType = CollectionUtils
+          .contains(mAltMap, "Entrez Id", "entrez_id", "entrez", "Entrez");
     }
 
     return getAltName(mEntrezType);
@@ -190,7 +201,11 @@ public class AnnotationGene extends GenomicRegion implements TextIdProperty {
 
   public String getRefSeq() {
     if (mRefSeqType == null) {
-      mRefSeqType = CollectionUtils.contains(mAltMap, "Transcript Id", "transcript_id", "RefSeq Id", "refseq_id",
+      mRefSeqType = CollectionUtils.contains(mAltMap,
+          "Transcript Id",
+          "transcript_id",
+          "RefSeq Id",
+          "refseq_id",
           "RefSeq");
     }
 
@@ -229,8 +244,10 @@ public class AnnotationGene extends GenomicRegion implements TextIdProperty {
    * return search; }
    */
 
-  public static FixedGapSearch<AnnotationGene> parseTssForSearch(String name, Path file, int ext5p, int ext3p)
-      throws IOException {
+  public static FixedGapSearch<AnnotationGene> parseTssForSearch(String name,
+      Path file,
+      int ext5p,
+      int ext3p) throws IOException {
     FixedGapSearch<AnnotationGene> search = new FixedGapSearch<AnnotationGene>();
 
     parseTssForSearch(file, ext5p, ext3p, search);
@@ -238,8 +255,11 @@ public class AnnotationGene extends GenomicRegion implements TextIdProperty {
     return search;
   }
 
-  public static BinarySearch<AnnotationGene> parseTssForBinarySearch(String name, Path file, int ext5p, int ext3p)
-      throws IOException {
+  public static BinarySearch<AnnotationGene> parseTssForBinarySearch(
+      String name,
+      Path file,
+      int ext5p,
+      int ext3p) throws IOException {
 
     BinarySearch<AnnotationGene> search = new BinarySearch<AnnotationGene>();
 
@@ -248,8 +268,10 @@ public class AnnotationGene extends GenomicRegion implements TextIdProperty {
     return search;
   }
 
-  public static void parseTssForSearch(Path file, int ext5p, int ext3p, GapSearch<AnnotationGene> gappedSearch)
-      throws IOException {
+  public static void parseTssForSearch(Path file,
+      int ext5p,
+      int ext3p,
+      GapSearch<AnnotationGene> gappedSearch) throws IOException {
 
     String line;
     List<String> tokens;
@@ -263,7 +285,8 @@ public class AnnotationGene extends GenomicRegion implements TextIdProperty {
 
       List<String> header = splitter.text(reader.readLine());
 
-      List<String> altNames = CollectionUtils.subList(header, ALT_COL, header.size() - ALT_COL);
+      List<String> altNames = CollectionUtils
+          .subList(header, ALT_COL, header.size() - ALT_COL);
 
       while ((line = reader.readLine()) != null) {
         if (Io.isEmptyLine(line)) {
@@ -274,7 +297,8 @@ public class AnnotationGene extends GenomicRegion implements TextIdProperty {
 
         String symbol = tokens.get(SYMBOL_COL);
 
-        Chromosome chr = ChromosomeService.getInstance().parse(tokens.get(CHR_COL));
+        Chromosome chr = ChromosomeService.getInstance()
+            .parse(tokens.get(CHR_COL));
         Strand strand = Strand.parse(tokens.get(STRAND_COL));
 
         // UCSC convention
@@ -282,9 +306,11 @@ public class AnnotationGene extends GenomicRegion implements TextIdProperty {
         int end = Integer.parseInt(tokens.get(END_COL));
         int exonCount = Integer.parseInt(tokens.get(EXON_COUNT_COL));
 
-        List<Integer> exonStarts = TextUtils.toInt(exonSplitter.text(tokens.get(EXON_START_COL)));
+        List<Integer> exonStarts = TextUtils
+            .toInt(exonSplitter.text(tokens.get(EXON_START_COL)));
 
-        List<Integer> exonEnds = TextUtils.toInt(exonSplitter.text(tokens.get(EXON_END_COL)));
+        List<Integer> exonEnds = TextUtils
+            .toInt(exonSplitter.text(tokens.get(EXON_END_COL)));
 
         GenomicRegion region = new GenomicRegion(chr, start, end);
 
@@ -294,7 +320,8 @@ public class AnnotationGene extends GenomicRegion implements TextIdProperty {
 
         for (int i = 0; i < exonCount; ++i) {
           // UCSC convention
-          GenomicRegion exon = new GenomicRegion(chr, exonStarts.get(i) + 1, exonEnds.get(i));
+          GenomicRegion exon = new GenomicRegion(chr, exonStarts.get(i) + 1,
+              exonEnds.get(i));
 
           gene.getExons().add(exon);
         }
@@ -316,7 +343,8 @@ public class AnnotationGene extends GenomicRegion implements TextIdProperty {
           end += ext3p;
         }
 
-        gappedSearch.add(GenomicRegion.create(region.getChr(), start, end), gene);
+        gappedSearch.add(GenomicRegion.create(region.getChr(), start, end),
+            gene);
       }
 
     } finally {
@@ -324,8 +352,10 @@ public class AnnotationGene extends GenomicRegion implements TextIdProperty {
     }
   }
 
-  public static FixedGapSearch<AnnotationGene> parseGFF3(String name, Path file, int ext5p, int ext3p)
-      throws IOException {
+  public static FixedGapSearch<AnnotationGene> parseGFF3(String name,
+      Path file,
+      int ext5p,
+      int ext3p) throws IOException {
 
     FixedGapSearch<AnnotationGene> search = new FixedGapSearch<AnnotationGene>();
 
@@ -334,8 +364,10 @@ public class AnnotationGene extends GenomicRegion implements TextIdProperty {
     return search;
   }
 
-  public static BinarySearch<AnnotationGene> parseGFF3Binary(String name, Path file, int ext5p, int ext3p)
-      throws IOException {
+  public static BinarySearch<AnnotationGene> parseGFF3Binary(String name,
+      Path file,
+      int ext5p,
+      int ext3p) throws IOException {
 
     BinarySearch<AnnotationGene> search = new BinarySearch<AnnotationGene>();
 
@@ -344,8 +376,10 @@ public class AnnotationGene extends GenomicRegion implements TextIdProperty {
     return search;
   }
 
-  public static void parseGFF3(Path file, int ext5p, int ext3p, GapSearch<AnnotationGene> gappedSearch)
-      throws IOException {
+  public static void parseGFF3(Path file,
+      int ext5p,
+      int ext3p,
+      GapSearch<AnnotationGene> gappedSearch) throws IOException {
 
     String line;
     List<String> tokens;
@@ -353,7 +387,8 @@ public class AnnotationGene extends GenomicRegion implements TextIdProperty {
     Splitter splitter = Splitter.onTab();
 
     IterMap<String, IterMap<Chromosome, List<GenomicRegion>>> exonMap = DefaultHashMap
-        .create(new DefaultHashMapCreator<Chromosome, List<GenomicRegion>>(new ArrayListCreator<GenomicRegion>()));
+        .create(new DefaultHashMapCreator<Chromosome, List<GenomicRegion>>(
+            new ArrayListCreator<GenomicRegion>()));
 
     Map<String, String> symbolMap = new HashMap<String, String>();
 
@@ -376,7 +411,8 @@ public class AnnotationGene extends GenomicRegion implements TextIdProperty {
           continue;
         }
 
-        Map<String, String> attributes = GFF3Parser.parseGFF3Attributes(tokens.get(8));
+        Map<String, String> attributes = GFF3Parser
+            .parseGFF3Attributes(tokens.get(8));
 
         String symbol = attributes.get("gene_name");
 
@@ -432,7 +468,8 @@ public class AnnotationGene extends GenomicRegion implements TextIdProperty {
 
         String symbol = symbolMap.get(transcript);
 
-        AnnotationGene gene = new AnnotationGene(symbol, strand, new GenomicRegion(chr, start, end));
+        AnnotationGene gene = new AnnotationGene(symbol, strand,
+            new GenomicRegion(chr, start, end));
 
         for (GenomicRegion r : regions) {
           gene.getExons().add(r);
@@ -441,7 +478,8 @@ public class AnnotationGene extends GenomicRegion implements TextIdProperty {
         Map<String, String> attributes = attributeMap.get(transcript);
 
         for (String attribute : CollectionUtils.sortKeys(attributes)) {
-          gene.addAltName(GFF3Parser.formatAttributeName(attribute), attributes.get(attribute));
+          gene.addAltName(GFF3Parser.formatAttributeName(attribute),
+              attributes.get(attribute));
         }
 
         // Extend to create promotor region
@@ -468,7 +506,8 @@ public class AnnotationGene extends GenomicRegion implements TextIdProperty {
 
       List<String> header = splitter.text(reader.readLine());
 
-      ret.addAll(CollectionUtils.subList(header, ALT_COL, header.size() - ALT_COL));
+      ret.addAll(
+          CollectionUtils.subList(header, ALT_COL, header.size() - ALT_COL));
     } finally {
       reader.close();
     }
@@ -485,7 +524,8 @@ public class AnnotationGene extends GenomicRegion implements TextIdProperty {
     List<String> ret = new ArrayList<String>(25);
 
     try {
-      Map<String, String> attributes = GFF3Parser.parseGFF3Attributes(TextUtils.tabSplit(reader.readLine()));
+      Map<String, String> attributes = GFF3Parser
+          .parseGFF3Attributes(TextUtils.tabSplit(reader.readLine()));
 
       for (String attribute : CollectionUtils.sortKeys(attributes)) {
         ret.add(GFF3Parser.formatAttributeName(attribute));

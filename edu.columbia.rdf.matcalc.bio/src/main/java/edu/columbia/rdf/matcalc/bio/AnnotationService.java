@@ -40,7 +40,6 @@ import java.util.TreeMap;
 
 import org.jebtk.bioinformatics.gapsearch.BinarySearch;
 import org.jebtk.bioinformatics.gapsearch.FixedGapSearch;
-import org.jebtk.bioinformatics.genomic.GTB2Parser;
 import org.jebtk.core.collections.DefaultHashMap;
 import org.jebtk.core.collections.DefaultHashMapCreator;
 import org.jebtk.core.collections.DefaultTreeMap;
@@ -71,9 +70,11 @@ public class AnnotationService implements Iterable<String> {
     return AnnotationServiceLoader.INSTANCE;
   }
 
-  private static final Path RES_DIR = PathUtils.getPath("res/modules/gene_annotation/genomes");
+  private static final Path RES_DIR = PathUtils
+      .getPath("res/modules/gene_annotation/genomes");
 
-  private Map<String, Set<String>> mGenomeMap = DefaultTreeMap.create(new DefaultTreeSetCreator<String>());
+  private Map<String, Set<String>> mGenomeMap = DefaultTreeMap
+      .create(new DefaultTreeSetCreator<String>());
 
   private Map<String, Path> mFileMap = new TreeMap<String, Path>();
 
@@ -84,12 +85,14 @@ public class AnnotationService implements Iterable<String> {
   // FixedGapSearch<AnnotationGene>>()));
 
   private IterMap<String, IterMap<Integer, IterMap<Integer, FixedGapSearch<AnnotationGene>>>> mSearchMap = DefaultHashMap
-      .create(new DefaultHashMapCreator<Integer, IterMap<Integer, FixedGapSearch<AnnotationGene>>>(
-          new HashMapCreator<Integer, FixedGapSearch<AnnotationGene>>()));
+      .create(
+          new DefaultHashMapCreator<Integer, IterMap<Integer, FixedGapSearch<AnnotationGene>>>(
+              new HashMapCreator<Integer, FixedGapSearch<AnnotationGene>>()));
 
   private IterMap<String, IterMap<Integer, IterMap<Integer, BinarySearch<AnnotationGene>>>> mBinarySearchMap = DefaultHashMap
-      .create(new DefaultHashMapCreator<Integer, IterMap<Integer, BinarySearch<AnnotationGene>>>(
-          new HashMapCreator<Integer, BinarySearch<AnnotationGene>>()));
+      .create(
+          new DefaultHashMapCreator<Integer, IterMap<Integer, BinarySearch<AnnotationGene>>>(
+              new HashMapCreator<Integer, BinarySearch<AnnotationGene>>()));
 
   private Map<String, List<String>> mGeneIdMap = new HashMap<String, List<String>>();
 
@@ -135,11 +138,14 @@ public class AnnotationService implements Iterable<String> {
     return mGeneIdMap.get(genome);
   }
 
-  public FixedGapSearch<AnnotationGene> getSearch(String name) throws IOException {
+  public FixedGapSearch<AnnotationGene> getSearch(String name)
+      throws IOException {
     return getSearch(name, 0, 0);
   }
 
-  public FixedGapSearch<AnnotationGene> getSearch(String name, int ext5p, int ext3p) throws IOException {
+  public FixedGapSearch<AnnotationGene> getSearch(String name,
+      int ext5p,
+      int ext3p) throws IOException {
     autoLoad();
 
     if (!mFileMap.containsKey(name)) {
@@ -147,7 +153,8 @@ public class AnnotationService implements Iterable<String> {
     }
 
     // We have a valid assembly name so load it
-    if (!mSearchMap.containsKey(name) || !mSearchMap.get(name).containsKey(ext5p)
+    if (!mSearchMap.containsKey(name)
+        || !mSearchMap.get(name).containsKey(ext5p)
         || !mSearchMap.get(name).get(ext5p).containsKey(ext3p)) {
       Path file = mFileMap.get(name);
 
@@ -168,11 +175,14 @@ public class AnnotationService implements Iterable<String> {
     return mSearchMap.get(name).get(ext5p).get(ext3p);
   }
 
-  public BinarySearch<AnnotationGene> getBinarySearch(String name) throws IOException {
+  public BinarySearch<AnnotationGene> getBinarySearch(String name)
+      throws IOException {
     return getBinarySearch(name, 0, 0);
   }
 
-  public BinarySearch<AnnotationGene> getBinarySearch(String name, int ext5p, int ext3p) throws IOException {
+  public BinarySearch<AnnotationGene> getBinarySearch(String name,
+      int ext5p,
+      int ext3p) throws IOException {
     autoLoad();
 
     if (!mFileMap.containsKey(name)) {
@@ -180,7 +190,8 @@ public class AnnotationService implements Iterable<String> {
     }
 
     // We have a valid assembly name so load it
-    if (!mBinarySearchMap.containsKey(name) || !mBinarySearchMap.get(name).containsKey(ext5p)
+    if (!mBinarySearchMap.containsKey(name)
+        || !mBinarySearchMap.get(name).containsKey(ext5p)
         || !mBinarySearchMap.get(name).get(ext5p).containsKey(ext3p)) {
       Path file = mFileMap.get(name);
 
@@ -192,7 +203,8 @@ public class AnnotationService implements Iterable<String> {
       if (PathUtils.getName(file).toLowerCase().contains("gff3")) {
         assembly = AnnotationGene.parseGFF3Binary(name, file, ext5p, ext3p);
       } else {
-        assembly = AnnotationGene.parseTssForBinarySearch(name, file, ext5p, ext3p);
+        assembly = AnnotationGene
+            .parseTssForBinarySearch(name, file, ext5p, ext3p);
       }
 
       mBinarySearchMap.get(name).get(ext5p).put(ext3p, assembly);
@@ -259,7 +271,8 @@ public class AnnotationService implements Iterable<String> {
     return createTree(ModernCheckTreeMode.MULTI);
   }
 
-  public ModernCheckTree<String> createTree(ModernCheckTreeMode mode) throws IOException {
+  public ModernCheckTree<String> createTree(ModernCheckTreeMode mode)
+      throws IOException {
     ModernCheckTree<String> tree = new ModernCheckTree<String>(mode);
 
     Deque<Path> stack = new ArrayDeque<Path>();

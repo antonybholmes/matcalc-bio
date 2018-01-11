@@ -60,13 +60,20 @@ public class BedIOModule extends CalcModule {
   }
 
   @Override
-  public DataFrame autoOpenFile(final MainMatCalcWindow window, final Path file, FileType type, int headers,
-      int rowAnnotations, String delimiter, Collection<String> skipLines) throws IOException {
+  public DataFrame autoOpenFile(final MainMatCalcWindow window,
+      final Path file,
+      FileType type,
+      int headers,
+      int rowAnnotations,
+      String delimiter,
+      Collection<String> skipLines) throws IOException {
     return Bed.toMatrix(file);
   }
 
   @Override
-  public boolean saveFile(final MainMatCalcWindow window, final Path file, final DataFrame m) throws IOException {
+  public boolean saveFile(final MainMatCalcWindow window,
+      final Path file,
+      final DataFrame m) throws IOException {
     BufferedWriter writer = FileUtils.newBufferedWriter(file);
 
     try {
@@ -77,13 +84,16 @@ public class BedIOModule extends CalcModule {
         GenomicRegion r = getRegion(m, i);
 
         if (r != null) {
-          writer.write(Join.onTab().values(r.getChr(), r.getStart(), r.getEnd(), r.getLocation()).toString());
+          writer.write(Join.onTab()
+              .values(r.getChr(), r.getStart(), r.getEnd(), r.getLocation())
+              .toString());
 
           writer.newLine();
         }
 
         /*
-         * String s = m.getText(i, 0) + ":" + m.getText(i, 1) + "-" + m.getText(i, 2);
+         * String s = m.getText(i, 0) + ":" + m.getText(i, 1) + "-" +
+         * m.getText(i, 2);
          * 
          * writer.write(Join.onTab().values(m.getText(i, 0), m.getText(i, 1),
          * m.getText(i, 2), s).toString());
@@ -109,8 +119,10 @@ public class BedIOModule extends CalcModule {
     } else if (isThreeColumnGenomicLocation(m, row)) {
       // three column format
 
-      region = new GenomicRegion(ChromosomeService.getInstance().parse(m.getText(row, 0)),
-          Integer.parseInt(m.getText(row, 1)), Integer.parseInt(m.getText(row, 2)));
+      region = new GenomicRegion(
+          ChromosomeService.getInstance().parse(m.getText(row, 0)),
+          Integer.parseInt(m.getText(row, 1)),
+          Integer.parseInt(m.getText(row, 2)));
     } else {
       region = null;
     }

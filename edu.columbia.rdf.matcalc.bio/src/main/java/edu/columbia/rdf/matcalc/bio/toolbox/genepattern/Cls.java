@@ -53,16 +53,13 @@ public class Cls {
   /**
    * Write.
    *
-   * @param file
-   *          the file
-   * @param mGroups
-   *          the m groups
-   * @param matrix
-   *          the matrix
-   * @throws IOException
-   *           Signals that an I/O exception has occurred.
+   * @param file the file
+   * @param mGroups the m groups
+   * @param matrix the matrix
+   * @throws IOException Signals that an I/O exception has occurred.
    */
-  public static void write(Path file, List<XYSeries> mGroups, DataFrame matrix) throws IOException {
+  public static void write(Path file, List<XYSeries> mGroups, DataFrame matrix)
+      throws IOException {
     // First allocate everyone to the undefined group
 
     Map<String, String> groupMap = new HashMap<String, String>();
@@ -90,8 +87,10 @@ public class Cls {
     write(file, names, groupMap, matrix);
   }
 
-  public static void write(Path file, List<String> names, Map<String, String> groupMap, DataFrame matrix)
-      throws IOException {
+  public static void write(Path file,
+      List<String> names,
+      Map<String, String> groupMap,
+      DataFrame matrix) throws IOException {
     BufferedWriter writer = FileUtils.newBufferedWriter(file);
 
     try {

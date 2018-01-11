@@ -14,7 +14,8 @@ public class ProbeLocationsCombo extends ModernComboBox {
 
   public ProbeLocationsCombo() {
     try {
-      List<Path> files = FileUtils.findAll(ProbeLocationsModule.PROBE_RES_DIR, "probe_locations.txt.gz");
+      List<Path> files = FileUtils.findAll(ProbeLocationsModule.PROBE_RES_DIR,
+          "probe_locations.txt.gz");
 
       for (Path file : files) {
         addMenuItem(PathUtils.getNameNoExt(file));

@@ -13,7 +13,6 @@ import org.jebtk.core.io.FileUtils;
 import org.jebtk.core.io.PathUtils;
 import org.jebtk.core.text.TextUtils;
 import org.jebtk.math.matrix.DataFrame;
-import org.jebtk.math.matrix.DataFrame;
 import org.jebtk.modern.UIService;
 import org.jebtk.modern.dialog.ModernDialogStatus;
 import org.jebtk.modern.event.ModernClickEvent;
@@ -23,10 +22,12 @@ import org.jebtk.modern.ribbon.RibbonLargeButton;
 import edu.columbia.rdf.matcalc.MainMatCalcWindow;
 import edu.columbia.rdf.matcalc.toolbox.CalcModule;
 
-public class ProbeLocationsModule extends CalcModule implements ModernClickListener {
+public class ProbeLocationsModule extends CalcModule
+    implements ModernClickListener {
   private MainMatCalcWindow mWindow;
 
-  public static final Path PROBE_RES_DIR = PathUtils.getPath("res/modules/probes/locations");
+  public static final Path PROBE_RES_DIR = PathUtils
+      .getPath("res/modules/probes/locations");
 
   @Override
   public String getName() {
@@ -37,10 +38,12 @@ public class ProbeLocationsModule extends CalcModule implements ModernClickListe
   public void init(MainMatCalcWindow window) {
     mWindow = window;
 
-    RibbonLargeButton button = new RibbonLargeButton("Probe Locations", UIService.getInstance().loadIcon("probes", 24));
+    RibbonLargeButton button = new RibbonLargeButton("Probe Locations",
+        UIService.getInstance().loadIcon("probes", 24));
 
     button.addClickListener(this);
-    mWindow.getRibbon().getToolbar("Bioinformatics").getSection("Probes").add(button);
+    mWindow.getRibbon().getToolbar("Bioinformatics").getSection("Probes")
+        .add(button);
   }
 
   @Override
@@ -65,7 +68,8 @@ public class ProbeLocationsModule extends CalcModule implements ModernClickListe
       return;
     }
 
-    Path file = PROBE_RES_DIR.resolve(dialog.getAnnotation() + ".probe_locations.txt.gz");
+    Path file = PROBE_RES_DIR
+        .resolve(dialog.getAnnotation() + ".probe_locations.txt.gz");
 
     BufferedReader reader = FileUtils.newBufferedReader(file);
 

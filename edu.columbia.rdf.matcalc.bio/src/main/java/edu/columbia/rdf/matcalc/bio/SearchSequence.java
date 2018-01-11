@@ -6,7 +6,6 @@ import java.util.List;
 
 import org.jebtk.bioinformatics.dna.Sequence;
 import org.jebtk.bioinformatics.genomic.GenomicRegion;
-import org.jebtk.bioinformatics.genomic.SequenceRegion;
 
 /**
  * We can either search genomic DNA where the location is useful, or else random
@@ -50,7 +49,8 @@ public class SearchSequence implements Comparable<SearchSequence> {
     return mRegion;
   }
 
-  public static List<SearchSequence> reverseComplement(Collection<SearchSequence> sequences) {
+  public static List<SearchSequence> reverseComplement(
+      Collection<SearchSequence> sequences) {
     List<SearchSequence> ret = new ArrayList<SearchSequence>(sequences.size());
 
     for (SearchSequence s : sequences) {

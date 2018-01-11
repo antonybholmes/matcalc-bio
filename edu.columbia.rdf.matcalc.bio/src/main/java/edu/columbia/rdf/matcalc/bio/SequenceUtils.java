@@ -67,15 +67,18 @@ public class SequenceUtils {
 
     if (dnaLocationColumn != -1) {
       for (int i = 0; i < m.getRows(); ++i) {
-        GenomicRegion region = GenomicRegion.parse(m.getText(i, dnaLocationColumn));
+        GenomicRegion region = GenomicRegion
+            .parse(m.getText(i, dnaLocationColumn));
         String dna = m.getText(i, dnaColumn);
 
         sequences.add(new SearchSequence(region, Sequence.create(dna)));
       }
     } else if (dnaLocationColumn != -1) {
       for (int i = 0; i < m.getRows(); ++i) {
-        GenomicRegion region = GenomicRegion.create(ChromosomeService.getInstance().parse(m.getText(i, chrCol)),
-            (int) m.getValue(i, startCol), (int) m.getValue(i, endCol));
+        GenomicRegion region = GenomicRegion.create(
+            ChromosomeService.getInstance().parse(m.getText(i, chrCol)),
+            (int) m.getValue(i, startCol),
+            (int) m.getValue(i, endCol));
 
         String dna = m.getText(i, dnaColumn);
 
@@ -95,8 +98,9 @@ public class SequenceUtils {
   }
 
   /**
-   * The DNA sequence must be at least 10 bp long to be considered useful. This is
-   * to stop short labels in columns such as 'a' from being misinterpreted as DNA.
+   * The DNA sequence must be at least 10 bp long to be considered useful. This
+   * is to stop short labels in columns such as 'a' from being misinterpreted as
+   * DNA.
    * 
    * @param text
    * @return
