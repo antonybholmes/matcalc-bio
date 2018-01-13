@@ -136,9 +136,7 @@ public class FillGapsModule extends CalcModule implements ModernClickListener {
     }
 
     // home
-    mFillGapsButton.setToolTip(
-        new ModernToolTip("Fill Gaps", "Fill gaps using reference."),
-        mWindow.getRibbon().getToolTipModel());
+    mFillGapsButton.setToolTip(new ModernToolTip("Fill Gaps", "Fill gaps using reference."));
     mFillGapsButton.setClickMessage("Fill Gaps");
     mWindow.getRibbon().getToolbar("Bioinformatics").getSection("Fill Gaps")
         .add(mFillGapsButton);

@@ -35,9 +35,9 @@ import org.jebtk.modern.event.ModernClickListener;
 import org.jebtk.modern.graphics.icons.FilterVectorIcon;
 import org.jebtk.modern.graphics.icons.ModernIcon;
 import org.jebtk.modern.graphics.icons.Raster32Icon;
-import org.jebtk.modern.menu.ModernPopupMenu;
+import org.jebtk.modern.menu.ModernPopupMenu2;
 import org.jebtk.modern.menu.ModernTwoLineMenuItem;
-import org.jebtk.modern.ribbon.RibbonLargeDropDownButton;
+import org.jebtk.modern.ribbon.RibbonLargeDropDownButton2;
 import org.jebtk.modern.theme.ThemeService;
 
 import edu.columbia.rdf.matcalc.MainMatCalcWindow;
@@ -107,7 +107,7 @@ public class ExpressionModule extends CalcModule
     // mMinExpButton.addClickListener(this);
     // mWindow.getRibbon().getToolbar("Bioinformatics").getSection("Expression").add(mMinExpButton);
 
-    ModernPopupMenu popup = new ModernPopupMenu();
+    ModernPopupMenu2 popup = new ModernPopupMenu2();
 
     popup.addMenuItem(new ModernTwoLineMenuItem("STDEV",
         "Rows must have a minimum standard deviation.", EXPRESSION_ICON));
@@ -116,7 +116,7 @@ public class ExpressionModule extends CalcModule
     popup.addMenuItem(new ModernTwoLineMenuItem("Minimum Expression",
         "Rows must have a minimum value in some columns.", EXPRESSION_ICON));
 
-    mButton = new RibbonLargeDropDownButton("Expression", EXPRESSION_ICON,
+    mButton = new RibbonLargeDropDownButton2("Expression", EXPRESSION_ICON,
         popup);
     mButton.setShowText(false);
 
