@@ -13,7 +13,6 @@ import org.jebtk.bioinformatics.ext.ucsc.Bed;
 import org.jebtk.bioinformatics.ext.ucsc.BedRegion;
 import org.jebtk.bioinformatics.gapsearch.BinaryGapSearch;
 import org.jebtk.bioinformatics.gapsearch.FixedGapSearch;
-import org.jebtk.bioinformatics.genomic.ChromosomeService;
 import org.jebtk.bioinformatics.genomic.GenomeService;
 import org.jebtk.bioinformatics.genomic.GenomicRegion;
 import org.jebtk.bioinformatics.ui.Bioinformatics;
@@ -126,7 +125,7 @@ public class Annotation implements Comparable<Annotation> {
           }
 
           BedRegion region = BedRegion
-              .parse(GenomeService.getInstance().guess(file), line);
+              .parse(GenomeService.getInstance().guessGenome(file), line);
 
           if (region != null) {
             Annotation annotation = new Annotation(region.getName(), region);
@@ -165,7 +164,7 @@ public class Annotation implements Comparable<Annotation> {
 
         tokens = TextUtils.tabSplit(line);
 
-        GenomicRegion region = GenomicRegion.parse(tokens.get(0));
+        GenomicRegion region = GenomicRegion.parse(GenomeService.getInstance().guessGenome(file), tokens.get(0));
 
         Annotation annotation = new Annotation(region.toString(), region);
 
@@ -179,11 +178,11 @@ public class Annotation implements Comparable<Annotation> {
     return gappedSearch;
   }
 
-  public static BinaryGapSearch<Annotation> parsePeaks(ModernDataModel model) {
+  public static BinaryGapSearch<Annotation> parsePeaks(String genome, ModernDataModel model) {
     BinaryGapSearch<Annotation> gappedSearch = new BinaryGapSearch<Annotation>();
 
     for (int i = 0; i < model.getRowCount(); ++i) {
-      GenomicRegion region = GenomicRegion.parse(model.getValueAsString(i, 0));
+      GenomicRegion region = GenomicRegion.parse(genome, model.getValueAsString(i, 0));
 
       if (region == null) {
         continue;
@@ -197,34 +196,35 @@ public class Annotation implements Comparable<Annotation> {
     return gappedSearch;
   }
 
-  public static BinaryGapSearch<Annotation> parseRegions(DataFrame model)
+  public static BinaryGapSearch<Annotation> parseRegions(String genome, DataFrame model)
       throws ParseException {
     BinaryGapSearch<Annotation> gappedSearch = new BinaryGapSearch<Annotation>();
 
-    parseRegions(model, gappedSearch);
+    parseRegions(genome, model, gappedSearch);
 
     return gappedSearch;
   }
 
-  public static FixedGapSearch<Annotation> parseRegionsFixed(DataFrame model) {
+  public static FixedGapSearch<Annotation> parseRegionsFixed(String genome, DataFrame model) {
     FixedGapSearch<Annotation> gappedSearch = new FixedGapSearch<Annotation>();
 
-    parseRegions(model, gappedSearch);
+    parseRegions(genome, model, gappedSearch);
 
     return gappedSearch;
   }
 
-  public static void parseRegions(DataFrame model,
+  public static void parseRegions(String genome,
+      DataFrame model,
       FixedGapSearch<Annotation> gappedSearch) {
     for (int i = 0; i < model.getRows(); ++i) {
 
       GenomicRegion region = null;
 
       if (GenomicRegion.isGenomicRegion(model.getText(i, 0))) {
-        region = GenomicRegion.parse(model.getText(i, 0));
+        region = GenomicRegion.parse(genome, model.getText(i, 0));
       } else {
         region = new GenomicRegion(
-            ChromosomeService.getInstance().parse(model.getText(i, 0)),
+            GenomeService.getInstance().chr(genome, model.getText(i, 0)),
             (int) model.getValue(i, 1), (int) model.getValue(i, 2));
       }
 
@@ -238,7 +238,7 @@ public class Annotation implements Comparable<Annotation> {
     }
   }
 
-  public static FixedGapSearch<Annotation> parseRegionsFixed(Path file)
+  public static FixedGapSearch<Annotation> parseRegionsFixed(String genome, Path file)
       throws IOException, ParseException {
     FixedGapSearch<Annotation> gappedSearch = new FixedGapSearch<Annotation>();
 
@@ -257,7 +257,7 @@ public class Annotation implements Comparable<Annotation> {
 
         tokens = TextUtils.tabSplit(line);
 
-        GenomicRegion region = GenomicRegion.parse(tokens.get(0));
+        GenomicRegion region = GenomicRegion.parse(genome, tokens.get(0));
 
         Annotation annotation = new Annotation(region.toString(), region);
 
@@ -271,14 +271,14 @@ public class Annotation implements Comparable<Annotation> {
     return gappedSearch;
   }
 
-  public static FixedGapSearch<Annotation> parsePeaksFixed(
+  public static FixedGapSearch<Annotation> parsePeaksFixed(String genome,
       ModernDataModel model,
       int header) throws ParseException {
     FixedGapSearch<Annotation> gappedSearch = new FixedGapSearch<Annotation>();
 
     for (int i = 0; i < model.getRowCount(); ++i) {
       GenomicRegion region = GenomicRegion
-          .parse(model.getValueAsString(i, header));
+          .parse(genome, model.getValueAsString(i, header));
 
       if (region == null) {
         continue;
@@ -307,7 +307,7 @@ public class Annotation implements Comparable<Annotation> {
           0,
           TextUtils.TAB_DELIMITER);
 
-      gappedSearch = parsePeaksFixed(model, header);
+      gappedSearch = parsePeaksFixed(GenomeService.getInstance().guessGenome(file), model, header);
     }
 
     return gappedSearch;
@@ -346,7 +346,8 @@ public class Annotation implements Comparable<Annotation> {
         || PathUtils.getFileExt(file).equals("bedgraph")) {
       return parseBed(file);
     } else {
-      return parseRegions(Excel.convertToMatrix(file,
+      return parseRegions(GenomeService.getInstance().guessGenome(file),
+          Excel.convertToMatrix(file,
           true,
           TextUtils.emptyList(),
           0,
@@ -361,7 +362,8 @@ public class Annotation implements Comparable<Annotation> {
         || PathUtils.getFileExt(file).equals("bedgraph")) {
       return parseBedFixed(file);
     } else {
-      return parseRegionsFixed(Excel.convertToMatrix(file,
+      return parseRegionsFixed(GenomeService.getInstance().guessGenome(file),
+          Excel.convertToMatrix(file,
           true,
           TextUtils.emptyList(),
           0,

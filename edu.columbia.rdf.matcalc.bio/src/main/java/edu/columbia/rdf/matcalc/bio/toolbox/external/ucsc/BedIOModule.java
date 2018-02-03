@@ -21,7 +21,7 @@ import java.nio.file.Path;
 import java.util.Collection;
 
 import org.jebtk.bioinformatics.ext.ucsc.Bed;
-import org.jebtk.bioinformatics.genomic.ChromosomeService;
+import org.jebtk.bioinformatics.genomic.GenomeService;
 import org.jebtk.bioinformatics.genomic.GenomicRegion;
 import org.jebtk.bioinformatics.ui.external.ucsc.BedGuiFileFilter;
 import org.jebtk.core.io.FileUtils;
@@ -81,7 +81,7 @@ public class BedIOModule extends CalcModule {
       writer.newLine();
 
       for (int i = 0; i < m.getRows(); ++i) {
-        GenomicRegion r = getRegion(m, i);
+        GenomicRegion r = getRegion(GenomeService.getInstance().guessGenome(file), m, i);
 
         if (r != null) {
           writer.write(Join.onTab()
@@ -107,7 +107,7 @@ public class BedIOModule extends CalcModule {
     return true;
   }
 
-  public static GenomicRegion getRegion(final DataFrame m, int row) {
+  public static GenomicRegion getRegion(String genome, final DataFrame m, int row) {
     GenomicRegion region = null;
 
     if (Io.isEmptyLine(m.getText(row, 0))) {
@@ -115,12 +115,12 @@ public class BedIOModule extends CalcModule {
     } else if (m.getText(row, 0).contains(TextUtils.NA)) {
       region = null;
     } else if (GenomicRegion.isGenomicRegion(m.getText(row, 0))) {
-      region = GenomicRegion.parse(m.getText(row, 0));
+      region = GenomicRegion.parse(genome, m.getText(row, 0));
     } else if (isThreeColumnGenomicLocation(m, row)) {
       // three column format
 
       region = new GenomicRegion(
-          ChromosomeService.getInstance().parse(m.getText(row, 0)),
+          GenomeService.getInstance().chr(genome, m.getText(row, 0)),
           Integer.parseInt(m.getText(row, 1)),
           Integer.parseInt(m.getText(row, 2)));
     } else {

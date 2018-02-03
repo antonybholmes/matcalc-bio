@@ -15,7 +15,7 @@ import org.jebtk.bioinformatics.gapsearch.BinarySearch;
 import org.jebtk.bioinformatics.gapsearch.FixedGapSearch;
 import org.jebtk.bioinformatics.gapsearch.GapSearch;
 import org.jebtk.bioinformatics.genomic.Chromosome;
-import org.jebtk.bioinformatics.genomic.ChromosomeService;
+import org.jebtk.bioinformatics.genomic.GenomeService;
 import org.jebtk.bioinformatics.genomic.GFF3Parser;
 import org.jebtk.bioinformatics.genomic.GenomicRegion;
 import org.jebtk.bioinformatics.genomic.Strand;
@@ -297,8 +297,8 @@ public class AnnotationGene extends GenomicRegion implements TextIdProperty {
 
         String symbol = tokens.get(SYMBOL_COL);
 
-        Chromosome chr = ChromosomeService.getInstance()
-            .parse(tokens.get(CHR_COL));
+        Chromosome chr = GenomeService.getInstance()
+            .chr(GenomeService.getInstance().guessGenome(file), tokens.get(CHR_COL));
         Strand strand = Strand.parse(tokens.get(STRAND_COL));
 
         // UCSC convention
@@ -426,7 +426,8 @@ public class AnnotationGene extends GenomicRegion implements TextIdProperty {
           continue;
         }
 
-        Chromosome chr = ChromosomeService.getInstance().parse(tokens.get(0));
+        Chromosome chr = GenomeService.getInstance().chr(GenomeService.getInstance().guessGenome(file),
+            tokens.get(0));
         Strand strand = Strand.parse(tokens.get(6));
 
         // UCSC convention

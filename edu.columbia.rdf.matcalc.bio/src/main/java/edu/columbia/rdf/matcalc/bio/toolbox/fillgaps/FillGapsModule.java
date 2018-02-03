@@ -44,7 +44,8 @@ import org.jebtk.bioinformatics.gapsearch.BinaryGapSearch;
 import org.jebtk.bioinformatics.gapsearch.BinarySearch;
 import org.jebtk.bioinformatics.gapsearch.GappedSearchFeatures;
 import org.jebtk.bioinformatics.genomic.Chromosome;
-import org.jebtk.bioinformatics.genomic.ChromosomeService;
+import org.jebtk.bioinformatics.genomic.Genome;
+import org.jebtk.bioinformatics.genomic.GenomeService;
 import org.jebtk.bioinformatics.genomic.GenomicRegion;
 import org.jebtk.bioinformatics.genomic.GenomicRegions;
 import org.jebtk.bioinformatics.genomic.Human;
@@ -161,8 +162,6 @@ public class FillGapsModule extends CalcModule implements ModernClickListener {
           e.printStackTrace();
         }
 
-        System.err.println("name " + name);
-
         mBedFileMap.put(name, file);
 
         try {
@@ -185,7 +184,7 @@ public class FillGapsModule extends CalcModule implements ModernClickListener {
   public final void clicked(ModernClickEvent e) {
     if (e.getSource().equals(mFillGapsButton)) {
       try {
-        annotate();
+        annotate(Genome.HG18);
       } catch (Exception e1) {
         e1.printStackTrace();
       }
@@ -197,7 +196,7 @@ public class FillGapsModule extends CalcModule implements ModernClickListener {
    * 
    * @throws Exception
    */
-  private void annotate() throws Exception {
+  private void annotate(String genome) throws Exception {
     DataFrame m = mWindow.getCurrentMatrix();
 
     if (m == null) {
@@ -252,7 +251,8 @@ public class FillGapsModule extends CalcModule implements ModernClickListener {
     }
 
     // Organize segments by sample and so we can sort them
-    Map<String, Map<Chromosome, List<Segment>>> segments = new TreeMap<String, Map<Chromosome, List<Segment>>>();
+    Map<String, Map<Chromosome, List<Segment>>> segments = 
+        new TreeMap<String, Map<Chromosome, List<Segment>>>();
 
     for (int r = 0; r < m.getRows(); ++r) {
       String name = m.getText(r, colMap.get("segment"));
@@ -264,8 +264,8 @@ public class FillGapsModule extends CalcModule implements ModernClickListener {
       Segment segment = new Segment();
 
       segment.name = name;
-      segment.chr = ChromosomeService.getInstance()
-          .parse(m.getText(r, colMap.get("chr")));
+      segment.chr = GenomeService.getInstance()
+          .chr(genome, m.getText(r, colMap.get("chr")));
       segment.start = (int) m.getValue(r, colMap.get("start"));
       segment.end = (int) m.getValue(r, colMap.get("end"));
       segment.markers = (int) m.getValue(r, colMap.get("markers|probes"));

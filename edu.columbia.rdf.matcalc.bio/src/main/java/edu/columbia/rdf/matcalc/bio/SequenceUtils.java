@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.jebtk.bioinformatics.dna.Sequence;
 import org.jebtk.bioinformatics.genomic.Chromosome;
-import org.jebtk.bioinformatics.genomic.ChromosomeService;
+import org.jebtk.bioinformatics.genomic.GenomeService;
 import org.jebtk.bioinformatics.genomic.GenomicRegion;
 import org.jebtk.math.matrix.DataFrame;
 
@@ -15,7 +15,7 @@ public class SequenceUtils {
     // Do nothing
   }
 
-  public static List<SearchSequence> matrixToSequences(DataFrame m) {
+  public static List<SearchSequence> matrixToSequences(String genome, DataFrame m) {
     int dnaLocationColumn = -1;
     int chrCol = -1;
     int startCol = -1;
@@ -68,7 +68,7 @@ public class SequenceUtils {
     if (dnaLocationColumn != -1) {
       for (int i = 0; i < m.getRows(); ++i) {
         GenomicRegion region = GenomicRegion
-            .parse(m.getText(i, dnaLocationColumn));
+            .parse(genome, m.getText(i, dnaLocationColumn));
         String dna = m.getText(i, dnaColumn);
 
         sequences.add(new SearchSequence(region, Sequence.create(dna)));
@@ -76,7 +76,7 @@ public class SequenceUtils {
     } else if (dnaLocationColumn != -1) {
       for (int i = 0; i < m.getRows(); ++i) {
         GenomicRegion region = GenomicRegion.create(
-            ChromosomeService.getInstance().parse(m.getText(i, chrCol)),
+            GenomeService.getInstance().chr(genome, m.getText(i, chrCol)),
             (int) m.getValue(i, startCol),
             (int) m.getValue(i, endCol));
 

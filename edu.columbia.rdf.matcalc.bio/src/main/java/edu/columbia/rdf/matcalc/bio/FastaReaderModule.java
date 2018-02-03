@@ -22,6 +22,7 @@ import java.util.List;
 
 import org.jebtk.bioinformatics.Fasta;
 import org.jebtk.bioinformatics.dna.Sequence;
+import org.jebtk.bioinformatics.genomic.GenomeService;
 import org.jebtk.bioinformatics.genomic.GenomicRegion;
 import org.jebtk.bioinformatics.ui.filters.FastaGuiFileFilter;
 import org.jebtk.math.matrix.DataFrame;
@@ -63,14 +64,14 @@ public class FastaReaderModule extends CalcModule {
   }
 
   public static DataFrame toMatrix(Path file) throws IOException {
-    return toMatrix(Fasta.parse(file));
+    return toMatrix(GenomeService.getInstance().guessGenome(file), Fasta.parse(file));
   }
 
-  public static DataFrame toMatrix(List<Sequence> sequences) {
+  public static DataFrame toMatrix(String genome, List<Sequence> sequences) {
 
     DataFrame ret = DataFrame.createMixedMatrix(sequences.size(), 3);
 
-    GenomicRegion.parse(sequences.get(0).getName());
+    GenomicRegion.parse(genome, sequences.get(0).getName());
 
     ret.setColumnName(0, "Name");
     ret.setColumnName(1, "Location");
@@ -83,7 +84,7 @@ public class FastaReaderModule extends CalcModule {
 
       ret.set(i, 0, name);
 
-      GenomicRegion r = GenomicRegion.parse(name);
+      GenomicRegion r = GenomicRegion.parse(genome, name);
 
       if (r != null) {
         ret.set(i, 1, r.getLocation());
