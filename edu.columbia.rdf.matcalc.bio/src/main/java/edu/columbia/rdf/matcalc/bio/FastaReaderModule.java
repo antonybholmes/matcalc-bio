@@ -97,4 +97,40 @@ public class FastaReaderModule extends CalcModule {
 
     return ret;
   }
+  
+  public static DataFrame toMatrix(String genome, 
+      List<GenomicRegion> regions,
+      List<Sequence> sequences) {
+
+    DataFrame ret = DataFrame.createMixedMatrix(sequences.size(), 4);
+
+    GenomicRegion.parse(genome, sequences.get(0).getName());
+
+    //ret.setColumnName(0, "Name");
+    ret.setColumnName(0, "Genome");
+    ret.setColumnName(1, "Location");
+    ret.setColumnName(2, "DNA Sequence");
+
+    for (int i = 0; i < sequences.size(); ++i) {
+      Sequence s = sequences.get(i);
+
+      String name = s.getName();
+
+      //ret.set(i, 0, name);
+      
+      ret.set(i, 0, genome);
+
+      GenomicRegion r = regions.get(i);
+
+      if (r != null) {
+        ret.set(i, 1, r.getLocation());
+      } else {
+        ret.set(i, 1, name);
+      }
+
+      ret.set(i, 2, s.toString());
+    }
+
+    return ret;
+  }
 }

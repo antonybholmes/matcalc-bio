@@ -24,6 +24,7 @@ import java.util.List;
 import org.jebtk.bioinformatics.Fasta;
 import org.jebtk.bioinformatics.dna.Sequence;
 import org.jebtk.bioinformatics.ui.filters.FastaSaveGuiFileFilter;
+import org.jebtk.core.sys.SysUtils;
 import org.jebtk.math.matrix.DataFrame;
 import org.jebtk.modern.io.GuiFileExtFilter;
 
@@ -92,6 +93,8 @@ public class FastaWriterModule extends CalcModule {
 
     List<Sequence> sequences = new ArrayList<Sequence>(m.getRows());
 
+    SysUtils.err().println("seq", c1, m.getText(0, c1));
+    
     for (int i = 0; i < m.getRows(); ++i) {
       String name = c1 != -1 ? m.getText(i, c1) : "Seq" + (i + 1);
 
