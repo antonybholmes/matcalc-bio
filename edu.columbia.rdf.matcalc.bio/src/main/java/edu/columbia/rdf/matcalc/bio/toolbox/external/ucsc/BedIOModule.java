@@ -81,7 +81,7 @@ public class BedIOModule extends CalcModule {
       writer.newLine();
 
       for (int i = 0; i < m.getRows(); ++i) {
-        GenomicRegion r = getRegion(GenomeService.getInstance().guessGenome(file), m, i);
+        GenomicRegion r = getRegion(GenomeService.instance().guessGenome(file), m, i);
 
         if (r != null) {
           writer.write(Join.onTab()
@@ -120,7 +120,7 @@ public class BedIOModule extends CalcModule {
       // three column format
 
       region = new GenomicRegion(
-          GenomeService.getInstance().chr(genome, m.getText(row, 0)),
+          GenomeService.instance().chr(genome, m.getText(row, 0)),
           Integer.parseInt(m.getText(row, 1)),
           Integer.parseInt(m.getText(row, 2)));
     } else {

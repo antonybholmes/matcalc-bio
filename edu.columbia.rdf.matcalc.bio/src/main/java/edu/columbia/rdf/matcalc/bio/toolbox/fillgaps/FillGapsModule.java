@@ -264,7 +264,7 @@ public class FillGapsModule extends CalcModule implements ModernClickListener {
       Segment segment = new Segment();
 
       segment.name = name;
-      segment.chr = GenomeService.getInstance()
+      segment.chr = GenomeService.instance()
           .chr(genome, m.getText(r, colMap.get("chr")));
       segment.start = (int) m.getValue(r, colMap.get("start"));
       segment.end = (int) m.getValue(r, colMap.get("end"));

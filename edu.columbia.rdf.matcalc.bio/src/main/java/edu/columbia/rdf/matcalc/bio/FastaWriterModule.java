@@ -22,7 +22,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.jebtk.bioinformatics.Fasta;
-import org.jebtk.bioinformatics.dna.Sequence;
+import org.jebtk.bioinformatics.genomic.Sequence;
 import org.jebtk.bioinformatics.ui.filters.FastaSaveGuiFileFilter;
 import org.jebtk.core.sys.SysUtils;
 import org.jebtk.math.matrix.DataFrame;

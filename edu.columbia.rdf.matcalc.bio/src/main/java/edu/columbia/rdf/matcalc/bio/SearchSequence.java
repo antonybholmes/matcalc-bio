@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.jebtk.bioinformatics.dna.Sequence;
 import org.jebtk.bioinformatics.genomic.GenomicRegion;
+import org.jebtk.bioinformatics.genomic.Sequence;
 
 /**
  * We can either search genomic DNA where the location is useful, or else random

@@ -297,8 +297,8 @@ public class AnnotationGene extends GenomicRegion implements TextIdProperty {
 
         String symbol = tokens.get(SYMBOL_COL);
 
-        Chromosome chr = GenomeService.getInstance()
-            .chr(GenomeService.getInstance().guessGenome(file), tokens.get(CHR_COL));
+        Chromosome chr = GenomeService.instance()
+            .chr(GenomeService.instance().guessGenome(file), tokens.get(CHR_COL));
         Strand strand = Strand.parse(tokens.get(STRAND_COL));
 
         // UCSC convention
@@ -426,7 +426,7 @@ public class AnnotationGene extends GenomicRegion implements TextIdProperty {
           continue;
         }
 
-        Chromosome chr = GenomeService.getInstance().chr(GenomeService.getInstance().guessGenome(file),
+        Chromosome chr = GenomeService.instance().chr(GenomeService.instance().guessGenome(file),
             tokens.get(0));
         Strand strand = Strand.parse(tokens.get(6));
 
