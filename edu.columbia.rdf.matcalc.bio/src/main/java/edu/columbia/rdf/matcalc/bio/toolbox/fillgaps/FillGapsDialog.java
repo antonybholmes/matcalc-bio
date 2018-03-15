@@ -147,7 +147,7 @@ public class FillGapsDialog extends ModernDialogTaskWindow {
 
     // content.setBorder(BorderService.getInstance().createBorder(10));
 
-    setDialogCardContent(content);
+    setCard(content);
   }
 
   private void loadSamples() throws IOException, InvalidFormatException {
