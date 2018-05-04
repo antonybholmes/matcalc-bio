@@ -352,31 +352,34 @@ public class AnnotationGene extends GenomicRegion implements TextIdProperty {
     }
   }
 
-  public static FixedGapSearch<AnnotationGene> parseGFF3(String name,
+  public static FixedGapSearch<AnnotationGene> parseGFF3(String genome,
+      String name,
       Path file,
       int ext5p,
       int ext3p) throws IOException {
 
     FixedGapSearch<AnnotationGene> search = new FixedGapSearch<AnnotationGene>();
 
-    parseGFF3(file, ext5p, ext3p, search);
+    parseGFF3(genome, file, ext5p, ext3p, search);
 
     return search;
   }
 
-  public static BinarySearch<AnnotationGene> parseGFF3Binary(String name,
+  public static BinarySearch<AnnotationGene> parseGFF3Binary(String genome,
+      String name,
       Path file,
       int ext5p,
       int ext3p) throws IOException {
 
     BinarySearch<AnnotationGene> search = new BinarySearch<AnnotationGene>();
 
-    parseGFF3(file, ext5p, ext3p, search);
+    parseGFF3(genome, file, ext5p, ext3p, search);
 
     return search;
   }
 
-  public static void parseGFF3(Path file,
+  public static void parseGFF3(String genome,
+      Path file,
       int ext5p,
       int ext3p,
       GapSearch<AnnotationGene> gappedSearch) throws IOException {
@@ -426,8 +429,7 @@ public class AnnotationGene extends GenomicRegion implements TextIdProperty {
           continue;
         }
 
-        Chromosome chr = GenomeService.instance().chr(GenomeService.instance().guessGenome(file),
-            tokens.get(0));
+        Chromosome chr = GenomeService.instance().chr(genome, tokens.get(0));
         Strand strand = Strand.parse(tokens.get(6));
 
         // UCSC convention

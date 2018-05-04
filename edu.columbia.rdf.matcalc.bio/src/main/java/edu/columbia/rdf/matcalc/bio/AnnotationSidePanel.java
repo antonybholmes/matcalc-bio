@@ -31,6 +31,7 @@ public class AnnotationSidePanel extends ModernComponent {
   private CheckBox mSelectAllButton = new ModernCheckSwitch("Select All");
 
   private Map<CheckBox, String> mCheckMap = new HashMap<CheckBox, String>();
+  private Map<CheckBox, String> mGenomeMap = new HashMap<CheckBox, String>();
 
   public AnnotationSidePanel() {
 
@@ -59,6 +60,7 @@ public class AnnotationSidePanel extends ModernComponent {
 
           ModernCheckSwitch button = new ModernCheckSwitch(name);
           button.setBorder(LEFT_BORDER);
+          mGenomeMap.put(button, genome);
           mCheckMap.put(button, name);
           box.add(button);
 
@@ -103,20 +105,20 @@ public class AnnotationSidePanel extends ModernComponent {
     }
   }
 
-  public List<String> getGenomes() {
-    List<String> ret = new ArrayList<String>(mCheckMap.size());
+  public List<GenomeDatabase> getGenomes() {
+    List<GenomeDatabase> ret = new ArrayList<GenomeDatabase>(mCheckMap.size());
 
     for (CheckBox button : mCheckMap.keySet()) {
       if (button.isSelected()) {
-        ret.add(button.getText());
+        ret.add(new GenomeDatabase(mGenomeMap.get(button), button.getText()));
       }
     }
 
     return ret;
   }
 
-  public String getGenome() {
-    List<String> genomes = getGenomes();
+  public GenomeDatabase getGenome() {
+    List<GenomeDatabase> genomes = getGenomes();
 
     if (genomes.size() > 0) {
       return genomes.get(0);
