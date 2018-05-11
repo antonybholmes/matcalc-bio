@@ -29,6 +29,7 @@ import org.jebtk.core.io.Io;
 import org.jebtk.core.text.Join;
 import org.jebtk.core.text.TextUtils;
 import org.jebtk.math.matrix.DataFrame;
+import org.jebtk.modern.io.FileFilterService;
 import org.jebtk.modern.io.GuiFileExtFilter;
 
 import edu.columbia.rdf.matcalc.FileType;
@@ -42,7 +43,8 @@ import edu.columbia.rdf.matcalc.toolbox.CalcModule;
  *
  */
 public class BedIOModule extends CalcModule {
-  private static final GuiFileExtFilter FILTER = new BedGuiFileFilter();
+  private static final GuiFileExtFilter FILTER = 
+      FileFilterService.instance().getFilter("bed"); //new BedGuiFileFilter();
 
   public BedIOModule() {
     registerFileOpenType(FILTER);

@@ -22,6 +22,7 @@ import java.util.Collection;
 import org.jebtk.bioinformatics.ext.ucsc.BedGraph;
 import org.jebtk.bioinformatics.ui.external.ucsc.BedGraphGuiFileFilter;
 import org.jebtk.math.matrix.DataFrame;
+import org.jebtk.modern.io.FileFilterService;
 import org.jebtk.modern.io.GuiFileExtFilter;
 
 import edu.columbia.rdf.matcalc.FileType;
@@ -35,7 +36,8 @@ import edu.columbia.rdf.matcalc.toolbox.CalcModule;
  *
  */
 public class BedGraphIOModule extends CalcModule {
-  private static final GuiFileExtFilter FILTER = new BedGraphGuiFileFilter();
+  private static final GuiFileExtFilter FILTER = 
+      FileFilterService.instance().getFilter("bedgraph"); //new BedGraphGuiFileFilter();
 
   public BedGraphIOModule() {
     registerFileOpenType(FILTER);

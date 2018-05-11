@@ -98,7 +98,8 @@ public class FillGapsModule extends CalcModule implements ModernClickListener {
 
   private Map<String, Path> mBedFileMap = new TreeMap<String, Path>();
 
-  private Map<String, Map<String, String>> mDescriptionMap = new TreeMap<String, Map<String, String>>();
+  private Map<String, Map<String, String>> mDescriptionMap = 
+      new TreeMap<String, Map<String, String>>();
 
   /*
    * (non-Javadoc)
