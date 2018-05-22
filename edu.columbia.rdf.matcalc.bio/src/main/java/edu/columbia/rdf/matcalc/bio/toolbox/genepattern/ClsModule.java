@@ -35,7 +35,7 @@ import org.jebtk.bioinformatics.ui.external.genepattern.ClsGuiFileFilter;
 import org.jebtk.core.io.FileUtils;
 import org.jebtk.graphplot.figure.series.XYSeriesGroup;
 import org.jebtk.math.matrix.DataFrame;
-import org.jebtk.modern.UIService;
+import org.jebtk.modern.AssetService;
 import org.jebtk.modern.dialog.MessageDialogType;
 import org.jebtk.modern.dialog.ModernDialogStatus;
 import org.jebtk.modern.dialog.ModernMessageDialog;
@@ -82,7 +82,7 @@ public class ClsModule extends CalcModule implements ModernClickListener {
     mParent = window;
 
     RibbonLargeButton button = new RibbonLargeButton("Export CLS",
-        UIService.getInstance().loadIcon("save", 24), "Export CLS",
+        AssetService.getInstance().loadIcon("save", 24), "Export CLS",
         "Export a GenePattern CLS using the groups.");
     button.addClickListener(this);
 

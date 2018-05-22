@@ -52,7 +52,7 @@ import org.jebtk.bioinformatics.genomic.Human;
 import org.jebtk.core.io.FileUtils;
 import org.jebtk.core.io.PathUtils;
 import org.jebtk.math.matrix.DataFrame;
-import org.jebtk.modern.UIService;
+import org.jebtk.modern.AssetService;
 import org.jebtk.modern.button.ModernButton;
 import org.jebtk.modern.dialog.MessageDialogType;
 import org.jebtk.modern.dialog.ModernDialogStatus;
@@ -83,8 +83,8 @@ public class FillGapsModule extends CalcModule implements ModernClickListener {
    * The member convert button.
    */
   private ModernButton mFillGapsButton = new RibbonLargeButton("Fill Gaps",
-      UIService.getInstance().loadIcon("fill_gaps", 32),
-      UIService.getInstance().loadIcon("fill_gaps", 24));
+      AssetService.getInstance().loadIcon("fill_gaps", 32),
+      AssetService.getInstance().loadIcon("fill_gaps", 24));
 
   private static final Path RES_FOLDER = PathUtils
       .getPath("res/modules/annotation");
@@ -265,7 +265,7 @@ public class FillGapsModule extends CalcModule implements ModernClickListener {
       Segment segment = new Segment();
 
       segment.name = name;
-      segment.chr = GenomeService.instance()
+      segment.chr = GenomeService.getInstance()
           .chr(genome, m.getText(r, colMap.get("chr")));
       segment.start = (int) m.getValue(r, colMap.get("start"));
       segment.end = (int) m.getValue(r, colMap.get("end"));

@@ -40,7 +40,7 @@ import edu.columbia.rdf.matcalc.toolbox.CalcModule;
  */
 public class FastaReaderModule extends CalcModule {
   public FastaReaderModule() {
-    registerFileOpenType(FileFilterService.instance().getFilter("fasta")); //FastaGuiFileFilter.FASTA_FILTER);
+    registerFileOpenType(FileFilterService.getInstance().getFilter("fasta")); //FastaGuiFileFilter.FASTA_FILTER);
   }
 
   /*
@@ -65,7 +65,7 @@ public class FastaReaderModule extends CalcModule {
   }
 
   public static DataFrame toMatrix(Path file) throws IOException {
-    return toMatrix(GenomeService.instance().guessGenome(file), Fasta.parse(file));
+    return toMatrix(GenomeService.getInstance().guessGenome(file), Fasta.parse(file));
   }
 
   public static DataFrame toMatrix(String genome, List<Sequence> sequences) {

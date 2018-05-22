@@ -37,7 +37,7 @@ import edu.columbia.rdf.matcalc.toolbox.CalcModule;
  */
 public class BedGraphIOModule extends CalcModule {
   private static final GuiFileExtFilter FILTER = 
-      FileFilterService.instance().getFilter("bedgraph"); //new BedGraphGuiFileFilter();
+      FileFilterService.getInstance().getFilter("bedgraph"); //new BedGraphGuiFileFilter();
 
   public BedGraphIOModule() {
     registerFileOpenType(FILTER);

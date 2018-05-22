@@ -6,7 +6,7 @@ import java.text.ParseException;
 import org.jebtk.math.matrix.DataFrame;
 import org.jebtk.math.matrix.MatrixGroup;
 import org.jebtk.math.matrix.utils.MatrixOperations;
-import org.jebtk.modern.UIService;
+import org.jebtk.modern.AssetService;
 import org.jebtk.modern.dialog.ModernDialogStatus;
 import org.jebtk.modern.event.ModernClickEvent;
 import org.jebtk.modern.event.ModernClickListener;
@@ -30,7 +30,7 @@ public class CollapseModule extends CalcModule implements ModernClickListener {
     mWindow = window;
 
     RibbonLargeButton button = new RibbonLargeButton("Collapse Rows",
-        UIService.getInstance().loadIcon("collapse", 32), "Collapse Rows",
+        AssetService.getInstance().loadIcon("collapse", 32), "Collapse Rows",
         "Collapse rows by annotation, e.g. probe ids.");
     button.addClickListener(this);
     mWindow.getRibbon().getToolbar("Annotation").getSection("Probes")

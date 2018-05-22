@@ -61,7 +61,7 @@ import org.jebtk.math.LinearNormalization;
 import org.jebtk.math.matrix.DataFrame;
 import org.jebtk.math.matrix.DoubleMatrixParser;
 import org.jebtk.math.matrix.MixedMatrixParser;
-import org.jebtk.modern.UIService;
+import org.jebtk.modern.AssetService;
 import org.jebtk.modern.event.ModernClickEvent;
 import org.jebtk.modern.event.ModernClickListener;
 import org.jebtk.modern.graphics.colormap.ColorMap;
@@ -121,7 +121,7 @@ public class GseaPlotModule extends CalcModule implements ModernClickListener {
     mParent = window;
 
     RibbonLargeButton button = new RibbonLargeButton("GSEA Plot",
-        UIService.getInstance().loadIcon("line_graph", 24), "GSEA Plot",
+        AssetService.getInstance().loadIcon("line_graph", 24), "GSEA Plot",
         "Create a GSEA Plot.");
     button.addClickListener(this);
 

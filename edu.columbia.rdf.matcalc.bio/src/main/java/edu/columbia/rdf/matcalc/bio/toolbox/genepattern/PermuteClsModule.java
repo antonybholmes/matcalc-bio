@@ -41,7 +41,7 @@ import org.jebtk.core.io.PathUtils;
 import org.jebtk.graphplot.figure.series.XYSeries;
 import org.jebtk.graphplot.figure.series.XYSeriesGroup;
 import org.jebtk.math.matrix.DataFrame;
-import org.jebtk.modern.UIService;
+import org.jebtk.modern.AssetService;
 import org.jebtk.modern.dialog.MessageDialogType;
 import org.jebtk.modern.dialog.ModernDialogStatus;
 import org.jebtk.modern.dialog.ModernMessageDialog;
@@ -86,7 +86,7 @@ public class PermuteClsModule extends CalcModule
     mParent = window;
 
     RibbonLargeButton button = new RibbonLargeButton("Permute CLS",
-        UIService.getInstance().loadIcon("save", 24), "Permute CLS",
+        AssetService.getInstance().loadIcon("save", 24), "Permute CLS",
         "Create random permutations of a GenePattern CLS using the groups.");
     button.addClickListener(this);
 

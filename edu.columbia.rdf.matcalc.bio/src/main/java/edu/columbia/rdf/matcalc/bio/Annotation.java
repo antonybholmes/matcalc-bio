@@ -125,7 +125,7 @@ public class Annotation implements Comparable<Annotation> {
           }
 
           BedRegion region = BedRegion
-              .parse(GenomeService.instance().guessGenome(file), line);
+              .parse(GenomeService.getInstance().guessGenome(file), line);
 
           if (region != null) {
             Annotation annotation = new Annotation(region.getName(), region);
@@ -164,7 +164,7 @@ public class Annotation implements Comparable<Annotation> {
 
         tokens = TextUtils.tabSplit(line);
 
-        GenomicRegion region = GenomicRegion.parse(GenomeService.instance().guessGenome(file), tokens.get(0));
+        GenomicRegion region = GenomicRegion.parse(GenomeService.getInstance().guessGenome(file), tokens.get(0));
 
         Annotation annotation = new Annotation(region.toString(), region);
 
@@ -224,7 +224,7 @@ public class Annotation implements Comparable<Annotation> {
         region = GenomicRegion.parse(genome, model.getText(i, 0));
       } else {
         region = new GenomicRegion(
-            GenomeService.instance().chr(genome, model.getText(i, 0)),
+            GenomeService.getInstance().chr(genome, model.getText(i, 0)),
             (int) model.getValue(i, 1), (int) model.getValue(i, 2));
       }
 
@@ -307,7 +307,7 @@ public class Annotation implements Comparable<Annotation> {
           0,
           TextUtils.TAB_DELIMITER);
 
-      gappedSearch = parsePeaksFixed(GenomeService.instance().guessGenome(file), model, header);
+      gappedSearch = parsePeaksFixed(GenomeService.getInstance().guessGenome(file), model, header);
     }
 
     return gappedSearch;
@@ -346,7 +346,7 @@ public class Annotation implements Comparable<Annotation> {
         || PathUtils.getFileExt(file).equals("bedgraph")) {
       return parseBed(file);
     } else {
-      return parseRegions(GenomeService.instance().guessGenome(file),
+      return parseRegions(GenomeService.getInstance().guessGenome(file),
           Excel.convertToMatrix(file,
           true,
           TextUtils.emptyList(),
@@ -362,7 +362,7 @@ public class Annotation implements Comparable<Annotation> {
         || PathUtils.getFileExt(file).equals("bedgraph")) {
       return parseBedFixed(file);
     } else {
-      return parseRegionsFixed(GenomeService.instance().guessGenome(file),
+      return parseRegionsFixed(GenomeService.getInstance().guessGenome(file),
           Excel.convertToMatrix(file,
           true,
           TextUtils.emptyList(),

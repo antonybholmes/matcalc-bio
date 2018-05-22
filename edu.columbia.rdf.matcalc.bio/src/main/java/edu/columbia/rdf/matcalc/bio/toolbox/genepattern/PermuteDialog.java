@@ -11,7 +11,7 @@ import org.jebtk.core.text.TextUtils;
 import org.jebtk.graphplot.figure.series.XYSeries;
 import org.jebtk.graphplot.figure.series.XYSeriesGroup;
 import org.jebtk.modern.UI;
-import org.jebtk.modern.UIService;
+import org.jebtk.modern.AssetService;
 import org.jebtk.modern.button.ModernButtonWidget;
 import org.jebtk.modern.button.ModernCheckBox;
 import org.jebtk.modern.combobox.ModernComboBox;
@@ -59,7 +59,7 @@ public class PermuteDialog extends ModernDialogTaskWindow {
       "Sample with replacement");
 
   private ModernButtonWidget mChangeButton = new ModernDialogFlatButton(
-      "Change...", UIService.getInstance().loadIcon("open", 16));
+      "Change...", AssetService.getInstance().loadIcon("open", 16));
 
   private Path mDir = null;
 

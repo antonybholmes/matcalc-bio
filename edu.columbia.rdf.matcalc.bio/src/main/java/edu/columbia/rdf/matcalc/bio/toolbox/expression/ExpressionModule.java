@@ -71,8 +71,8 @@ public class ExpressionModule extends CalcModule
 
   private static final ModernIcon EXPRESSION_ICON = new Raster32Icon(
       new FilterVectorIcon(
-          ThemeService.getInstance().colors().getBlueTheme().getColor(5),
-          ThemeService.getInstance().colors().getBlueTheme().getColor(4)));
+          ThemeService.getInstance().getColors().getBlueTheme().getColor(5),
+          ThemeService.getInstance().getColors().getBlueTheme().getColor(4)));
 
   /**
    * The member window.

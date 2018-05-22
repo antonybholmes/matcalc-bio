@@ -13,7 +13,7 @@ import org.jebtk.core.io.FileUtils;
 import org.jebtk.core.io.PathUtils;
 import org.jebtk.core.text.TextUtils;
 import org.jebtk.math.matrix.DataFrame;
-import org.jebtk.modern.UIService;
+import org.jebtk.modern.AssetService;
 import org.jebtk.modern.dialog.ModernDialogStatus;
 import org.jebtk.modern.event.ModernClickEvent;
 import org.jebtk.modern.event.ModernClickListener;
@@ -39,7 +39,7 @@ public class ProbeLocationsModule extends CalcModule
     mWindow = window;
 
     RibbonLargeButton button = new RibbonLargeButton("Probe Locations",
-        UIService.getInstance().loadIcon("probes", 24));
+        AssetService.getInstance().loadIcon("probes", 24));
 
     button.addClickListener(this);
     mWindow.getRibbon().getToolbar("Bioinformatics").getSection("Probes")

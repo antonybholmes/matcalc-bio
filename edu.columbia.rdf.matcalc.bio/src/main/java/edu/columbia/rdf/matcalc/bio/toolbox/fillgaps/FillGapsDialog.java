@@ -15,7 +15,7 @@ import org.jebtk.core.collections.CollectionUtils;
 import org.jebtk.math.external.microsoft.Excel;
 import org.jebtk.math.ui.external.microsoft.ExcelDialog;
 import org.jebtk.modern.UI;
-import org.jebtk.modern.UIService;
+import org.jebtk.modern.AssetService;
 import org.jebtk.modern.button.ModernButtonWidget;
 import org.jebtk.modern.combobox.ModernComboBox;
 import org.jebtk.modern.dialog.ModernDialogFlatButton;
@@ -54,7 +54,7 @@ public class FillGapsDialog extends ModernDialogTaskWindow {
   private ModernList<String> mSampleList = new ModernList<String>();
 
   private ModernButtonWidget mLoadButton = new ModernDialogFlatButton("Load...",
-      UIService.getInstance().loadIcon("open", 16));
+      AssetService.getInstance().loadIcon("open", 16));
 
   private ModernNumericalTextField mMeanZeroField = new ModernClipboardNumericalTextField(
       FillGapsModule.SEGMENT_MEAN_ZERO);
@@ -179,6 +179,6 @@ public class FillGapsDialog extends ModernDialogTaskWindow {
   }
 
   public double getMeanZero() throws ParseException {
-    return mMeanZeroField.getAsDouble();
+    return mMeanZeroField.getDouble();
   }
 }
