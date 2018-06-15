@@ -189,6 +189,10 @@ public class AnnotationService implements Iterable<String> {
 
     return mSearchMap.get(id).get(ext5p).get(ext3p);
   }
+  
+  public BinarySearch<AnnotationGene> getBinarySearch(GenomeDatabase genome) throws IOException {
+    return getBinarySearch(genome.getGenome(), genome.getDb());
+  }
 
   public BinarySearch<AnnotationGene> getBinarySearch(String genome, String name)
       throws IOException {
@@ -238,6 +242,8 @@ public class AnnotationService implements Iterable<String> {
    */
   private void autoLoad() throws IOException {
     if (mAutoLoad) {
+      mAutoLoad = false;
+      
       Deque<Path> stack = new ArrayDeque<Path>();
 
       stack.push(RES_DIR);
@@ -272,8 +278,6 @@ public class AnnotationService implements Iterable<String> {
           }
         }
       }
-
-      mAutoLoad = false;
     }
   }
 
