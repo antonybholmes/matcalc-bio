@@ -41,7 +41,6 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.jebtk.core.ColorUtils;
 import org.jebtk.core.Mathematics;
-import org.jebtk.core.geom.IntDim;
 import org.jebtk.core.io.FileUtils;
 import org.jebtk.core.io.Io;
 import org.jebtk.core.io.PathUtils;
@@ -50,6 +49,7 @@ import org.jebtk.core.text.Formatter;
 import org.jebtk.core.text.TextUtils;
 import org.jebtk.graphplot.PlotFactory;
 import org.jebtk.graphplot.figure.Axes;
+import org.jebtk.graphplot.figure.Axis;
 import org.jebtk.graphplot.figure.Figure;
 import org.jebtk.graphplot.figure.LabelPlotLayer;
 import org.jebtk.graphplot.figure.Plot;
@@ -243,17 +243,17 @@ public class GseaPlotModule extends CalcModule implements ModernClickListener {
     // Find where the crossing point is in the full list of ranked genes
     //
 
-    DataFrame allRankedGenes = new DoubleMatrixParser(true,
+    DataFrame allRankedM = new DoubleMatrixParser(true,
         4,
         TextUtils.TAB_DELIMITER)
         .parse(rankedListFile);
 
     // Make the first column the rank order
 
-    allRankedGenes.setColumnName(0, "Ranked x");
-    allRankedGenes.setColumnName(1, "Ranked y");
+    allRankedM.setColumnName(0, "Ranked x");
+    allRankedM.setColumnName(1, "Ranked y");
 
-    int n = allRankedGenes.getRows();
+    int n = allRankedM.getRows();
 
     // Last index of sorted rows
     int ni = n - 1;
@@ -265,12 +265,12 @@ public class GseaPlotModule extends CalcModule implements ModernClickListener {
     //    allRankedGenes);
 
     System.err.println(
-        "aha " + allRankedGenes.getValue(allRankedGenes.getRows() - 1, 0));
+        "aha " + allRankedM.getValue(allRankedM.getRows() - 1, 0));
 
     int crossingIndex = -1;
 
     for (int i = 0; i < n; ++i) {
-      double v = allRankedGenes.getValue(i, 0);
+      double v = allRankedM.getValue(i, 0);
 
       if (Mathematics.isInvalidNumber(v)) {
         continue;
@@ -287,8 +287,8 @@ public class GseaPlotModule extends CalcModule implements ModernClickListener {
     
     // For scaling the heat map
     // Max is first
-    double max = allRankedGenes.getValue(0, 0);
-    double min = allRankedGenes.getValue(ni, 0);
+    double max = allRankedM.getValue(0, 0);
+    double min = allRankedM.getValue(ni, 0);
     
     SysUtils.err().println("min", min, "max", max);
 
@@ -324,6 +324,8 @@ public class GseaPlotModule extends CalcModule implements ModernClickListener {
 
       // Select the xy columns of interest
 
+      System.err.println("here");
+      
       DataFrame plotDataM = DataFrame
           .copyInnerColumns(new MixedMatrixParser(true,
               0,
@@ -339,42 +341,50 @@ public class GseaPlotModule extends CalcModule implements ModernClickListener {
 
       // Set to be the end of the points, i.e assume there is no crossing point
       // and the gsea plot is above zero
-      int geneSetCrossingIndex = plotDataM.getRows() - 1;
+      
+      int plotn = plotDataM.getRows();
+      int plotni = plotn - 1;
+      
+      int geneSetCrossingIndex = plotni;
       double crossingX = n;
 
       for (int i = 0; i < plotDataM.getRows(); ++i) {
         // For plotting vlines
         vlinesM.set(0, i, plotDataM.getInt(i, 0));
-        
+      }
+      
+      for (int i = 0; i < plotDataM.getRows(); ++i) {
         if (plotDataM.getValue(i, 1) < 0) {
-          geneSetCrossingIndex = plotDataM.getInt(i, 0);
+          geneSetCrossingIndex = i - 1; //plotDataM.getInt(i, 0);
+          
+          SysUtils.err().println("blob", i, plotDataM.getInt(i, 0), plotDataM.getValue(i, 0) + " " + plotDataM.getValue(i, 1));
 
           // crossingX = (m.getValue(i, 0) + m.getValue(i - 1, 0)) / 2.0;
 
           // Imagine p1 is (0,0) so we have y =mx and solve for x
-          double dydx = (plotDataM.getValue(i, 1) - plotDataM.getValue(i - 1, 1))
-              / (plotDataM.getValue(i, 0) - plotDataM.getValue(i - 1, 0));
+          double dydx = (plotDataM.getValue(i, 1) - plotDataM.getValue(geneSetCrossingIndex, 1))
+              / (plotDataM.getValue(i, 0) - plotDataM.getValue(geneSetCrossingIndex, 0));
 
           // Since we set p1 (i - 1) to be the zero point, when we
           // solve for the intercept at y = 0, invert p1 as that
           // is the distance of y = 0 relative to p1
 
-          crossingX = plotDataM.getValue(i - 1, 0) - plotDataM.getValue(i - 1, 1) / dydx;
+          crossingX = plotDataM.getValue(geneSetCrossingIndex, 0) - plotDataM.getValue(geneSetCrossingIndex, 1) / dydx;
 
           break;
         }
       }
+      
+      System.err.println("here2 " + plotDataM.getRows() + " " + geneSetCrossingIndex);
 
       //System.err.println("cross " + geneSetCrossingIndex + " " + crossingX + " "
       //    + mPlotData.getValue(geneSetCrossingIndex, 1));
 
       
 
-      //
-      // Ranking
-      //
-
-      DataFrame rankedM = DataFrame.createNumericalMatrix(1, n);
+      
+      
+      //DataFrame rankedM = DataFrame.createNumericalMatrix(1, n);
 
       //rankedM.setColumnName(0, "Ranked x");
       //rankedM.setColumnName(1, "Ranked y");
@@ -388,9 +398,9 @@ public class GseaPlotModule extends CalcModule implements ModernClickListener {
       //rankedM.copyColumn(m, 0, 2);
 
       // Make a normalized plot for a heat map
-      for (int i = 0; i < n; ++i) {
-        rankedM.set(0, i, allRankedGenes.getValue(i, 0));
-      }
+      //for (int i = 0; i < n; ++i) {
+      //  rankedM.set(0, i, allRankedGenes.getValue(i, 0));
+      //}
 
       if (crossingIndex < ni) {
         // We add two extra points to ensure the plot starts and ends
@@ -424,6 +434,8 @@ public class GseaPlotModule extends CalcModule implements ModernClickListener {
         series.getStyle().getLineStyle().setColor(color);
         series.getMarkerStyle().setVisible(false);
 
+        System.err.println(upM.getShape());
+        
         PlotFactory.createFilledLinePlot(upM, axes, series);
       }
 
@@ -463,6 +475,8 @@ public class GseaPlotModule extends CalcModule implements ModernClickListener {
         series.getStyle().getLineStyle().setColor(color);
         series.getMarkerStyle().setVisible(false);
 
+        System.err.println(downM.getShape());
+        
         PlotFactory.createFilledLinePlot(downM, axes, series);
       }
 
@@ -509,7 +523,7 @@ public class GseaPlotModule extends CalcModule implements ModernClickListener {
           leadingM.set(i, 1, plotDataM.get(ls + i, 1));
         }
 
-        leadingM.set(leadingM.getRows() - 1, 0, allRankedGenes.getRows());
+        leadingM.set(leadingM.getRows() - 1, 0, allRankedM.getRows());
         leadingM.set(leadingM.getRows() - 1, 1, 0);
       }
 
@@ -528,67 +542,93 @@ public class GseaPlotModule extends CalcModule implements ModernClickListener {
       System.err.println("properties");
       
       axes.setY1AxisLimitAutoRound();
-      axes.setInternalSize(width, 500);
+      axes.setInternalSize(width, 400);
       axes.setMargins(100);
 
       Plot plot = axes.newPlot();
       plot.addChild(new LabelPlotLayer(p1, 0, 0, 10, -10));
       plot.addChild(
-          new RightLabelPlotLayer(p2, allRankedGenes.getRows(), 0, -10, -10));
+          new RightLabelPlotLayer(p2, allRankedM.getRows(), 0, -10, -10));
 
       plot.addChild(
-          new LabelPlotLayer("Size:", allRankedGenes.getRows(), 0, -200, -120));
+          new LabelPlotLayer("Size:", allRankedM.getRows(), 0, -200, -120));
       plot.addChild(new LabelPlotLayer(Integer.toString(sizeMap.get(name)),
-          allRankedGenes.getRows(), 0, -100, -120));
+          allRankedM.getRows(), 0, -100, -120));
       // plot.getPlotLayerZModel().setZ(new LabelPlotLayer("ES:",
       // allRankedGenes.getRowCount(), 0, -200, -140));
       // plot.getPlotLayerZModel().setZ(new
       // LabelPlotLayer(TextUtils.format4DP(es),
       // allRankedGenes.getRowCount(), 0, -100, -140));
       plot.addChild(
-          new LabelPlotLayer("NES:", allRankedGenes.getRows(), 0, -200, -100));
+          new LabelPlotLayer("NES:", allRankedM.getRows(), 0, -200, -100));
       plot.addChild(
           new LabelPlotLayer(Formatter.number().dp(4).format(nesMap.get(name)),
-              allRankedGenes.getRows(), 0, -100, -100));
+              allRankedM.getRows(), 0, -100, -100));
       // plot.getPlotLayerZModel().setZ(new LabelPlotLayer("P:",
       // allRankedGenes.getRowCount(), 0, -200, -100));
       // plot.getPlotLayerZModel().setZ(new
       // LabelPlotLayer(TextUtils.format4DP(pMap.get(name)),
       // allRankedGenes.getRowCount(), 0, -100, -100));
       plot.addChild(
-          new LabelPlotLayer("FDR:", allRankedGenes.getRows(), 0, -200, -80));
+          new LabelPlotLayer("FDR:", allRankedM.getRows(), 0, -200, -80));
       plot.addChild(
           new LabelPlotLayer(Formatter.number().dp(4).format(fdrMap.get(name)),
-              allRankedGenes.getRows(), 0, -100, -80));
+              allRankedM.getRows(), 0, -100, -80));
 
       // Plot the limits as if all genes are present
-      axes.getX1Axis().setLimitsAutoRound(0, allRankedGenes.getRows());
       axes.getX1Axis().getTitle().setText("Gene List Index");
       axes.getY1Axis().getTitle().setText("Running Enrichment Score");
       axes.getY1Axis().setShowZerothLine(true);
       axes.getTitle().setText(name);
+      axes.getX1Axis().setLimits(0, n);
 
       //
       // Ranked genes
       //
       
+      // Copy the ranks from the file
+      
+      DataFrame rankedM = new MixedMatrixParser(true,
+          0,
+          TextUtils.TAB_DELIMITER)
+          .parse(plotFile)
+          .cols(5, 6);
+      
+      rankedM.setColumnName(0, "Ranked x");
+      rankedM.setColumnName(1, "Ranked y");
+      
+      //
+      // Heat Map
+      //
+      
+      DataFrame heatmapM = DataFrame.createNumericalMatrix(1, rankedM.getRows());
+      
+      heatmapM.setRow(0, rankedM.columnToDoubleArray(1));
+      
       System.err.println("heatmap");
 
       subFigure = figure.newSubFigure();
-
-      axes = subFigure.newAxes().setInternalSize(width, 100);
-    
+      //subFigure.setZLayout();
       
-
+      axes = subFigure.newAxes().setInternalSize(width, 25);
+      axes.getX1Axis().setLimits(0, n);
+      axes.setLeftMargin(100);
+      axes.getX1Axis().getTitle().setText("Gene List Index");
       
-      PlotFactory.imShow(rankedM, subFigure, axes,
+      PlotFactory.imShow(heatmapM, subFigure, axes,
           ColorMap.createBlueWhiteRedMap(),
           new LinearNormalization(min, 0, max));
       
+      Axes.disableAllFeatures(axes);
+      
+      subFigure = figure.newSubFigure();
+      axes = subFigure.newAxes().setInternalSize(width, 25);
+      axes.getX1Axis().setLimits(0, n);
+      axes.setLeftMargin(100);
+      
       PlotFactory.vlines(vlinesM, axes);
       
-
-      // Create a custom heatmap
+      Axes.disableAllFeatures(axes);
 
 
       // Set the axes ranges etc
@@ -597,16 +637,15 @@ public class GseaPlotModule extends CalcModule implements ModernClickListener {
       //axes.getY1Axis().setLimitsAutoRound(0, 1);
       //axes.setInternalSize(DEFAULT_WIDTH, 60);
       //axes.setMargins(100);
-      axes.getX1Axis().getTitle().setText("Gene List Index");
-      Axes.disableAllFeatures(axes);
+      
 
       //
-      // All the ranked ranked genes
+      // All the ranked genes
       //
       
       System.err.println("ranked " + axes.getInternalSize());
 
-      /*
+      
       subFigure = figure.newSubFigure();
 
       axes = subFigure.newAxes();
@@ -620,21 +659,22 @@ public class GseaPlotModule extends CalcModule implements ModernClickListener {
       series.getMarkerStyle().setVisible(false);
 
       // PlotFactory.createSplineFilledLinePlot(allRankedGenes, axes, series);
-      PlotFactory.createFilledTrapezoidLinePlot(allRankedGenes, axes, series);
+      PlotFactory.createFilledTrapezoidPlot(rankedM, axes, series);
 
-      axes.setMargins(40, 0, 0, 0);
-      axes.setInternalSize(DEFAULT_WIDTH, 200);
+      axes.setInternalSize(width, 200);
+      axes.setMargins(100);
       axes.getX1Axis().getTitle().setText("Gene List Index");
       axes.getY1Axis().getTitle().setText("Ranked List Metric");
-      Axis.disableAllFeatures(axes.getX1Axis());
+      //Axis.disableAllFeatures(axes.getX1Axis());
       axes.getY1Axis().getGrid().setVisible(false);
-      */
+      axes.getX1Axis().setLimits(0, n);
+      
 
       Graph2dWindow window = new Graph2dWindow(mParent, figure);
 
       window.setVisible(true);
 
-      //FOR DEGUG ONL
+      //FOR DEGUG ONLY
       break;
     }
 
