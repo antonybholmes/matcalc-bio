@@ -539,7 +539,6 @@ public class GseaPlotModule extends CalcModule implements ModernClickListener {
       // Set some plot properties
       //
 
-      System.err.println("properties");
       
       axes.setY1AxisLimitAutoRound();
       axes.setInternalSize(width, 400);
@@ -605,8 +604,6 @@ public class GseaPlotModule extends CalcModule implements ModernClickListener {
       
       heatmapM.setRow(0, rankedM.columnToDoubleArray(1));
       
-      System.err.println("heatmap");
-
       subFigure = figure.newSubFigure();
       //subFigure.setZLayout();
       
