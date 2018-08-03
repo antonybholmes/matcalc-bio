@@ -109,7 +109,7 @@ public class ProbeLocationsModule extends CalcModule
     locMap.clear();
 
     DataFrame ml = new DataFrame(m);
-    ml.setTextRowAnnotations("Probe Location (hg19)", locs);
+    ml.setRowAnnotations("Probe Location (hg19)", locs.toArray());
 
     mWindow.addToHistory("Probe Locations", ml);
   }
