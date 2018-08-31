@@ -302,7 +302,7 @@ public class Annotation implements Comparable<Annotation> {
       gappedSearch = Annotation.parseBedFixed(file);
     } else {
       ModernDataModel model = Bioinformatics.getModel(file,
-          true,
+          1,
           TextUtils.emptyList(),
           0,
           TextUtils.TAB_DELIMITER);
@@ -348,7 +348,7 @@ public class Annotation implements Comparable<Annotation> {
     } else {
       return parseRegions(GenomeService.getInstance().guessGenome(file),
           Excel.convertToMatrix(file,
-          true,
+          1,
           TextUtils.emptyList(),
           0,
           TextUtils.TAB_DELIMITER));
@@ -364,7 +364,7 @@ public class Annotation implements Comparable<Annotation> {
     } else {
       return parseRegionsFixed(GenomeService.getInstance().guessGenome(file),
           Excel.convertToMatrix(file,
-          true,
+          1,
           TextUtils.emptyList(),
           0,
           TextUtils.TAB_DELIMITER));
@@ -378,7 +378,7 @@ public class Annotation implements Comparable<Annotation> {
       return Bed.toMatrix(file);
     } else {
       return Excel.convertToMatrix(file,
-          true,
+          1,
           TextUtils.emptyList(),
           0,
           TextUtils.TAB_DELIMITER);

@@ -9,6 +9,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.regex.Pattern;
 
 import org.jebtk.bioinformatics.gapsearch.BinarySearch;
@@ -450,8 +451,12 @@ public class AnnotationGene extends GenomicRegion implements TextIdProperty {
       reader.close();
     }
 
-    for (String transcript : exonMap) {
-      for (Chromosome chr : exonMap.get(transcript)) {
+    for (Entry<String, IterMap<Chromosome, List<GenomicRegion>>> em : exonMap) {
+      String transcript = em.getKey();
+      
+      for (Entry<Chromosome, List<GenomicRegion>> cm : em.getValue()) {
+        Chromosome chr = cm.getKey();
+        
         int start = Integer.MAX_VALUE;
         int end = Integer.MIN_VALUE;
 

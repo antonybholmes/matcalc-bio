@@ -49,7 +49,6 @@ import org.jebtk.core.text.Formatter;
 import org.jebtk.core.text.TextUtils;
 import org.jebtk.graphplot.PlotFactory;
 import org.jebtk.graphplot.figure.Axes;
-import org.jebtk.graphplot.figure.Axis;
 import org.jebtk.graphplot.figure.Figure;
 import org.jebtk.graphplot.figure.LabelPlotLayer;
 import org.jebtk.graphplot.figure.Plot;
@@ -243,7 +242,7 @@ public class GseaPlotModule extends CalcModule implements ModernClickListener {
     // Find where the crossing point is in the full list of ranked genes
     //
 
-    DataFrame allRankedM = new DoubleMatrixParser(true,
+    DataFrame allRankedM = new DoubleMatrixParser(1,
         4,
         TextUtils.TAB_DELIMITER)
         .parse(rankedListFile);
@@ -327,7 +326,7 @@ public class GseaPlotModule extends CalcModule implements ModernClickListener {
       System.err.println("here");
       
       DataFrame plotDataM = DataFrame
-          .copyInnerColumns(new MixedMatrixParser(true,
+          .copyInnerColumns(new MixedMatrixParser(1,
               0,
               TextUtils.TAB_DELIMITER)
               .parse(plotFile), 5, 7, 8);
@@ -587,7 +586,7 @@ public class GseaPlotModule extends CalcModule implements ModernClickListener {
       
       // Copy the ranks from the file
       
-      DataFrame rankedM = new MixedMatrixParser(true,
+      DataFrame rankedM = new MixedMatrixParser(1,
           0,
           TextUtils.TAB_DELIMITER)
           .parse(plotFile)
