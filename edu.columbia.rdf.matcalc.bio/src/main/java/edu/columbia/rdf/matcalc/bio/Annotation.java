@@ -10,7 +10,7 @@ import java.util.Map;
 
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.jebtk.bioinformatics.ext.ucsc.Bed;
-import org.jebtk.bioinformatics.ext.ucsc.BedRegion;
+import org.jebtk.bioinformatics.ext.ucsc.BedElement;
 import org.jebtk.bioinformatics.gapsearch.BinaryGapSearch;
 import org.jebtk.bioinformatics.gapsearch.FixedGapSearch;
 import org.jebtk.bioinformatics.genomic.GenomeService;
@@ -124,7 +124,7 @@ public class Annotation implements Comparable<Annotation> {
             continue;
           }
 
-          BedRegion region = BedRegion
+          BedElement region = BedElement
               .parse(GenomeService.getInstance().guessGenome(file), line);
 
           if (region != null) {

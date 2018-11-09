@@ -231,7 +231,7 @@ public class FillGapsModule extends CalcModule implements ModernClickListener {
     UCSCTrack track = Bed.parseTrack(mBedFileMap.get(dialog.getAnnotation()));
 
     BinarySearch<UCSCTrackRegion> gapSearch = getBinarySearch(
-        track.getRegions());
+        track.getElements());
 
     List<String> samples = dialog.getSamples();
 
