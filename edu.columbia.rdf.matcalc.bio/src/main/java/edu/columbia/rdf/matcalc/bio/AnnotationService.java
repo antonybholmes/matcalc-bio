@@ -39,6 +39,7 @@ import java.util.Set;
 
 import org.jebtk.bioinformatics.gapsearch.BinarySearch;
 import org.jebtk.bioinformatics.gapsearch.FixedGapSearch;
+import org.jebtk.bioinformatics.genomic.Genome;
 import org.jebtk.core.collections.DefaultHashMap;
 import org.jebtk.core.collections.DefaultHashMapCreator;
 import org.jebtk.core.collections.DefaultTreeMap;
@@ -95,7 +96,7 @@ public class AnnotationService implements Iterable<String> {
           new DefaultHashMapCreator<Integer, IterMap<Integer, BinarySearch<AnnotationGene>>>(
               new HashMapCreator<Integer, BinarySearch<AnnotationGene>>()));
 
-  private Map<String, List<String>> mGeneIdMap = new HashMap<String, List<String>>();
+  private Map<Genome, List<String>> mGeneIdMap = new HashMap<Genome, List<String>>();
 
   private boolean mAutoLoad = true;
 
@@ -123,10 +124,10 @@ public class AnnotationService implements Iterable<String> {
     return getGeneIdTypes(gb.getGenome(), gb.getDb());
   }
   
-  public List<String> getGeneIdTypes(String genome, String name) throws IOException {
+  public List<String> getGeneIdTypes(Genome genome, String name) throws IOException {
     autoLoad();
 
-    String id = genome + name;
+    String id = genome.getAssembly() + name;
     
     if (!mFileMap.containsKey(id)) {
       return null;
@@ -149,13 +150,13 @@ public class AnnotationService implements Iterable<String> {
     return getSearch(gb.getGenome(), gb.getDb());
   }
 
-  public FixedGapSearch<AnnotationGene> getSearch(String genome,
+  public FixedGapSearch<AnnotationGene> getSearch(Genome genome,
       String name)
       throws IOException {
     return getSearch(genome, name, 0, 0);
   }
 
-  public FixedGapSearch<AnnotationGene> getSearch(String genome,
+  public FixedGapSearch<AnnotationGene> getSearch(Genome genome,
       String name,
       int ext5p,
       int ext3p) throws IOException {
@@ -194,12 +195,12 @@ public class AnnotationService implements Iterable<String> {
     return getBinarySearch(genome.getGenome(), genome.getDb());
   }
 
-  public BinarySearch<AnnotationGene> getBinarySearch(String genome, String name)
+  public BinarySearch<AnnotationGene> getBinarySearch(Genome genome, String name)
       throws IOException {
     return getBinarySearch(genome, name, 0, 0);
   }
 
-  public BinarySearch<AnnotationGene> getBinarySearch(String genome,
+  public BinarySearch<AnnotationGene> getBinarySearch(Genome genome,
       String name,
       int ext5p,
       int ext3p) throws IOException {

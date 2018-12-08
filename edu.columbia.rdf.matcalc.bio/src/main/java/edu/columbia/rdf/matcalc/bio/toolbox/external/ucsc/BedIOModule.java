@@ -21,9 +21,9 @@ import java.nio.file.Path;
 import java.util.Collection;
 
 import org.jebtk.bioinformatics.ext.ucsc.Bed;
+import org.jebtk.bioinformatics.genomic.Genome;
 import org.jebtk.bioinformatics.genomic.GenomeService;
 import org.jebtk.bioinformatics.genomic.GenomicRegion;
-import org.jebtk.bioinformatics.ui.external.ucsc.BedGuiFileFilter;
 import org.jebtk.core.io.FileUtils;
 import org.jebtk.core.io.Io;
 import org.jebtk.core.text.Join;
@@ -109,7 +109,7 @@ public class BedIOModule extends CalcModule {
     return true;
   }
 
-  public static GenomicRegion getRegion(String genome, final DataFrame m, int row) {
+  public static GenomicRegion getRegion(Genome genome, final DataFrame m, int row) {
     GenomicRegion region = null;
 
     if (Io.isEmptyLine(m.getText(row, 0))) {

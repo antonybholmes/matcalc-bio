@@ -1,15 +1,17 @@
 package edu.columbia.rdf.matcalc.bio;
 
+import org.jebtk.bioinformatics.genomic.Genome;
+
 public class GenomeDatabase {
-  private String mGenome;
+  private Genome mGenome;
   private String mDb;
 
-  public GenomeDatabase(String genome, String db) {
+  public GenomeDatabase(Genome genome, String db) {
     mGenome = genome;
     mDb = db;
   }
 
-  public String getGenome() {
+  public Genome getGenome() {
     return mGenome;
   }
   
@@ -19,6 +21,6 @@ public class GenomeDatabase {
   
   @Override
   public String toString() {
-    return mGenome;
+    return mGenome.getAssembly();
   }
 }

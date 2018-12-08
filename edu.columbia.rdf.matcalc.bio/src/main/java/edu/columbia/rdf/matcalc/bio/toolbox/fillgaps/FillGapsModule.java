@@ -34,20 +34,21 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeMap;
 
 import org.jebtk.bioinformatics.ext.ucsc.Bed;
 import org.jebtk.bioinformatics.ext.ucsc.UCSCTrack;
-import org.jebtk.bioinformatics.ext.ucsc.UCSCTrackRegion;
 import org.jebtk.bioinformatics.gapsearch.BinaryGapSearch;
 import org.jebtk.bioinformatics.gapsearch.BinarySearch;
 import org.jebtk.bioinformatics.gapsearch.GappedSearchFeatures;
 import org.jebtk.bioinformatics.genomic.Chromosome;
 import org.jebtk.bioinformatics.genomic.Genome;
 import org.jebtk.bioinformatics.genomic.GenomeService;
+import org.jebtk.bioinformatics.genomic.GenomicElement;
+import org.jebtk.bioinformatics.genomic.GenomicElementsMap;
 import org.jebtk.bioinformatics.genomic.GenomicRegion;
-import org.jebtk.bioinformatics.genomic.GenomicRegions;
 import org.jebtk.bioinformatics.genomic.Human;
 import org.jebtk.core.io.FileUtils;
 import org.jebtk.core.io.PathUtils;
@@ -197,7 +198,7 @@ public class FillGapsModule extends CalcModule implements ModernClickListener {
    * 
    * @throws Exception
    */
-  private void annotate(String genome) throws Exception {
+  private void annotate(Genome genome) throws Exception {
     DataFrame m = mWindow.getCurrentMatrix();
 
     if (m == null) {
@@ -228,9 +229,9 @@ public class FillGapsModule extends CalcModule implements ModernClickListener {
       return;
     }
 
-    UCSCTrack track = Bed.parseTrack(mBedFileMap.get(dialog.getAnnotation()));
+    UCSCTrack track = Bed.parseTrack("bed", mBedFileMap.get(dialog.getAnnotation()));
 
-    BinarySearch<UCSCTrackRegion> gapSearch = getBinarySearch(
+    BinarySearch<GenomicRegion> gapSearch = getBinarySearch(
         track.getElements());
 
     List<String> samples = dialog.getSamples();
@@ -280,7 +281,7 @@ public class FillGapsModule extends CalcModule implements ModernClickListener {
     for (String name : segments.keySet()) {
       for (Chromosome chr : segments.get(name).keySet()) {
         for (Segment segment : segments.get(name).get(chr)) {
-          List<GappedSearchFeatures<UCSCTrackRegion>> features = gapSearch
+          List<GappedSearchFeatures<GenomicRegion>> features = gapSearch
               .getFeatures(chr, segment.start, segment.end);
 
           // update so the segment begins and ends on a probe
@@ -596,12 +597,14 @@ public class FillGapsModule extends CalcModule implements ModernClickListener {
     return ret;
   }
 
-  public static <X extends GenomicRegion> BinarySearch<X> getBinarySearch(
-      GenomicRegions<X> regions) {
-    BinarySearch<X> search = new BinarySearch<X>();
+  public static BinarySearch<GenomicRegion> getBinarySearch(
+      GenomicElementsMap regions) {
+    BinarySearch<GenomicRegion> search = new BinarySearch<GenomicRegion>();
 
-    for (X region : regions) {
-      search.add(region, region);
+    for (Entry<Chromosome, Set<GenomicElement>> region : regions) {
+      for (GenomicElement e : region.getValue()) {
+        search.add(e, e);
+      }
     }
 
     return search;

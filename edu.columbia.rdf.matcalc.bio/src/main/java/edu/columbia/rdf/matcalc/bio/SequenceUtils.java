@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.jebtk.bioinformatics.genomic.Chromosome;
+import org.jebtk.bioinformatics.genomic.Genome;
 import org.jebtk.bioinformatics.genomic.GenomeService;
 import org.jebtk.bioinformatics.genomic.GenomicRegion;
 import org.jebtk.bioinformatics.genomic.Sequence;
@@ -15,7 +16,7 @@ public class SequenceUtils {
     // Do nothing
   }
 
-  public static List<SearchSequence> matrixToSequences(String genome, DataFrame m) {
+  public static List<SearchSequence> matrixToSequences(Genome genome, DataFrame m) {
     int dnaLocationColumn = -1;
     int chrCol = -1;
     int startCol = -1;

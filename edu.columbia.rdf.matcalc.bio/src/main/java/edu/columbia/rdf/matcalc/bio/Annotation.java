@@ -13,6 +13,7 @@ import org.jebtk.bioinformatics.ext.ucsc.Bed;
 import org.jebtk.bioinformatics.ext.ucsc.BedElement;
 import org.jebtk.bioinformatics.gapsearch.BinaryGapSearch;
 import org.jebtk.bioinformatics.gapsearch.FixedGapSearch;
+import org.jebtk.bioinformatics.genomic.Genome;
 import org.jebtk.bioinformatics.genomic.GenomeService;
 import org.jebtk.bioinformatics.genomic.GenomicRegion;
 import org.jebtk.bioinformatics.ui.Bioinformatics;
@@ -124,8 +125,8 @@ public class Annotation implements Comparable<Annotation> {
             continue;
           }
 
-          BedElement region = BedElement
-              .parse(GenomeService.getInstance().guessGenome(file), line);
+          BedElement region = (BedElement) BedElement
+              .parse("bed", GenomeService.getInstance().guessGenome(file), line);
 
           if (region != null) {
             Annotation annotation = new Annotation(region.getName(), region);
@@ -178,7 +179,7 @@ public class Annotation implements Comparable<Annotation> {
     return gappedSearch;
   }
 
-  public static BinaryGapSearch<Annotation> parsePeaks(String genome, ModernDataModel model) {
+  public static BinaryGapSearch<Annotation> parsePeaks(Genome genome, ModernDataModel model) {
     BinaryGapSearch<Annotation> gappedSearch = new BinaryGapSearch<Annotation>();
 
     for (int i = 0; i < model.getRowCount(); ++i) {
@@ -196,7 +197,7 @@ public class Annotation implements Comparable<Annotation> {
     return gappedSearch;
   }
 
-  public static BinaryGapSearch<Annotation> parseRegions(String genome, DataFrame model)
+  public static BinaryGapSearch<Annotation> parseRegions(Genome genome, DataFrame model)
       throws ParseException {
     BinaryGapSearch<Annotation> gappedSearch = new BinaryGapSearch<Annotation>();
 
@@ -205,7 +206,7 @@ public class Annotation implements Comparable<Annotation> {
     return gappedSearch;
   }
 
-  public static FixedGapSearch<Annotation> parseRegionsFixed(String genome, DataFrame model) {
+  public static FixedGapSearch<Annotation> parseRegionsFixed(Genome genome, DataFrame model) {
     FixedGapSearch<Annotation> gappedSearch = new FixedGapSearch<Annotation>();
 
     parseRegions(genome, model, gappedSearch);
@@ -213,7 +214,7 @@ public class Annotation implements Comparable<Annotation> {
     return gappedSearch;
   }
 
-  public static void parseRegions(String genome,
+  public static void parseRegions(Genome genome,
       DataFrame model,
       FixedGapSearch<Annotation> gappedSearch) {
     for (int i = 0; i < model.getRows(); ++i) {
@@ -238,7 +239,7 @@ public class Annotation implements Comparable<Annotation> {
     }
   }
 
-  public static FixedGapSearch<Annotation> parseRegionsFixed(String genome, Path file)
+  public static FixedGapSearch<Annotation> parseRegionsFixed(Genome genome, Path file)
       throws IOException, ParseException {
     FixedGapSearch<Annotation> gappedSearch = new FixedGapSearch<Annotation>();
 
@@ -271,7 +272,7 @@ public class Annotation implements Comparable<Annotation> {
     return gappedSearch;
   }
 
-  public static FixedGapSearch<Annotation> parsePeaksFixed(String genome,
+  public static FixedGapSearch<Annotation> parsePeaksFixed(Genome genome,
       ModernDataModel model,
       int header) throws ParseException {
     FixedGapSearch<Annotation> gappedSearch = new FixedGapSearch<Annotation>();

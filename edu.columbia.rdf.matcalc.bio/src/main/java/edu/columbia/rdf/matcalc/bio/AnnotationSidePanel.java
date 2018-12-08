@@ -8,6 +8,7 @@ import java.util.Map;
 
 import javax.swing.Box;
 
+import org.jebtk.bioinformatics.genomic.GenomeService;
 import org.jebtk.modern.ModernComponent;
 import org.jebtk.modern.UI;
 import org.jebtk.modern.button.CheckBox;
@@ -110,7 +111,8 @@ public class AnnotationSidePanel extends ModernComponent {
 
     for (CheckBox button : mCheckMap.keySet()) {
       if (button.isSelected()) {
-        ret.add(new GenomeDatabase(mGenomeMap.get(button), button.getText()));
+        ret.add(new GenomeDatabase(GenomeService.getInstance().guessGenome(mGenomeMap.get(button)), 
+            button.getText()));
       }
     }
 

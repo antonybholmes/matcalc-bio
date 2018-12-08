@@ -16,8 +16,9 @@ import org.jebtk.bioinformatics.gapsearch.BinarySearch;
 import org.jebtk.bioinformatics.gapsearch.FixedGapSearch;
 import org.jebtk.bioinformatics.gapsearch.GapSearch;
 import org.jebtk.bioinformatics.genomic.Chromosome;
-import org.jebtk.bioinformatics.genomic.GenomeService;
 import org.jebtk.bioinformatics.genomic.GFF3Parser;
+import org.jebtk.bioinformatics.genomic.Genome;
+import org.jebtk.bioinformatics.genomic.GenomeService;
 import org.jebtk.bioinformatics.genomic.GenomicRegion;
 import org.jebtk.bioinformatics.genomic.Strand;
 import org.jebtk.core.TextIdProperty;
@@ -353,7 +354,7 @@ public class AnnotationGene extends GenomicRegion implements TextIdProperty {
     }
   }
 
-  public static FixedGapSearch<AnnotationGene> parseGFF3(String genome,
+  public static FixedGapSearch<AnnotationGene> parseGFF3(Genome genome,
       String name,
       Path file,
       int ext5p,
@@ -366,7 +367,7 @@ public class AnnotationGene extends GenomicRegion implements TextIdProperty {
     return search;
   }
 
-  public static BinarySearch<AnnotationGene> parseGFF3Binary(String genome,
+  public static BinarySearch<AnnotationGene> parseGFF3Binary(Genome genome,
       String name,
       Path file,
       int ext5p,
@@ -379,7 +380,7 @@ public class AnnotationGene extends GenomicRegion implements TextIdProperty {
     return search;
   }
 
-  public static void parseGFF3(String genome,
+  public static void parseGFF3(Genome genome,
       Path file,
       int ext5p,
       int ext3p,

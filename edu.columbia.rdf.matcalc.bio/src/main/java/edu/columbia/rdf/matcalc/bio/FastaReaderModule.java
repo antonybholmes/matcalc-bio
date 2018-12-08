@@ -21,10 +21,10 @@ import java.util.Collection;
 import java.util.List;
 
 import org.jebtk.bioinformatics.Fasta;
+import org.jebtk.bioinformatics.genomic.Genome;
 import org.jebtk.bioinformatics.genomic.GenomeService;
 import org.jebtk.bioinformatics.genomic.GenomicRegion;
 import org.jebtk.bioinformatics.genomic.Sequence;
-import org.jebtk.bioinformatics.ui.filters.FastaGuiFileFilter;
 import org.jebtk.math.matrix.DataFrame;
 import org.jebtk.modern.io.FileFilterService;
 
@@ -68,7 +68,7 @@ public class FastaReaderModule extends CalcModule {
     return toMatrix(GenomeService.getInstance().guessGenome(file), Fasta.parse(file));
   }
 
-  public static DataFrame toMatrix(String genome, List<Sequence> sequences) {
+  public static DataFrame toMatrix(Genome genome, List<Sequence> sequences) {
 
     DataFrame ret = DataFrame.createMixedMatrix(sequences.size(), 3);
 
@@ -99,7 +99,7 @@ public class FastaReaderModule extends CalcModule {
     return ret;
   }
   
-  public static DataFrame toMatrix(String genome, 
+  public static DataFrame toMatrix(Genome genome, 
       List<GenomicRegion> regions,
       List<Sequence> sequences) {
 
