@@ -372,6 +372,15 @@ public class Annotation implements Comparable<Annotation> {
     }
   }
 
+  /**
+   * Assume file contains genomic coordinates and attempt to create a data
+   * frame out of them.
+   * 
+   * @param file
+   * @return
+   * @throws InvalidFormatException
+   * @throws IOException
+   */
   public static DataFrame toMatrix(Path file)
       throws InvalidFormatException, IOException {
     if (PathUtils.getFileExt(file).equals("bed")

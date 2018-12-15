@@ -47,19 +47,23 @@ import org.jebtk.modern.io.RecentFilesService;
 import org.jebtk.modern.ribbon.RibbonLargeButton;
 
 import edu.columbia.rdf.matcalc.MainMatCalcWindow;
-import edu.columbia.rdf.matcalc.toolbox.CalcModule;
+import edu.columbia.rdf.matcalc.toolbox.core.io.IOModule;
 
 /**
  * The class BoxWhiskerPlotModule.
  */
-public class ClsModule extends CalcModule implements ModernClickListener {
+public class ClsModule extends IOModule implements ModernClickListener {
 
   private static final GuiFileExtFilter SAVE_CLS_FILTER = new ClsGuiFileFilter();
   /**
    * The member parent.
    */
   private MainMatCalcWindow mParent;
-
+  
+  public ClsModule() {
+    registerFileSaveType(SAVE_CLS_FILTER);
+  }
+  
   /*
    * (non-Javadoc)
    * 
@@ -88,8 +92,6 @@ public class ClsModule extends CalcModule implements ModernClickListener {
 
     mParent.getRibbon().getToolbar("Bioinformatics").getSection("GenePattern")
         .add(button);
-
-    registerFileSaveType(SAVE_CLS_FILTER);
   }
 
   /*
@@ -184,7 +186,7 @@ public class ClsModule extends CalcModule implements ModernClickListener {
    * java.nio.file.Path, boolean, int)
    */
   @Override
-  public boolean saveFile(final MainMatCalcWindow window,
+  public boolean write(final MainMatCalcWindow window,
       final Path file,
       final DataFrame m) throws IOException {
     return save(file, m);

@@ -30,7 +30,7 @@ import org.jebtk.modern.io.FileFilterService;
 
 import edu.columbia.rdf.matcalc.FileType;
 import edu.columbia.rdf.matcalc.MainMatCalcWindow;
-import edu.columbia.rdf.matcalc.toolbox.CalcModule;
+import edu.columbia.rdf.matcalc.toolbox.core.io.IOModule;
 
 /**
  * Allow users to open and save Broad GCT files
@@ -38,7 +38,7 @@ import edu.columbia.rdf.matcalc.toolbox.CalcModule;
  * @author Antony Holmes Holmes
  *
  */
-public class FastaReaderModule extends CalcModule {
+public class FastaReaderModule extends IOModule {
   public FastaReaderModule() {
     registerFileOpenType(FileFilterService.getInstance().getFilter("fasta")); //FastaGuiFileFilter.FASTA_FILTER);
   }
@@ -54,7 +54,7 @@ public class FastaReaderModule extends CalcModule {
   }
 
   @Override
-  public DataFrame autoOpenFile(final MainMatCalcWindow window,
+  public DataFrame read(final MainMatCalcWindow window,
       final Path file,
       FileType type,
       int headers,

@@ -51,12 +51,12 @@ import org.jebtk.modern.io.RecentFilesService;
 import org.jebtk.modern.ribbon.RibbonLargeButton;
 
 import edu.columbia.rdf.matcalc.MainMatCalcWindow;
-import edu.columbia.rdf.matcalc.toolbox.CalcModule;
+import edu.columbia.rdf.matcalc.toolbox.Module;
 
 /**
  * The class BoxWhiskerPlotModule.
  */
-public class PermuteClsModule extends CalcModule
+public class PermuteClsModule extends Module
     implements ModernClickListener {
 
   /**

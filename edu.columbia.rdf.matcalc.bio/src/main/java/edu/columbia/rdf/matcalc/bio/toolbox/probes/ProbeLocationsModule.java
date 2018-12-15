@@ -20,9 +20,9 @@ import org.jebtk.modern.event.ModernClickListener;
 import org.jebtk.modern.ribbon.RibbonLargeButton;
 
 import edu.columbia.rdf.matcalc.MainMatCalcWindow;
-import edu.columbia.rdf.matcalc.toolbox.CalcModule;
+import edu.columbia.rdf.matcalc.toolbox.Module;
 
-public class ProbeLocationsModule extends CalcModule
+public class ProbeLocationsModule extends Module
     implements ModernClickListener {
   private MainMatCalcWindow mWindow;
 
@@ -111,6 +111,6 @@ public class ProbeLocationsModule extends CalcModule
     DataFrame ml = new DataFrame(m);
     ml.setRowAnnotations("Probe Location (hg19)", locs.toArray());
 
-    mWindow.addToHistory("Probe Locations", ml);
+    mWindow.history().addToHistory("Probe Locations", ml);
   }
 }

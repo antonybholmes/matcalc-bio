@@ -13,11 +13,11 @@ import org.jebtk.modern.event.ModernClickListener;
 import org.jebtk.modern.ribbon.RibbonLargeButton;
 
 import edu.columbia.rdf.matcalc.MainMatCalcWindow;
-import edu.columbia.rdf.matcalc.toolbox.CalcModule;
+import edu.columbia.rdf.matcalc.toolbox.Module;
 import edu.columbia.rdf.matcalc.toolbox.core.collapse.CollapseDialog;
 import edu.columbia.rdf.matcalc.toolbox.core.collapse.CollapseType;
 
-public class CollapseModule extends CalcModule implements ModernClickListener {
+public class CollapseModule extends Module implements ModernClickListener {
   private MainMatCalcWindow mWindow;
 
   @Override
@@ -85,7 +85,7 @@ public class CollapseModule extends CalcModule implements ModernClickListener {
       break;
     case MAX_TSTAT:
       c = MatrixOperations.addTStat(m, group1, group2);
-      mWindow.addToHistory("Add T-Stats", c);
+      mWindow.history().addToHistory("Add T-Stats", c);
       c = MatrixOperations.collapseMaxTStat(c, collapseName);
       break;
     default:
@@ -93,6 +93,6 @@ public class CollapseModule extends CalcModule implements ModernClickListener {
       break;
     }
 
-    mWindow.addToHistory("Collapse rows", c);
+    mWindow.history().addToHistory("Collapse rows", c);
   }
 }

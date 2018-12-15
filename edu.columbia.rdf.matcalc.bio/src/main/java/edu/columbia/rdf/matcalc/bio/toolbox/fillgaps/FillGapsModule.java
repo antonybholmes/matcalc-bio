@@ -66,7 +66,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import edu.columbia.rdf.matcalc.MainMatCalcWindow;
-import edu.columbia.rdf.matcalc.toolbox.CalcModule;
+import edu.columbia.rdf.matcalc.toolbox.Module;
 
 /**
  * Merges designated segments together using the merge column. Consecutive rows
@@ -76,7 +76,7 @@ import edu.columbia.rdf.matcalc.toolbox.CalcModule;
  * @author Antony Holmes Holmes
  *
  */
-public class FillGapsModule extends CalcModule implements ModernClickListener {
+public class FillGapsModule extends Module implements ModernClickListener {
   private static final Logger LOG = LoggerFactory
       .getLogger(FillGapsModule.class);
 
@@ -300,7 +300,7 @@ public class FillGapsModule extends CalcModule implements ModernClickListener {
       }
     }
 
-    mWindow.addToHistory("Closest Markers", segmentsToMatrix(segments));
+    mWindow.history().addToHistory("Closest Markers", segmentsToMatrix(segments));
 
     // regions that happen to start and end close to each other may end
     // up overlapping since we extend regions in both directions to map
@@ -378,7 +378,7 @@ public class FillGapsModule extends CalcModule implements ModernClickListener {
       }
     }
 
-    mWindow.addToHistory("Remove Overlaps", segmentsToMatrix(segments));
+    mWindow.history().addToHistory("Remove Overlaps", segmentsToMatrix(segments));
 
     //
     // Fill in the blanks
@@ -541,7 +541,7 @@ public class FillGapsModule extends CalcModule implements ModernClickListener {
       }
     }
 
-    mWindow.addToHistory("Fill Gaps", segmentsToMatrix(newSegments));
+    mWindow.history().addToHistory("Fill Gaps", segmentsToMatrix(newSegments));
   }
 
   private static void addSegment(final Segment segment,

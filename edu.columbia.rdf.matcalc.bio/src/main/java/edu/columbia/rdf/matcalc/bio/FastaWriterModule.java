@@ -29,7 +29,7 @@ import org.jebtk.math.matrix.DataFrame;
 import org.jebtk.modern.io.GuiFileExtFilter;
 
 import edu.columbia.rdf.matcalc.MainMatCalcWindow;
-import edu.columbia.rdf.matcalc.toolbox.CalcModule;
+import edu.columbia.rdf.matcalc.toolbox.core.io.IOModule;
 
 /**
  * Allow users to open and save Broad GCT files
@@ -37,7 +37,7 @@ import edu.columbia.rdf.matcalc.toolbox.CalcModule;
  * @author Antony Holmes Holmes
  *
  */
-public class FastaWriterModule extends CalcModule {
+public class FastaWriterModule extends IOModule {
   private static final GuiFileExtFilter SAVE_FILTER = new FastaSaveGuiFileFilter();
 
   public FastaWriterModule() {
@@ -55,7 +55,7 @@ public class FastaWriterModule extends CalcModule {
   }
 
   @Override
-  public boolean saveFile(final MainMatCalcWindow window,
+  public boolean write(final MainMatCalcWindow window,
       final Path file,
       final DataFrame m) throws IOException {
 

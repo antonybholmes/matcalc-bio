@@ -20,14 +20,13 @@ import java.nio.file.Path;
 import java.util.Collection;
 
 import org.jebtk.bioinformatics.ext.ucsc.BedGraph;
-import org.jebtk.bioinformatics.ui.external.ucsc.BedGraphGuiFileFilter;
 import org.jebtk.math.matrix.DataFrame;
 import org.jebtk.modern.io.FileFilterService;
 import org.jebtk.modern.io.GuiFileExtFilter;
 
 import edu.columbia.rdf.matcalc.FileType;
 import edu.columbia.rdf.matcalc.MainMatCalcWindow;
-import edu.columbia.rdf.matcalc.toolbox.CalcModule;
+import edu.columbia.rdf.matcalc.toolbox.core.io.IOModule;
 
 /**
  * Allow users to open and save Broad GCT files
@@ -35,7 +34,7 @@ import edu.columbia.rdf.matcalc.toolbox.CalcModule;
  * @author Antony Holmes Holmes
  *
  */
-public class BedGraphIOModule extends CalcModule {
+public class BedGraphIOModule extends IOModule {
   private static final GuiFileExtFilter FILTER = 
       FileFilterService.getInstance().getFilter("bedgraph"); //new BedGraphGuiFileFilter();
 
@@ -54,7 +53,7 @@ public class BedGraphIOModule extends CalcModule {
   }
 
   @Override
-  public DataFrame autoOpenFile(final MainMatCalcWindow window,
+  public DataFrame read(final MainMatCalcWindow window,
       final Path file,
       FileType type,
       int headers,

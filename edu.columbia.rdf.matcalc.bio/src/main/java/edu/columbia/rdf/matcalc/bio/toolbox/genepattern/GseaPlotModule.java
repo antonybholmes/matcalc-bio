@@ -71,12 +71,12 @@ import org.xml.sax.SAXException;
 
 import edu.columbia.rdf.matcalc.MainMatCalcWindow;
 import edu.columbia.rdf.matcalc.figure.graph2d.Graph2dWindow;
-import edu.columbia.rdf.matcalc.toolbox.CalcModule;
+import edu.columbia.rdf.matcalc.toolbox.Module;
 
 /**
  * The class BoxWhiskerPlotModule.
  */
-public class GseaPlotModule extends CalcModule implements ModernClickListener {
+public class GseaPlotModule extends Module implements ModernClickListener {
 
   private static final Color RED_COLOR = Color.RED;
 

@@ -41,7 +41,7 @@ import org.jebtk.modern.ribbon.RibbonLargeDropDownButton2;
 import org.jebtk.modern.theme.ThemeService;
 
 import edu.columbia.rdf.matcalc.MainMatCalcWindow;
-import edu.columbia.rdf.matcalc.toolbox.CalcModule;
+import edu.columbia.rdf.matcalc.toolbox.Module;
 
 /**
  * Merges designated segments together using the merge column. Consecutive rows
@@ -51,7 +51,7 @@ import edu.columbia.rdf.matcalc.toolbox.CalcModule;
  * @author Antony Holmes Holmes
  *
  */
-public class ExpressionModule extends CalcModule
+public class ExpressionModule extends Module
     implements ModernClickListener {
   public static final double SEGMENT_MEAN_ZERO = 0.0001;
 
@@ -137,13 +137,13 @@ public class ExpressionModule extends CalcModule
     DataFrame m = mWindow.getCurrentMatrix();
 
     if (e.getMessage().equals("STDEV")) {
-      mWindow.addToHistory("STDEV Filter",
+      mWindow.history().addToHistory("STDEV Filter",
           MatrixTransforms.stdDevFilter(mWindow, m, 1.5));
     } else if (e.getMessage().equals("Mean")) {
-      mWindow.addToHistory("STDEV Filter",
+      mWindow.history().addToHistory("STDEV Filter",
           MatrixTransforms.meanFilter(mWindow, m, 1.5));
     } else if (e.getMessage().equals("Minimum Expression")) {
-      mWindow.addToHistory("Minimum Expression Filter",
+      mWindow.history().addToHistory("Minimum Expression Filter",
           MatrixTransforms.minExpFilter(mWindow, m, 100, 2)); // new
                                                               // MinExpFilterMatrixTransform(this,
                                                               // getCurrentMatrix(),

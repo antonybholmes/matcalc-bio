@@ -27,7 +27,7 @@ import org.jebtk.modern.io.GuiFileExtFilter;
 
 import edu.columbia.rdf.matcalc.FileType;
 import edu.columbia.rdf.matcalc.MainMatCalcWindow;
-import edu.columbia.rdf.matcalc.toolbox.CalcModule;
+import edu.columbia.rdf.matcalc.toolbox.core.io.IOModule;
 
 /**
  * Allow users to open and save Broad RES files
@@ -35,12 +35,11 @@ import edu.columbia.rdf.matcalc.toolbox.CalcModule;
  * @author Antony Holmes Holmes
  *
  */
-public class ResIOModule extends CalcModule {
+public class ResIOModule extends IOModule {
   private static final GuiFileExtFilter FILTER = new ResGuiFileFilter();
 
   public ResIOModule() {
-    registerFileOpenType(FILTER);
-    registerFileSaveType(FILTER);
+    registerFileType(FILTER);
   }
 
   /*
@@ -54,7 +53,7 @@ public class ResIOModule extends CalcModule {
   }
 
   @Override
-  public DataFrame autoOpenFile(final MainMatCalcWindow window,
+  public DataFrame read(final MainMatCalcWindow window,
       final Path file,
       FileType type,
       int headers,
@@ -74,7 +73,7 @@ public class ResIOModule extends CalcModule {
   }
 
   @Override
-  public boolean saveFile(final MainMatCalcWindow window,
+  public boolean write(final MainMatCalcWindow window,
       final Path file,
       final DataFrame m) throws IOException {
     ResMatrix.writeResMatrix(m, file);
