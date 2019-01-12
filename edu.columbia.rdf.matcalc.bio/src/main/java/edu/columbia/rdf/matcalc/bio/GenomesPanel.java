@@ -21,7 +21,7 @@ import org.jebtk.modern.tree.ModernCheckTreeMode;
 /**
  * Control which conservation scores are shown.
  * 
- * @author Antony Holmes Holmes
+ * @author Antony Holmes
  *
  */
 public class GenomesPanel extends ModernComponent {

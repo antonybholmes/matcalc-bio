@@ -98,7 +98,7 @@ public class ProbeLocationsModule extends Module
 
     List<String> locs = new ArrayList<String>(m.getRows());
 
-    for (String p : m.getRowAnnotationText(dialog.getRowAnnotation())) {
+    for (String p : m.getIndex().getText(dialog.getAnnotation())) {
       if (locMap.containsKey(p)) {
         locs.add(locMap.get(p));
       } else {
@@ -109,7 +109,7 @@ public class ProbeLocationsModule extends Module
     locMap.clear();
 
     DataFrame ml = new DataFrame(m);
-    ml.setRowAnnotations("Probe Location (hg19)", locs.toArray());
+    ml.getIndex().setAnnotation("Probe Location (hg19)", locs.toArray());
 
     mWindow.history().addToHistory("Probe Locations", ml);
   }

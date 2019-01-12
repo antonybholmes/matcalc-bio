@@ -31,7 +31,7 @@ import edu.columbia.rdf.matcalc.toolbox.core.io.IOModule;
 /**
  * Allow users to open and save Broad GCT files
  *
- * @author Antony Holmes Holmes
+ * @author Antony Holmes
  *
  */
 public class BedGraphIOModule extends IOModule {

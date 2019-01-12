@@ -23,7 +23,7 @@ import org.jebtk.modern.text.ModernSubHeadingLabel;
 /**
  * List available annotations organized by genome that a user can select from.
  * 
- * @author Antony Holmes Holmes
+ * @author Antony Holmes
  *
  */
 public class AnnotationSidePanel extends ModernComponent {

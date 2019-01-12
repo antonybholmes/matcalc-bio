@@ -16,10 +16,10 @@
 package edu.columbia.rdf.matcalc.bio;
 
 import edu.columbia.rdf.matcalc.BasicModuleLoader;
-import edu.columbia.rdf.matcalc.bio.toolbox.external.genepattern.io.GctIOModule;
-import edu.columbia.rdf.matcalc.bio.toolbox.external.genepattern.io.ResIOModule;
 import edu.columbia.rdf.matcalc.bio.toolbox.external.ucsc.BedGraphIOModule;
 import edu.columbia.rdf.matcalc.bio.toolbox.external.ucsc.BedIOModule;
+import edu.columbia.rdf.matcalc.bio.toolbox.genepattern.io.GctIOModule;
+import edu.columbia.rdf.matcalc.bio.toolbox.genepattern.io.ResIOModule;
 
 public class BioModuleLoader extends BasicModuleLoader {
   public BioModuleLoader() {

@@ -59,7 +59,7 @@ import org.jebtk.modern.tree.ModernCheckTreeMode;
 /**
  * Service for extracting DNA from sequences.
  *
- * @author Antony Holmes Holmes
+ * @author Antony Holmes
  */
 public class AnnotationService implements Iterable<String> {
 

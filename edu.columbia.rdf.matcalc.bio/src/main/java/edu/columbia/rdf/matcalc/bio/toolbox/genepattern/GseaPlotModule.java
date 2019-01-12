@@ -32,7 +32,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -297,7 +296,7 @@ public class GseaPlotModule extends Module implements ModernClickListener {
     // Go through all comparison files and create a plot for each
     //
 
-    List<Path> plotFiles = getPlotFiles(dir);
+    Path[] plotFiles = getPlotFiles(dir);
 
     for (Path plotFile : plotFiles) {
       if (!FileUtils.exists(plotFile)) {
@@ -601,7 +600,7 @@ public class GseaPlotModule extends Module implements ModernClickListener {
       
       DataFrame heatmapM = DataFrame.createNumericalMatrix(1, rankedM.getRows());
       
-      heatmapM.setRow(0, rankedM.columnToDoubleArray(1));
+      heatmapM.setRow(0, rankedM.columnToDouble(1));
       
       subFigure = figure.newSubFigure();
       //subFigure.setZLayout();
@@ -677,18 +676,18 @@ public class GseaPlotModule extends Module implements ModernClickListener {
     RecentFilesService.getInstance().setPwd(dir);
   }
 
-  private static List<Path> getPlotFiles(Path dir) throws IOException {
+  private static Path[] getPlotFiles(Path dir) throws IOException {
     Path geneSetsFile = dir.resolve("gene_set_sizes.xls");
 
     // Get the names of each gene set
-    List<String> names = Io.getColumn(geneSetsFile, true, 0);
+    String[] names = Io.getColumn(geneSetsFile, true, 0);
 
     // Convert the gene set names into a list of files to extract data
     // from
-    List<Path> plotFiles = new ArrayList<Path>(names.size());
+    Path[] plotFiles = new Path[names.length];
 
-    for (String name : names) {
-      plotFiles.add(dir.resolve(name + ".xls"));
+    for (int i = 0; i < names.length; ++i) {
+      plotFiles[i] = dir.resolve(names[i] + ".xls");
     }
 
     return plotFiles;

@@ -50,6 +50,8 @@ import org.jebtk.bioinformatics.genomic.GenomicElement;
 import org.jebtk.bioinformatics.genomic.GenomicElementsMap;
 import org.jebtk.bioinformatics.genomic.GenomicRegion;
 import org.jebtk.bioinformatics.genomic.Human;
+import org.jebtk.core.cli.ArgParser;
+import org.jebtk.core.cli.Args;
 import org.jebtk.core.io.FileUtils;
 import org.jebtk.core.io.PathUtils;
 import org.jebtk.math.matrix.DataFrame;
@@ -73,7 +75,7 @@ import edu.columbia.rdf.matcalc.toolbox.Module;
  * with the same merge id will be merged together. Coordinates and copy number
  * will be adjusted but genes, cytobands etc are not.
  *
- * @author Antony Holmes Holmes
+ * @author Antony Holmes
  *
  */
 public class FillGapsModule extends Module implements ModernClickListener {
@@ -91,6 +93,12 @@ public class FillGapsModule extends Module implements ModernClickListener {
       .getPath("res/modules/annotation");
 
   public static final double SEGMENT_MEAN_ZERO = 0.0001;
+  
+  private static final Args ARGS = new Args();
+  
+  static {
+    ARGS.add('s', "switch-tab");
+  }
 
   /**
    * The member window.
@@ -113,11 +121,14 @@ public class FillGapsModule extends Module implements ModernClickListener {
   }
 
   @Override
-  public void run(String... args) {
-    for (String arg : args) {
-      if (arg.equals("--switch-tab")) {
-        mWindow.getRibbon().changeTab("Annotation");
-      }
+  public Args getArgs() {
+    return ARGS;
+  }
+  
+  @Override
+  public void run(ArgParser ap) {
+    if (ap.contains("switch-tab")) {
+       mWindow.getRibbon().changeTab("Annotation");
     }
   }
 

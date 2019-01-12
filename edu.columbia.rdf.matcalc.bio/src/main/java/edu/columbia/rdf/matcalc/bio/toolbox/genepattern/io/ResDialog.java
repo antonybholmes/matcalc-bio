@@ -25,7 +25,7 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package edu.columbia.rdf.matcalc.bio.toolbox.external.genepattern.io;
+package edu.columbia.rdf.matcalc.bio.toolbox.genepattern.io;
 
 import org.jebtk.modern.input.ModernQuestionInputDialog;
 import org.jebtk.modern.window.ModernWindow;
@@ -33,7 +33,7 @@ import org.jebtk.modern.window.ModernWindow;
 /**
  * User can enter an integer option value.
  * 
- * @author Antony Holmes Holmes
+ * @author Antony Holmes
  *
  */
 public class ResDialog extends ModernQuestionInputDialog {

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package edu.columbia.rdf.matcalc.bio.toolbox.external.genepattern.io;
+package edu.columbia.rdf.matcalc.bio.toolbox.genepattern.io;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -32,7 +32,7 @@ import edu.columbia.rdf.matcalc.toolbox.core.io.IOModule;
 /**
  * Allow users to open and save Broad RES files
  *
- * @author Antony Holmes Holmes
+ * @author Antony Holmes
  *
  */
 public class ResIOModule extends IOModule {
