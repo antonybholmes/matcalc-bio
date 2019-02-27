@@ -10,12 +10,11 @@ import org.jebtk.core.io.PathUtils;
 import org.jebtk.core.text.TextUtils;
 import org.jebtk.graphplot.figure.series.XYSeries;
 import org.jebtk.graphplot.figure.series.XYSeriesGroup;
-import org.jebtk.modern.UI;
 import org.jebtk.modern.AssetService;
+import org.jebtk.modern.UI;
 import org.jebtk.modern.button.ModernButtonWidget;
 import org.jebtk.modern.button.ModernCheckBox;
 import org.jebtk.modern.combobox.ModernComboBox;
-import org.jebtk.modern.dialog.ModernDialogFlatButton;
 import org.jebtk.modern.dialog.ModernDialogTaskWindow;
 import org.jebtk.modern.event.ModernClickEvent;
 import org.jebtk.modern.event.ModernClickListener;
@@ -23,6 +22,7 @@ import org.jebtk.modern.io.FileDialog;
 import org.jebtk.modern.io.RecentFilesService;
 import org.jebtk.modern.panel.HBox;
 import org.jebtk.modern.panel.VBox;
+import org.jebtk.modern.ribbon.RibbonButton;
 import org.jebtk.modern.spinner.ModernCompactSpinner;
 import org.jebtk.modern.text.ModernAutoSizeLabel;
 import org.jebtk.modern.text.ModernTextBorderPanel;
@@ -58,7 +58,7 @@ public class PermuteDialog extends ModernDialogTaskWindow {
   private ModernCheckBox mCheckSampleWithReplacement = new ModernCheckBox(
       "Sample with replacement");
 
-  private ModernButtonWidget mChangeButton = new ModernDialogFlatButton(
+  private ModernButtonWidget mChangeButton = new RibbonButton(
       "Change...", AssetService.getInstance().loadIcon("open", 16));
 
   private Path mDir = null;

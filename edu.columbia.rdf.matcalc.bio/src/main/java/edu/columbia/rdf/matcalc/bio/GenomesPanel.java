@@ -9,10 +9,10 @@ import javax.swing.Box;
 import org.jebtk.core.tree.CheckTreeNode;
 import org.jebtk.modern.ModernComponent;
 import org.jebtk.modern.button.ModernButton;
-import org.jebtk.modern.dialog.ModernDialogFlatButton;
 import org.jebtk.modern.event.ModernClickEvent;
 import org.jebtk.modern.event.ModernClickListener;
 import org.jebtk.modern.panel.HSpacedBox;
+import org.jebtk.modern.ribbon.RibbonButton;
 import org.jebtk.modern.scrollpane.ModernScrollPane;
 import org.jebtk.modern.scrollpane.ScrollBarPolicy;
 import org.jebtk.modern.tree.ModernCheckTree;
@@ -29,7 +29,7 @@ public class GenomesPanel extends ModernComponent {
 
   private ModernCheckTree<String> mTree;
 
-  private ModernButton mSelectAllButton = new ModernDialogFlatButton(
+  private ModernButton mSelectAllButton = new RibbonButton(
       "Select All");
 
   private boolean mCheckAll = true;

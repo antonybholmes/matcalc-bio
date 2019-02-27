@@ -14,11 +14,10 @@ import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.jebtk.core.collections.CollectionUtils;
 import org.jebtk.math.external.microsoft.Excel;
 import org.jebtk.math.ui.external.microsoft.ExcelDialog;
-import org.jebtk.modern.UI;
 import org.jebtk.modern.AssetService;
+import org.jebtk.modern.UI;
 import org.jebtk.modern.button.ModernButtonWidget;
 import org.jebtk.modern.combobox.ModernComboBox;
-import org.jebtk.modern.dialog.ModernDialogFlatButton;
 import org.jebtk.modern.dialog.ModernDialogTaskWindow;
 import org.jebtk.modern.event.ModernClickEvent;
 import org.jebtk.modern.event.ModernClickListener;
@@ -29,6 +28,7 @@ import org.jebtk.modern.panel.HBox;
 import org.jebtk.modern.panel.ModernLineBorderPanel;
 import org.jebtk.modern.panel.ModernPanel;
 import org.jebtk.modern.panel.VBox;
+import org.jebtk.modern.ribbon.RibbonButton;
 import org.jebtk.modern.scrollpane.ModernScrollPane;
 import org.jebtk.modern.text.ModernAutoSizeLabel;
 import org.jebtk.modern.text.ModernClipboardNumericalTextField;
@@ -53,7 +53,7 @@ public class FillGapsDialog extends ModernDialogTaskWindow {
 
   private ModernList<String> mSampleList = new ModernList<String>();
 
-  private ModernButtonWidget mLoadButton = new ModernDialogFlatButton("Load...",
+  private ModernButtonWidget mLoadButton = new RibbonButton("Load...",
       AssetService.getInstance().loadIcon("open", 16));
 
   private ModernNumericalTextField mMeanZeroField = new ModernClipboardNumericalTextField(
