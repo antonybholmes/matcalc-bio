@@ -74,7 +74,7 @@ public class GenomesPanel extends ModernComponent {
     });
   }
 
-  public List<String> getGenomes() {
+  public List<String> getGenomesIds() {
     List<CheckTreeNode<String>> nodes = mTree.getCheckedNodes();
 
     List<String> ret = new ArrayList<String>(nodes.size());
@@ -86,8 +86,8 @@ public class GenomesPanel extends ModernComponent {
     return ret;
   }
 
-  public String getGenome() {
-    List<String> genomes = getGenomes();
+  public String getGenomeId() {
+    List<String> genomes = getGenomesIds();
 
     if (genomes.size() > 0) {
       return genomes.get(0);

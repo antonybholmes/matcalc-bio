@@ -35,18 +35,17 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
-import org.jebtk.bioinformatics.gapsearch.BinarySearch;
-import org.jebtk.bioinformatics.gapsearch.FixedGapSearch;
+import org.jebtk.bioinformatics.genomic.GFF3Parser;
+import org.jebtk.bioinformatics.genomic.GenesDB;
 import org.jebtk.bioinformatics.genomic.Genome;
 import org.jebtk.core.collections.DefaultHashMap;
 import org.jebtk.core.collections.DefaultHashMapCreator;
-import org.jebtk.core.collections.DefaultTreeMap;
-import org.jebtk.core.collections.DefaultTreeSetCreator;
+import org.jebtk.core.collections.DefaultTreeMapCreator;
 import org.jebtk.core.collections.HashMapCreator;
 import org.jebtk.core.collections.IterMap;
 import org.jebtk.core.collections.IterTreeMap;
+import org.jebtk.core.collections.TreeMapCreator;
 import org.jebtk.core.io.FileUtils;
 import org.jebtk.core.io.PathUtils;
 import org.jebtk.core.text.TextUtils;
@@ -61,7 +60,7 @@ import org.jebtk.modern.tree.ModernCheckTreeMode;
  *
  * @author Antony Holmes
  */
-public class AnnotationService implements Iterable<String> {
+public class AnnotationService implements Iterable<Genome> {
 
   private static class AnnotationServiceLoader {
     private static final AnnotationService INSTANCE = new AnnotationService();
@@ -74,11 +73,15 @@ public class AnnotationService implements Iterable<String> {
   private static final Path RES_DIR = PathUtils
       .getPath("res/modules/gene_annotation/genomes");
 
-  private Map<String, Set<String>> mGenomeMap = DefaultTreeMap
-      .create(new DefaultTreeSetCreator<String>());
+  //private Map<String, Set<String>> mGenomeMap = DefaultTreeMap
+  //    .create(new DefaultTreeSetCreator<String>());
 
-  private Map<String, Path> mFileMap = 
-      new IterTreeMap<String, Path>();
+  private Map<Genome, Path> mFileMap = 
+      new IterTreeMap<Genome, Path>();
+  
+  private IterMap<String, IterMap<String, IterMap<String, Genome>>> mGenomeMap = DefaultHashMap
+      .create(
+          new DefaultTreeMapCreator<String, IterMap<String, Genome>>(new TreeMapCreator<String, Genome>()));
 
   // private Map<String, Map<Integer, Map<Integer,
   // FixedGapSearch<AnnotationGene>>>> mFixedGapSearchMap =
@@ -86,17 +89,18 @@ public class AnnotationService implements Iterable<String> {
   // FixedGapSearch<AnnotationGene>>>(new HashMapCreator<Integer,
   // FixedGapSearch<AnnotationGene>>()));
 
-  private IterMap<String, IterMap<Integer, IterMap<Integer, FixedGapSearch<AnnotationGene>>>> mSearchMap = DefaultHashMap
+  private IterMap<Genome, IterMap<Integer, IterMap<Integer, GenesDB>>> mSearchMap = DefaultHashMap
       .create(
-          new DefaultHashMapCreator<Integer, IterMap<Integer, FixedGapSearch<AnnotationGene>>>(
-              new HashMapCreator<Integer, FixedGapSearch<AnnotationGene>>()));
+          new DefaultHashMapCreator<Integer, IterMap<Integer, GenesDB>>(
+              new HashMapCreator<Integer, GenesDB>()));
 
-  private IterMap<String, IterMap<Integer, IterMap<Integer, BinarySearch<AnnotationGene>>>> mBinarySearchMap = DefaultHashMap
-      .create(
-          new DefaultHashMapCreator<Integer, IterMap<Integer, BinarySearch<AnnotationGene>>>(
-              new HashMapCreator<Integer, BinarySearch<AnnotationGene>>()));
+//  private IterMap<Genome, IterMap<Integer, IterMap<Integer, BinarySearch<AnnotationGene>>>> mBinarySearchMap = DefaultHashMap
+//      .create(
+//          new DefaultHashMapCreator<Integer, IterMap<Integer, BinarySearch<AnnotationGene>>>(
+//              new HashMapCreator<Integer, BinarySearch<AnnotationGene>>()));
 
-  private Map<Genome, List<String>> mGeneIdMap = new HashMap<Genome, List<String>>();
+  private Map<Genome, IterMap<String, List<String>>> mGeneIdMap = 
+      DefaultHashMap.create(new HashMapCreator<String, List<String>>());
 
   private boolean mAutoLoad = true;
 
@@ -120,121 +124,138 @@ public class AnnotationService implements Iterable<String> {
    * return mFixedGapSearchMap.get(name).get(ext5p).get(ext3p); }
    */
 
-  public List<String> getGeneIdTypes(GenomeDatabase gb) throws IOException {
-    return getGeneIdTypes(gb.getGenome(), gb.getDb());
-  }
+  //public List<String> getGeneIdTypes(GenomeDatabase gb) throws IOException {
+  //  return getGeneIdTypes(gb.getGenome(), gb.getDb());
+  //}
   
-  public List<String> getGeneIdTypes(Genome genome, String name) throws IOException {
+  /**
+   * Returns the names of the ids (e.g. entrez_id, refseq_id) associated with
+   * a gene entity that can used to label it.
+   * @param genome
+   * @param level
+   * @return
+   * @throws IOException
+   */
+  public List<String> getGeneIdTypes(Genome genome, String level) throws IOException {
     autoLoad();
 
-    String id = genome.getAssembly() + name;
+    //String id = genome.getAssembly() + name;
     
-    if (!mFileMap.containsKey(id)) {
+    if (!mFileMap.containsKey(genome)) {
       return null;
     }
 
-    if (!mGeneIdMap.containsKey(genome)) {
-      Path file = mFileMap.get(id);
+    if (!mGeneIdMap.get(genome).containsKey(level)) {
+      Path file = mFileMap.get(genome);
+      
+      System.err.println("creating types for " + file);
 
       if (PathUtils.getName(file).toLowerCase().contains("gff3")) {
-        mGeneIdMap.put(genome, AnnotationGene.gff3IdTypes(file));
-      } else {
-        mGeneIdMap.put(genome, AnnotationGene.geneIdTypes(file));
-      }
+        mGeneIdMap.get(genome).put(level, GFF3Parser.gff3IdTypes(file, level));
+      }// else {
+       // mGeneIdMap.put(genome, AnnotationGene.geneIdTypes(file));
+      //}
     }
 
-    return mGeneIdMap.get(genome);
+    return mGeneIdMap.get(genome).get(level);
   }
   
-  public FixedGapSearch<AnnotationGene> getSearch(GenomeDatabase gb) throws IOException {
-    return getSearch(gb.getGenome(), gb.getDb());
-  }
+  //public FixedGapSearch<AnnotationGene> getSearch(GenomeDatabase gb) throws IOException {
+  //  return getSearch(gb.getGenome(), gb.getDb());
+  //}
 
-  public FixedGapSearch<AnnotationGene> getSearch(Genome genome,
-      String name)
+  public GenesDB getSearch(Genome genome)
       throws IOException {
-    return getSearch(genome, name, 0, 0);
+    return getSearch(genome, 0, 0);
   }
 
-  public FixedGapSearch<AnnotationGene> getSearch(Genome genome,
-      String name,
+  public GenesDB getSearch(Genome genome,
       int ext5p,
       int ext3p) throws IOException {
     autoLoad();
 
-    String id = genome + name;
+    //String id = genome.getAssembly() + name;
+
+    //System.err.println("Looking for " + genome + " df " + mFileMap.keySet());
     
-    if (!mFileMap.containsKey(id)) {
+    if (!mFileMap.containsKey(genome)) {
       return null;
     }
-    
+
     // We have a valid assembly name so load it
-    if (!mSearchMap.containsKey(id)
-        || !mSearchMap.get(id).containsKey(ext5p)
-        || !mSearchMap.get(id).get(ext5p).containsKey(ext3p)) {
-      Path file = mFileMap.get(id);
+    if (!mSearchMap.containsKey(genome)
+        || !mSearchMap.get(genome).containsKey(ext5p)
+        || !mSearchMap.get(genome).get(ext5p).containsKey(ext3p)) {
+      Path file = mFileMap.get(genome);
 
       // System.err.println("blob " + name + " " +
       // mSearchMap.get(name).containsKey(ext5p));
 
-      FixedGapSearch<AnnotationGene> assembly = null;
+      GenesDB assembly = null;
 
       if (PathUtils.getName(file).toLowerCase().contains("gff3")) {
-        assembly = AnnotationGene.parseGFF3(genome, name, file, ext5p, ext3p);
-      } else {
-        assembly = AnnotationGene.parseTssForSearch(name, file, ext5p, ext3p);
-      }
+        GFF3Parser parser = new GFF3Parser();
+        
+        assembly = parser.parse(file, genome);
+        
+        System.err.println("Creating assembly from " + file);
+        
+        //assembly = AnnotationGene.parseGFF3(genome, file, ext5p, ext3p);
+      } //else {
+        //assembly = AnnotationGene.parseTssForSearch(file, ext5p, ext3p);
+      //}
 
-      mSearchMap.get(id).get(ext5p).put(ext3p, assembly);
+      if (assembly != null) {
+        mSearchMap.get(genome).get(ext5p).put(ext3p, assembly);
+      }
     }
 
-    return mSearchMap.get(id).get(ext5p).get(ext3p);
+    return mSearchMap.get(genome).get(ext5p).get(ext3p);
   }
   
-  public BinarySearch<AnnotationGene> getBinarySearch(GenomeDatabase genome) throws IOException {
-    return getBinarySearch(genome.getGenome(), genome.getDb());
-  }
+  //public BinarySearch<AnnotationGene> getBinarySearch(GenomeDatabase genome) throws IOException {
+  //  return getBinarySearch(genome.getGenome(), genome.getDb());
+  //}
 
-  public BinarySearch<AnnotationGene> getBinarySearch(Genome genome, String name)
-      throws IOException {
-    return getBinarySearch(genome, name, 0, 0);
-  }
-
-  public BinarySearch<AnnotationGene> getBinarySearch(Genome genome,
-      String name,
-      int ext5p,
-      int ext3p) throws IOException {
-    autoLoad();
-
-    String id = genome + name;
-    
-    if (!mFileMap.containsKey(id)) {
-      return null;
-    }
-
-    // We have a valid assembly name so load it
-    if (!mBinarySearchMap.containsKey(id)
-        || !mBinarySearchMap.get(id).containsKey(ext5p)
-        || !mBinarySearchMap.get(id).get(ext5p).containsKey(ext3p)) {
-      Path file = mFileMap.get(id);
-
-      // System.err.println("blob " + name + " " +
-      // mSearchMap.get(name).containsKey(ext5p));
-
-      BinarySearch<AnnotationGene> assembly = null;
-
-      if (PathUtils.getName(file).toLowerCase().contains("gff3")) {
-        assembly = AnnotationGene.parseGFF3Binary(genome, name, file, ext5p, ext3p);
-      } else {
-        assembly = AnnotationGene
-            .parseTssForBinarySearch(name, file, ext5p, ext3p);
-      }
-
-      mBinarySearchMap.get(id).get(ext5p).put(ext3p, assembly);
-    }
-
-    return mBinarySearchMap.get(id).get(ext5p).get(ext3p);
-  }
+  //public BinarySearch<AnnotationGene> getBinarySearch(Genome genome, String name)
+   //   throws IOException {
+  //  return getBinarySearch(genome, name, 0, 0);
+  //}
+//
+//  public BinarySearch<AnnotationGene> getBinarySearch(Genome genome,
+//      int ext5p,
+//      int ext3p) throws IOException {
+//    autoLoad();
+//
+//    //String id = genome.getAssembly() + name;
+//    
+//    if (!mFileMap.containsKey(genome)) {
+//      return null;
+//    }
+//
+//    // We have a valid assembly name so load it
+//    if (!mBinarySearchMap.containsKey(genome)
+//        || !mBinarySearchMap.get(genome).containsKey(ext5p)
+//        || !mBinarySearchMap.get(genome).get(ext5p).containsKey(ext3p)) {
+//      Path file = mFileMap.get(genome);
+//
+//      // System.err.println("blob " + name + " " +
+//      // mSearchMap.get(name).containsKey(ext5p));
+//
+//      BinarySearch<AnnotationGene> assembly = null;
+//
+//      if (PathUtils.getName(file).toLowerCase().contains("gff3")) {
+//        assembly = AnnotationGene.parseGFF3Binary(genome, file, ext5p, ext3p);
+//      } else {
+//        assembly = AnnotationGene
+//            .parseTssForBinarySearch(file, ext5p, ext3p);
+//      }
+//
+//      mBinarySearchMap.get(genome).get(ext5p).put(ext3p, assembly);
+//    }
+//
+//    return mBinarySearchMap.get(genome).get(ext5p).get(ext3p);
+//  }
 
   /**
    * Load a list of files
@@ -254,21 +275,28 @@ public class AnnotationService implements Iterable<String> {
 
         if (FileUtils.exists(file)) {
           if (FileUtils.isFile(file)) {
-            String name = PathUtils.getName(file);
+            String f = PathUtils.getName(file);
 
-            if (name.contains("gff3") || name.contains("txt")) {
-              String genome = PathUtils.getName(file.getParent());
+            if (f.contains("gff3") || f.contains("txt")) {
+              String name = PathUtils.getName(file.getParent().getParent());
+              
+              String build = PathUtils.getName(file.getParent());
               
               // Remove extension
-              name = name.replaceFirst("\\..+", TextUtils.EMPTY_STRING);
+              String track = f.replaceFirst("\\..+", TextUtils.EMPTY_STRING);
 
-              String id = genome + name;
+              Genome genome = new Genome(name, build, track);
               
-              mFileMap.put(id, file);
+              //String id = genome + name;
+              
+              mFileMap.put(genome, file);
+              
+              
+              mGenomeMap.get(genome.getName()).get(genome.getAssembly()).put(genome.getTrack(), genome);
 
               //String genome = file.getParent().getFileName().toString();
 
-              mGenomeMap.get(genome).add(name);
+              //mGenomeMap.get(genome).add(name);
             }
           } else {
             List<Path> files = FileUtils.ls(file);
@@ -282,17 +310,48 @@ public class AnnotationService implements Iterable<String> {
     }
   }
 
-  public Iterable<String> genomes() throws IOException {
+  public Iterable<Genome> genomes() throws IOException {
+    autoLoad();
+
+    return mFileMap.keySet();
+  }
+  
+  public Iterable<String> name() throws IOException {
     autoLoad();
 
     return mGenomeMap.keySet();
   }
-
-  public Iterable<String> annotations(String genome) throws IOException {
+  
+  /**
+   * Return the assemblies from a given genome.
+   * 
+   * @param name
+   * @return
+   * @throws IOException 
+   */
+  public Iterable<String> assemblies(String name) throws IOException {
     autoLoad();
-
-    return mGenomeMap.get(genome);
+    
+    return mGenomeMap.get(name).keySet();
   }
+  
+  public Iterable<String> tracks(String name, String assembly) throws IOException {
+    autoLoad();
+    
+    return mGenomeMap.get(name).get(assembly).keySet();
+  }
+  
+  public Genome genome(String name, String assembly, String track) throws IOException {
+    autoLoad();
+    
+    return mGenomeMap.get(name).get(assembly).get(track);
+  }
+
+  //public Iterable<String> annotations(String genome) throws IOException {
+  //  autoLoad();
+
+  //  return mGenomeMap.get(genome);
+  //}
 
   public ModernCheckTree<String> createTree() throws IOException {
     return createTree(ModernCheckTreeMode.MULTI);
@@ -318,22 +377,32 @@ public class AnnotationService implements Iterable<String> {
 
       List<Path> files = FileUtils.ls(dir);
 
-      for (Path f : files) {
-
-        String name = PathUtils.getName(f);
+      for (Path file : files) {
 
         TreeNode<String> n = null;
 
-        if (FileUtils.isFile(f)) {
-          if (name.contains("gff3") || name.contains("txt")) {
+        String f = PathUtils.getName(file);
+        
+        if (FileUtils.isFile(file)) {
+          
+          
+          if (f.contains("gff3") || f.contains("txt")) {
             // Remove extension
-            name = name.replaceFirst("\\..+", "");
-            n = new CheckTreeNode<String>(name);
+            String name = PathUtils.getName(file.getParent().getParent());
+            
+            String build = PathUtils.getName(file.getParent());
+            
+            // Remove extension
+            String track = f.replaceFirst("\\..+", TextUtils.EMPTY_STRING);
+
+            Genome genome = new Genome(name, build, track);
+            
+            n = new CheckTreeNode<String>(genome.toString());
           }
         } else {
-          n = new TreeNode<String>(name);
+          n = new TreeNode<String>(f);
           treeStack.push(n);
-          stack.push(f);
+          stack.push(file);
         }
 
         if (n != null) {
@@ -350,7 +419,7 @@ public class AnnotationService implements Iterable<String> {
   }
 
   @Override
-  public Iterator<String> iterator() {
+  public Iterator<Genome> iterator() {
     try {
       autoLoad();
     } catch (IOException e) {
@@ -359,5 +428,7 @@ public class AnnotationService implements Iterable<String> {
 
     return mFileMap.keySet().iterator();
   }
+
+ 
 
 }

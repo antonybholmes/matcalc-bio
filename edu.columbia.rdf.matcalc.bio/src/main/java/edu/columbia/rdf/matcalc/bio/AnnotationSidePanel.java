@@ -8,7 +8,7 @@ import java.util.Map;
 
 import javax.swing.Box;
 
-import org.jebtk.bioinformatics.genomic.GenomeService;
+import org.jebtk.bioinformatics.genomic.Genome;
 import org.jebtk.modern.ModernComponent;
 import org.jebtk.modern.UI;
 import org.jebtk.modern.button.CheckBox;
@@ -32,9 +32,13 @@ public class AnnotationSidePanel extends ModernComponent {
   private CheckBox mSelectAllButton = new ModernCheckSwitch("Select All");
 
   private Map<CheckBox, String> mCheckMap = new HashMap<CheckBox, String>();
-  private Map<CheckBox, String> mGenomeMap = new HashMap<CheckBox, String>();
+  private Map<CheckBox, Genome> mGenomeMap = new HashMap<CheckBox, Genome>();
 
   public AnnotationSidePanel() {
+    this("ucsc_refseq_hg19");
+  }
+
+  public AnnotationSidePanel(String defaultAnnotation) {
 
     Box box = VBox.create();
 
@@ -50,21 +54,23 @@ public class AnnotationSidePanel extends ModernComponent {
     box = VBox.create();
 
     // If two services provide the same genome, use the later.
-    try {
-      for (String genome : AnnotationService.getInstance().genomes()) {
+    try { 
+      for (String name : AnnotationService.getInstance().name()) {
 
-        box.add(new ModernSubHeadingLabel(genome));
+        box.add(new ModernSubHeadingLabel(name));
         box.add(UI.createVGap(5));
 
-        for (String name : AnnotationService.getInstance()
-            .annotations(genome)) {
+        for (String assembly : AnnotationService.getInstance().assemblies(name)) {
 
-          ModernCheckSwitch button = new ModernCheckSwitch(name);
-          button.setBorder(LEFT_BORDER);
-          mGenomeMap.put(button, genome);
-          mCheckMap.put(button, name);
-          box.add(button);
+          for (String track : AnnotationService.getInstance().tracks(name, assembly)) {
 
+            ModernCheckSwitch button = new ModernCheckSwitch(track);
+            button.setBorder(LEFT_BORDER);
+            mGenomeMap.put(button, AnnotationService.getInstance().genome(name, assembly, track));
+            mCheckMap.put(button, track);
+            box.add(button);
+
+          }
         }
 
         box.add(UI.createVGap(20)); // collapsePane.addTab(genome, box);
@@ -93,7 +99,7 @@ public class AnnotationSidePanel extends ModernComponent {
     // Set a default
 
     for (CheckBox button : mCheckMap.keySet()) {
-      if (button.getText().equals("ucsc_refseq_hg19")) {
+      if (button.getText().equals(defaultAnnotation)) {
         button.setSelected(true);
         break;
       }
@@ -106,21 +112,20 @@ public class AnnotationSidePanel extends ModernComponent {
     }
   }
 
-  public List<GenomeDatabase> getGenomes() {
-    List<GenomeDatabase> ret = new ArrayList<GenomeDatabase>(mCheckMap.size());
+  public List<Genome> getGenomes() {
+    List<Genome> ret = new ArrayList<Genome>(mCheckMap.size());
 
     for (CheckBox button : mCheckMap.keySet()) {
       if (button.isSelected()) {
-        ret.add(new GenomeDatabase(GenomeService.getInstance().guessGenome(mGenomeMap.get(button)), 
-            button.getText()));
+        ret.add(mGenomeMap.get(button));
       }
     }
 
     return ret;
   }
 
-  public GenomeDatabase getGenome() {
-    List<GenomeDatabase> genomes = getGenomes();
+  public Genome getGenome() {
+    List<Genome> genomes = getGenomes();
 
     if (genomes.size() > 0) {
       return genomes.get(0);
