@@ -49,6 +49,7 @@ import org.jebtk.bioinformatics.genomic.GenomeService;
 import org.jebtk.bioinformatics.genomic.GenomicElement;
 import org.jebtk.bioinformatics.genomic.GenomicElementsMap;
 import org.jebtk.bioinformatics.genomic.GenomicRegion;
+import org.jebtk.bioinformatics.genomic.GenomicType;
 import org.jebtk.bioinformatics.genomic.Human;
 import org.jebtk.core.cli.ArgParser;
 import org.jebtk.core.cli.Args;
@@ -240,7 +241,7 @@ public class FillGapsModule extends Module implements ModernClickListener {
       return;
     }
 
-    UCSCTrack track = Bed.parseTrack("bed", mBedFileMap.get(dialog.getAnnotation()));
+    UCSCTrack track = Bed.parseTrack(GenomicType.REGION, mBedFileMap.get(dialog.getAnnotation()));
 
     BinarySearch<GenomicRegion> gapSearch = getBinarySearch(
         track.getElements());

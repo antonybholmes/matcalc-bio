@@ -11,13 +11,10 @@ import javax.swing.Box;
 
 import org.jebtk.bioinformatics.genomic.Genome;
 import org.jebtk.core.collections.IterMap;
-import org.jebtk.core.collections.IterTreeMap;
 import org.jebtk.modern.ModernComponent;
 import org.jebtk.modern.UI;
-import org.jebtk.modern.button.CheckBox;
-import org.jebtk.modern.button.ModernCheckSwitch;
-import org.jebtk.modern.event.ModernClickEvent;
-import org.jebtk.modern.event.ModernClickListener;
+import org.jebtk.modern.button.ModernButtonGroup;
+import org.jebtk.modern.button.ModernRadioButton;
 import org.jebtk.modern.panel.VBox;
 import org.jebtk.modern.scrollpane.ModernScrollPane;
 import org.jebtk.modern.scrollpane.ScrollBarPolicy;
@@ -29,39 +26,24 @@ import org.jebtk.modern.text.ModernSubHeadingLabel;
  * @author Antony Holmes
  *
  */
-public class AnnotationSidePanel extends ModernComponent {
+public class GenomeSidePanel extends ModernComponent {
   private static final long serialVersionUID = 1L;
 
-  private CheckBox mSelectAllButton = new ModernCheckSwitch("Select All");
+  private Map<ModernRadioButton, String> mCheckMap = new HashMap<ModernRadioButton, String>();
+  private Map<ModernRadioButton, Genome> mGenomeMap = new HashMap<ModernRadioButton, Genome>();
 
-  private Map<CheckBox, String> mCheckMap = new HashMap<CheckBox, String>();
-  private Map<CheckBox, Genome> mGenomeMap = new HashMap<CheckBox, Genome>();
-
-  public AnnotationSidePanel() {
-    this("ucsc_refseq_hg19");
-  }
-
-  public AnnotationSidePanel(String defaultAnnotation) {
+  public GenomeSidePanel() {
+    // ModernSubCollapsePane collapsePane = new ModernSubCollapsePane();
 
     Box box = VBox.create();
 
-    // box.add(new ModernSubHeadingLabel("Genomes"));
-    box.add(UI.createVGap(10));
-    box.add(mSelectAllButton);
-    box.add(UI.createVGap(20));
 
-    setHeader(box);
-
-    // ModernSubCollapsePane collapsePane = new ModernSubCollapsePane();
-
-    box = VBox.create();
-
-    // If two services provide the same genome, use the later.
+    ModernButtonGroup g = new ModernButtonGroup();
+    
     try {
       IterMap<String, IterMap<String, IterMap<String, Genome>>> gmap = 
           Genome.sort(AnnotationService.getInstance().genomes());
-      
-      
+    
       for (Entry<String, IterMap<String, IterMap<String, Genome>>> nameEntry : gmap) {
         String name = nameEntry.getKey();
         
@@ -72,14 +54,15 @@ public class AnnotationSidePanel extends ModernComponent {
           //String assembly = nameEntry.getKey();
           
           for (Entry<String, Genome> trackEntry : assemblyEntry.getValue()) {
-            String track = trackEntry.getKey();
+            //String track = trackEntry.getKey();
             
             Genome genome = trackEntry.getValue();
             
-            ModernCheckSwitch button = new ModernCheckSwitch(track);
+            ModernRadioButton button = new ModernRadioButton(name);
+            g.add(button);
             button.setBorder(LEFT_BORDER);
             mGenomeMap.put(button, genome);
-            mCheckMap.put(button, track);
+            mCheckMap.put(button, name);
             box.add(button);
           }
 
@@ -99,34 +82,44 @@ public class AnnotationSidePanel extends ModernComponent {
 
     setBorder(DOUBLE_BORDER);
 
-    mSelectAllButton.addClickListener(new ModernClickListener() {
-
-      @Override
-      public void clicked(ModernClickEvent e) {
-        checkAll();
-      }
-    });
-
     // Set a default
 
-    for (CheckBox button : mCheckMap.keySet()) {
-      if (button.getText().equals(defaultAnnotation)) {
+    for (ModernRadioButton button : mCheckMap.keySet()) {
+      if (button.getText().equals("ucsc_refseq_hg19")) {
         button.setSelected(true);
         break;
       }
     }
   }
 
-  private void checkAll() {
-    for (CheckBox button : mCheckMap.keySet()) {
-      button.setSelected(mSelectAllButton.isSelected());
-    }
-  }
+//  public List<GenomeDatabase> getGenomes() {
+//    List<GenomeDatabase> ret = new ArrayList<GenomeDatabase>(mCheckMap.size());
+//
+//    for (ModernRadioButton button : mCheckMap.keySet()) {
+//      if (button.isSelected()) {
+//        ret.add(new GenomeDatabase(GenomeService.getInstance().guessGenome(mGenomeMap.get(button)), 
+//            button.getText()));
+//      }
+//    }
+//
+//    return ret;
+//  }
+//
+//  public GenomeDatabase getGenome() {
+//    List<GenomeDatabase> genomes = getGenomes();
+//
+//    if (genomes.size() > 0) {
+//      return genomes.get(0);
+//    } else {
+//      return null;
+//    }
+//  }
+
 
   public List<Genome> getGenomes() {
     List<Genome> ret = new ArrayList<Genome>(mCheckMap.size());
 
-    for (CheckBox button : mCheckMap.keySet()) {
+    for (ModernRadioButton button : mCheckMap.keySet()) {
       if (button.isSelected()) {
         ret.add(mGenomeMap.get(button));
       }

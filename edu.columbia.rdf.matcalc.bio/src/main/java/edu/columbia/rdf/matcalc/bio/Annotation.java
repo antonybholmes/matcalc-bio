@@ -16,6 +16,7 @@ import org.jebtk.bioinformatics.gapsearch.FixedGapSearch;
 import org.jebtk.bioinformatics.genomic.Genome;
 import org.jebtk.bioinformatics.genomic.GenomeService;
 import org.jebtk.bioinformatics.genomic.GenomicRegion;
+import org.jebtk.bioinformatics.genomic.GenomicType;
 import org.jebtk.bioinformatics.ui.Bioinformatics;
 import org.jebtk.core.collections.CollectionUtils;
 import org.jebtk.core.io.FileUtils;
@@ -126,7 +127,7 @@ public class Annotation implements Comparable<Annotation> {
           }
 
           BedElement region = (BedElement) BedElement
-              .parse("bed", GenomeService.getInstance().guessGenome(file), line);
+              .parse(GenomicType.REGION, GenomeService.getInstance().guessGenome(file), line);
 
           if (region != null) {
             Annotation annotation = new Annotation(region.getName(), region);

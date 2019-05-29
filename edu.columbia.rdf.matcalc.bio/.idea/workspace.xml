@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="4ae309d4-680e-49d3-9316-88349cc3b9a1" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/src/main/java/edu/columbia/rdf/matcalc/bio/Annotation.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/edu/columbia/rdf/matcalc/bio/Annotation.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/edu/columbia/rdf/matcalc/bio/AnnotationService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/edu/columbia/rdf/matcalc/bio/AnnotationService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/edu/columbia/rdf/matcalc/bio/AnnotationSidePanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/edu/columbia/rdf/matcalc/bio/AnnotationSidePanel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/edu/columbia/rdf/matcalc/bio/toolbox/fillgaps/FillGapsModule.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/edu/columbia/rdf/matcalc/bio/toolbox/fillgaps/FillGapsModule.java" afterDir="false" />
+    </list>
+    <ignored path="$PROJECT_DIR$/out/" />
+    <ignored path="$PROJECT_DIR$/target/" />
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="DefaultGradleProjectSettings">
+    <option name="testRunner" value="GRADLE" />
+    <option name="delegatedBuild" value="true" />
+  </component>
+  <component name="FileEditorManager">
+    <leaf>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/edu/columbia/rdf/matcalc/bio/AnnotationSidePanel.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="165">
+              <caret line="97" column="62" selection-start-line="97" selection-start-column="62" selection-end-line="97" selection-end-column="62" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/pom.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="210">
+              <caret line="14" column="40" selection-start-line="14" selection-start-column="40" selection-end-line="14" selection-end-column="40" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/edu/columbia/rdf/matcalc/bio/BioModuleLoader.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="105">
+              <caret line="25" column="33" lean-forward="true" selection-start-line="25" selection-start-column="33" selection-end-line="25" selection-end-column="33" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/java/edu/columbia/rdf/matcalc/bio/FastaReaderModule.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="375">
+              <caret line="40" column="13" selection-start-line="40" selection-start-column="13" selection-end-line="40" selection-end-column="13" />
+              <folding>
+                <element signature="n#!!doc" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="ProjectConfigurationFiles">
+    <option name="files">
+      <list>
+        <option value="$PROJECT_DIR$/edu.columbia.rdf.matcalc.bio.iml" />
+        <option value="$PROJECT_DIR$/.idea/vcs.xml" />
+        <option value="$PROJECT_DIR$/.idea/compiler.xml" />
+        <option value="$PROJECT_DIR$/.idea/libraries/Maven__avalon_framework_avalon_framework_api_4_2_0.xml" />
+        <option value="$PROJECT_DIR$/.idea/libraries/Maven__avalon_framework_avalon_framework_impl_4_2_0.xml" />
+        <option value="$PROJECT_DIR$/.idea/libraries/Maven__com_fasterxml_jackson_core_jackson_annotations_2_9_0.xml" />
+        <option value="$PROJECT_DIR$/.idea/libraries/Maven__com_fasterxml_jackson_core_jackson_core_2_9_6.xml" />
+        <option value="$PROJECT_DIR$/.idea/libraries/Maven__com_fasterxml_jackson_core_jackson_databind_2_9_6.xml" />
+        <option value="$PROJECT_DIR$/.idea/libraries/Maven__com_github_samtools_htsjdk_1_141.xml" />
+        <option value="$PROJECT_DIR$/.idea/libraries/Maven__com_google_guava_guava_19_0.xml" />
+        <option value="$PROJECT_DIR$/.idea/libraries/Maven__commons_codec_commons_codec_1_9.xml" />
+        <option value="$PROJECT_DIR$/.idea/libraries/Maven__commons_io_commons_io_1_3_1.xml" />
+        <option value="$PROJECT_DIR$/.idea/libraries/Maven__commons_logging_commons_logging_1_0_4.xml" />
+        <option value="$PROJECT_DIR$/.idea/libraries/Maven__edu_columbia_rdf_matcalc_edu_columbia_rdf_matcalc_1_0_0.xml" />
+        <option value="$PROJECT_DIR$/.idea/libraries/Maven__log4j_log4j_1_2_17.xml" />
+        <option value="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_ant_ant_1_8_2.xml" />
+        <option value="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_ant_ant_launcher_1_8_2.xml" />
+        <option value="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_commons_commons_compress_1_4_1.xml" />
+        <option value="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_commons_commons_jexl_2_1_1.xml" />
+        <option value="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_commons_commons_math3_3_6_1.xml" />
+        <option value="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_poi_poi_3_12.xml" />
+        <option value="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_poi_poi_ooxml_3_12.xml" />
+        <option value="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_poi_poi_ooxml_schemas_3_12.xml" />
+        <option value="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_xmlbeans_xmlbeans_2_6_0.xml" />
+        <option value="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_xmlgraphics_batik_anim_1_8.xml" />
+        <option value="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_xmlgraphics_batik_awt_util_1_8.xml" />
+        <option value="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_xmlgraphics_batik_bridge_1_8.xml" />
+        <option value="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_xmlgraphics_batik_css_1_8.xml" />
+        <option value="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_xmlgraphics_batik_dom_1_8.xml" />
+        <option value="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_xmlgraphics_batik_ext_1_8.xml" />
+        <option value="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_xmlgraphics_batik_extension_1_8.xml" />
+        <option value="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_xmlgraphics_batik_gvt_1_8.xml" />
+        <option value="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_xmlgraphics_batik_parser_1_8.xml" />
+        <option value="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_xmlgraphics_batik_script_1_8.xml" />
+        <option value="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_xmlgraphics_batik_svg_dom_1_8.xml" />
+        <option value="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_xmlgraphics_batik_svggen_1_8.xml" />
+        <option value="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_xmlgraphics_batik_transcoder_1_8.xml" />
+        <option value="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_xmlgraphics_batik_util_1_8.xml" />
+        <option value="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_xmlgraphics_batik_xml_1_8.xml" />
+        <option value="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_xmlgraphics_fop_2_0.xml" />
+        <option value="$PROJECT_DIR$/.idea/libraries/Maven__org_apache_xmlgraphics_xmlgraphics_commons_2_0_1.xml" />
+        <option value="$PROJECT_DIR$/.idea/libraries/Maven__org_jebtk_org_jebtk_bioinformatics_1_0_0.xml" />
+        <option value="$PROJECT_DIR$/.idea/libraries/Maven__org_jebtk_org_jebtk_bioinformatics_ui_1_0_0.xml" />
+        <option value="$PROJECT_DIR$/.idea/libraries/Maven__org_jebtk_org_jebtk_core_1_0_0.xml" />
+        <option value="$PROJECT_DIR$/.idea/libraries/Maven__org_jebtk_org_jebtk_graphplot_1_0_0.xml" />
+        <option value="$PROJECT_DIR$/.idea/libraries/Maven__org_jebtk_org_jebtk_math_1_0_0.xml" />
+        <option value="$PROJECT_DIR$/.idea/libraries/Maven__org_jebtk_org_jebtk_math_ui_1_0_0.xml" />
+        <option value="$PROJECT_DIR$/.idea/libraries/Maven__org_jebtk_org_jebtk_modern_1_0_0.xml" />
+        <option value="$PROJECT_DIR$/.idea/libraries/Maven__org_slf4j_slf4j_api_1_7_20.xml" />
+        <option value="$PROJECT_DIR$/.idea/libraries/Maven__org_slf4j_slf4j_log4j12_1_7_20.xml" />
+        <option value="$PROJECT_DIR$/.idea/libraries/Maven__org_tukaani_xz_1_5.xml" />
+        <option value="$PROJECT_DIR$/.idea/libraries/Maven__org_xerial_snappy_snappy_java_1_0_3_rc3.xml" />
+        <option value="$PROJECT_DIR$/.idea/libraries/Maven__stax_stax_api_1_0_1.xml" />
+        <option value="$PROJECT_DIR$/.idea/libraries/Maven__trove_trove_1_0_2.xml" />
+        <option value="$PROJECT_DIR$/.idea/libraries/Maven__xalan_xalan_2_7_0.xml" />
+        <option value="$PROJECT_DIR$/.idea/libraries/Maven__xml_apis_xml_apis_1_3_04.xml" />
+        <option value="$PROJECT_DIR$/.idea/libraries/Maven__xml_apis_xml_apis_ext_1_3_04.xml" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectFrameBounds">
+    <option name="x" value="157" />
+    <option name="y" value="700" />
+    <option name="width" value="1400" />
+    <option name="height" value="1000" />
+  </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectView">
+    <navigator proportions="" version="1">
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="Scope" />
+      <pane id="PackagesPane" />
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="edu.columbia.rdf.matcalc.bio" type="b2602c69:ProjectViewProjectNode" />
+              <item name="edu.columbia.rdf.matcalc.bio" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="edu.columbia.rdf.matcalc.bio" type="b2602c69:ProjectViewProjectNode" />
+              <item name="edu.columbia.rdf.matcalc.bio" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="edu.columbia.rdf.matcalc.bio" type="b2602c69:ProjectViewProjectNode" />
+              <item name="edu.columbia.rdf.matcalc.bio" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="edu.columbia.rdf.matcalc.bio" type="b2602c69:ProjectViewProjectNode" />
+              <item name="edu.columbia.rdf.matcalc.bio" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="edu.columbia.rdf.matcalc.bio" type="b2602c69:ProjectViewProjectNode" />
+              <item name="edu.columbia.rdf.matcalc.bio" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="bio" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+    </panes>
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="4ae309d4-680e-49d3-9316-88349cc3b9a1" name="Default Changelist" comment="" />
+      <created>1557325575416</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1557325575416</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="TodoView">
+    <todo-panel id="selected-file">
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+    <todo-panel id="all">
+      <are-packages-shown value="true" />
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="157" y="700" width="1400" height="1000" extended-state="0" />
+    <layout>
+      <window_info id="Image Layers" />
+      <window_info id="Designer" />
+      <window_info id="UI Designer" />
+      <window_info id="Capture Tool" />
+      <window_info id="Favorites" side_tool="true" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.25" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info anchor="bottom" id="Version Control" sideWeight="0.4994664" weight="0.32941177" />
+      <window_info anchor="bottom" id="Terminal" sideWeight="0.4994664" weight="0.32941177" />
+      <window_info anchor="bottom" id="Event Log" sideWeight="0.50074184" side_tool="true" visible="true" weight="0.35119727" />
+      <window_info anchor="bottom" id="Messages" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Find" order="1" />
+      <window_info anchor="bottom" id="Run" order="2" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info active="true" anchor="bottom" id="TODO" order="6" sideWeight="0.49925816" visible="true" weight="0.35119727" />
+      <window_info anchor="right" id="Palette" />
+      <window_info anchor="right" id="Theme Preview" />
+      <window_info anchor="right" id="Maven" />
+      <window_info anchor="right" id="Capture Analysis" />
+      <window_info anchor="right" id="Palette&#9;" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+    </layout>
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/src/main/java/edu/columbia/rdf/matcalc/bio/AnnotationSidePanel.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="165">
+          <caret line="97" column="62" selection-start-line="97" selection-start-column="62" selection-end-line="97" selection-end-column="62" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="210">
+          <caret line="14" column="40" selection-start-line="14" selection-start-column="40" selection-end-line="14" selection-end-column="40" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/edu/columbia/rdf/matcalc/bio/BioModuleLoader.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="105">
+          <caret line="25" column="33" lean-forward="true" selection-start-line="25" selection-start-column="33" selection-end-line="25" selection-end-column="33" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/edu/columbia/rdf/matcalc/bio/FastaReaderModule.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="375">
+          <caret line="40" column="13" selection-start-line="40" selection-start-column="13" selection-end-line="40" selection-end-column="13" />
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+  </component>
+</project>
