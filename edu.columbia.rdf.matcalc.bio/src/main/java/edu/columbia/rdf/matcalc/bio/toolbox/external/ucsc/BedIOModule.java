@@ -121,6 +121,7 @@ public class BedIOModule extends IOModule {
       // three column format
 
       region = new GenomicRegion(
+          genome,
           GenomeService.getInstance().chr(genome, m.getText(row, 0)),
           Integer.parseInt(m.getText(row, 1)),
           Integer.parseInt(m.getText(row, 2)));

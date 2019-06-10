@@ -226,6 +226,7 @@ public class Annotation implements Comparable<Annotation> {
         region = GenomicRegion.parse(genome, model.getText(i, 0));
       } else {
         region = new GenomicRegion(
+            genome,
             GenomeService.getInstance().chr(genome, model.getText(i, 0)),
             (int) model.getValue(i, 1), (int) model.getValue(i, 2));
       }

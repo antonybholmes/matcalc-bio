@@ -33,7 +33,7 @@ public class CollapseModule extends Module implements ModernClickListener {
         AssetService.getInstance().loadIcon("collapse", 32), "Collapse Rows",
         "Collapse rows by annotation, e.g. probe ids.");
     button.addClickListener(this);
-    mWindow.getRibbon().getToolbar("Annotation").getSection("Probes")
+    mWindow.getRibbon().getToolbar("Bioinformatics").getSection("Collapse Rows")
         .add(button);
   }
 

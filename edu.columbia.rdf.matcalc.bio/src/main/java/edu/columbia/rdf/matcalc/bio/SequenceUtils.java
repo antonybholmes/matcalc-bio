@@ -77,6 +77,7 @@ public class SequenceUtils {
     } else if (dnaLocationColumn != -1) {
       for (int i = 0; i < m.getRows(); ++i) {
         GenomicRegion region = GenomicRegion.create(
+            genome,
             GenomeService.getInstance().chr(genome, m.getText(i, chrCol)),
             (int) m.getValue(i, startCol),
             (int) m.getValue(i, endCol));
