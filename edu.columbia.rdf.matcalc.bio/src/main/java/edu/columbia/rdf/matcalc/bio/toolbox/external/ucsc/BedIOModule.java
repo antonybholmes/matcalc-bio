@@ -21,6 +21,7 @@ import java.nio.file.Path;
 import java.util.Collection;
 
 import org.jebtk.bioinformatics.ext.ucsc.Bed;
+import org.jebtk.bioinformatics.genomic.ChromosomeService;
 import org.jebtk.bioinformatics.genomic.Genome;
 import org.jebtk.bioinformatics.genomic.GenomeService;
 import org.jebtk.bioinformatics.genomic.GenomicRegion;
@@ -122,7 +123,7 @@ public class BedIOModule extends IOModule {
 
       region = new GenomicRegion(
           genome,
-          GenomeService.getInstance().chr(genome, m.getText(row, 0)),
+          ChromosomeService.getInstance().chr(genome, m.getText(row, 0)),
           Integer.parseInt(m.getText(row, 1)),
           Integer.parseInt(m.getText(row, 2)));
     } else {

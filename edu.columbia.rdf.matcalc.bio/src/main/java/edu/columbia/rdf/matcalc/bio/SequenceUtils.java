@@ -5,8 +5,8 @@ import java.util.Collections;
 import java.util.List;
 
 import org.jebtk.bioinformatics.genomic.Chromosome;
+import org.jebtk.bioinformatics.genomic.ChromosomeService;
 import org.jebtk.bioinformatics.genomic.Genome;
-import org.jebtk.bioinformatics.genomic.GenomeService;
 import org.jebtk.bioinformatics.genomic.GenomicRegion;
 import org.jebtk.bioinformatics.genomic.Sequence;
 import org.jebtk.math.matrix.DataFrame;
@@ -78,7 +78,7 @@ public class SequenceUtils {
       for (int i = 0; i < m.getRows(); ++i) {
         GenomicRegion region = GenomicRegion.create(
             genome,
-            GenomeService.getInstance().chr(genome, m.getText(i, chrCol)),
+            ChromosomeService.getInstance().chr(genome, m.getText(i, chrCol)),
             (int) m.getValue(i, startCol),
             (int) m.getValue(i, endCol));
 

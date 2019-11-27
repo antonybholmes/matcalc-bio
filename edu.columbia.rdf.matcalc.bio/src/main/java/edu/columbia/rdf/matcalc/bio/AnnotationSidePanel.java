@@ -11,7 +11,6 @@ import javax.swing.Box;
 
 import org.jebtk.bioinformatics.genomic.Genome;
 import org.jebtk.core.collections.IterMap;
-import org.jebtk.core.collections.IterTreeMap;
 import org.jebtk.modern.ModernComponent;
 import org.jebtk.modern.UI;
 import org.jebtk.modern.button.CheckBox;

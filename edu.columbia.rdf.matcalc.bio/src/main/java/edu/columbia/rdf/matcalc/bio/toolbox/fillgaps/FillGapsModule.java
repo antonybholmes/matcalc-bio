@@ -44,8 +44,8 @@ import org.jebtk.bioinformatics.gapsearch.BinaryGapSearch;
 import org.jebtk.bioinformatics.gapsearch.BinarySearch;
 import org.jebtk.bioinformatics.gapsearch.GappedSearchFeatures;
 import org.jebtk.bioinformatics.genomic.Chromosome;
+import org.jebtk.bioinformatics.genomic.ChromosomeService;
 import org.jebtk.bioinformatics.genomic.Genome;
-import org.jebtk.bioinformatics.genomic.GenomeService;
 import org.jebtk.bioinformatics.genomic.GenomicElement;
 import org.jebtk.bioinformatics.genomic.GenomicElementsMap;
 import org.jebtk.bioinformatics.genomic.GenomicRegion;
@@ -278,7 +278,7 @@ public class FillGapsModule extends Module implements ModernClickListener {
       Segment segment = new Segment();
 
       segment.name = name;
-      segment.chr = GenomeService.getInstance()
+      segment.chr = ChromosomeService.getInstance()
           .chr(genome, m.getText(r, colMap.get("chr")));
       segment.start = (int) m.getValue(r, colMap.get("start"));
       segment.end = (int) m.getValue(r, colMap.get("end"));

@@ -13,6 +13,7 @@ import org.jebtk.bioinformatics.ext.ucsc.Bed;
 import org.jebtk.bioinformatics.ext.ucsc.BedElement;
 import org.jebtk.bioinformatics.gapsearch.BinaryGapSearch;
 import org.jebtk.bioinformatics.gapsearch.FixedGapSearch;
+import org.jebtk.bioinformatics.genomic.ChromosomeService;
 import org.jebtk.bioinformatics.genomic.Genome;
 import org.jebtk.bioinformatics.genomic.GenomeService;
 import org.jebtk.bioinformatics.genomic.GenomicRegion;
@@ -227,7 +228,7 @@ public class Annotation implements Comparable<Annotation> {
       } else {
         region = new GenomicRegion(
             genome,
-            GenomeService.getInstance().chr(genome, model.getText(i, 0)),
+            ChromosomeService.getInstance().chr(genome, model.getText(i, 0)),
             (int) model.getValue(i, 1), (int) model.getValue(i, 2));
       }
 

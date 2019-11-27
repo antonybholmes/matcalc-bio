@@ -20,6 +20,7 @@ import java.nio.file.Path;
 import java.util.Collection;
 import java.util.List;
 
+import org.jebtk.bioinformatics.Bio;
 import org.jebtk.bioinformatics.Fasta;
 import org.jebtk.bioinformatics.genomic.Genome;
 import org.jebtk.bioinformatics.genomic.GenomeService;
@@ -75,8 +76,8 @@ public class FastaReaderModule extends IOModule {
     GenomicRegion.parse(genome, sequences.get(0).getName());
 
     ret.setColumnName(0, "Name");
-    ret.setColumnName(1, "Location");
-    ret.setColumnName(2, "DNA Sequence");
+    ret.setColumnName(1, Bio.ASSET_GENOMIC_LOCATION);
+    ret.setColumnName(2, Bio.ASSET_DNA_SEQUENCE);
 
     for (int i = 0; i < sequences.size(); ++i) {
       Sequence s = sequences.get(i);
@@ -108,9 +109,10 @@ public class FastaReaderModule extends IOModule {
     GenomicRegion.parse(genome, sequences.get(0).getName());
 
     //ret.setColumnName(0, "Name");
-    ret.setColumnName(0, "Genome");
-    ret.setColumnName(1, "Location");
-    ret.setColumnName(2, "DNA Sequence");
+    ret.setColumnName(0, Bio.ASSET_GENOME);
+    ret.setColumnName(1, Bio.ASSET_GENOMIC_LOCATION);
+    ret.setColumnName(2, Bio.ASSET_DNA_SEQUENCE);
+    ret.setColumnName(3, Bio.ASSET_LEN_BP);
 
     for (int i = 0; i < sequences.size(); ++i) {
       Sequence s = sequences.get(i);
@@ -130,6 +132,7 @@ public class FastaReaderModule extends IOModule {
       }
 
       ret.set(i, 2, s.toString());
+      ret.set(i, 3, s.toString().length());
     }
 
     return ret;
