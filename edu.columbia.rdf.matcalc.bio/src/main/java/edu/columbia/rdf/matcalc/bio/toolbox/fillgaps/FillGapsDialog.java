@@ -15,6 +15,7 @@ import org.jebtk.core.collections.CollectionUtils;
 import org.jebtk.math.external.microsoft.Excel;
 import org.jebtk.math.ui.external.microsoft.ExcelDialog;
 import org.jebtk.modern.AssetService;
+import org.jebtk.modern.ModernWidget;
 import org.jebtk.modern.UI;
 import org.jebtk.modern.button.ModernButtonWidget;
 import org.jebtk.modern.combobox.ModernComboBox;
@@ -35,7 +36,6 @@ import org.jebtk.modern.text.ModernClipboardNumericalTextField;
 import org.jebtk.modern.text.ModernNumericalTextField;
 import org.jebtk.modern.text.ModernSubHeadingLabel;
 import org.jebtk.modern.text.ModernTextBorderPanel;
-import org.jebtk.modern.widget.ModernWidget;
 import org.jebtk.modern.window.ModernWindow;
 import org.jebtk.modern.window.WindowWidgetFocusEvents;
 
