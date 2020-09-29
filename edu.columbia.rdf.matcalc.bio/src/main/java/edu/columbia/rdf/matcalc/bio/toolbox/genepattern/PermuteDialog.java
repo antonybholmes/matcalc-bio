@@ -15,7 +15,7 @@ import org.jebtk.modern.ModernWidget;
 import org.jebtk.modern.UI;
 import org.jebtk.modern.button.ModernButtonWidget;
 import org.jebtk.modern.button.ModernCheckBox;
-import org.jebtk.modern.combobox.ModernComboBox;
+import org.jebtk.modern.combobox.ModernComboBox2;
 import org.jebtk.modern.dialog.ModernDialogTaskWindow;
 import org.jebtk.modern.event.ModernClickEvent;
 import org.jebtk.modern.event.ModernClickListener;
@@ -209,7 +209,7 @@ public class PermuteDialog extends ModernDialogTaskWindow {
   }
 
   private static XYSeries getGroup(XYSeriesGroup groups,
-      ModernComboBox groupCombo) {
+      ModernComboBox2 groupCombo) {
     if (groups == null || groups.getCount() == 0) {
       return null;
     }

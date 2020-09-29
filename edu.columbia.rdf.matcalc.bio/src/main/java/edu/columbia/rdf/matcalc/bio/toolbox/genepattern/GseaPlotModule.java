@@ -355,8 +355,6 @@ public class GseaPlotModule extends Module implements ModernClickListener {
         if (plotDataM.getValue(i, 1) < 0) {
           geneSetCrossingIndex = i - 1; //plotDataM.getInt(i, 0);
           
-          SysUtils.err().println("blob", i, plotDataM.getInt(i, 0), plotDataM.getValue(i, 0) + " " + plotDataM.getValue(i, 1));
-
           // crossingX = (m.getValue(i, 0) + m.getValue(i - 1, 0)) / 2.0;
 
           // Imagine p1 is (0,0) so we have y =mx and solve for x
