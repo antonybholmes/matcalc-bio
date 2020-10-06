@@ -49,8 +49,7 @@ public class SearchSequence implements Comparable<SearchSequence> {
     return mRegion;
   }
 
-  public static List<SearchSequence> reverseComplement(
-      Collection<SearchSequence> sequences) {
+  public static List<SearchSequence> reverseComplement(Collection<SearchSequence> sequences) {
     List<SearchSequence> ret = new ArrayList<SearchSequence>(sequences.size());
 
     for (SearchSequence s : sequences) {

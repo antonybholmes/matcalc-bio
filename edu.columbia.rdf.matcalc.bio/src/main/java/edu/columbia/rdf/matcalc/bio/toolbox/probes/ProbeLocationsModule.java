@@ -22,12 +22,10 @@ import org.jebtk.modern.ribbon.RibbonLargeButton;
 import edu.columbia.rdf.matcalc.MainMatCalcWindow;
 import edu.columbia.rdf.matcalc.toolbox.Module;
 
-public class ProbeLocationsModule extends Module
-    implements ModernClickListener {
+public class ProbeLocationsModule extends Module implements ModernClickListener {
   private MainMatCalcWindow mWindow;
 
-  public static final Path PROBE_RES_DIR = PathUtils
-      .getPath("res/modules/probes/locations");
+  public static final Path PROBE_RES_DIR = PathUtils.getPath("res/modules/probes/locations");
 
   @Override
   public String getName() {
@@ -42,8 +40,7 @@ public class ProbeLocationsModule extends Module
         AssetService.getInstance().loadIcon("probes", 24));
 
     button.addClickListener(this);
-    mWindow.getRibbon().getToolbar("Bioinformatics").getSection("Probes")
-        .add(button);
+    mWindow.getRibbon().getToolbar("Bioinformatics").getSection("Probes").add(button);
   }
 
   @Override
@@ -68,8 +65,7 @@ public class ProbeLocationsModule extends Module
       return;
     }
 
-    Path file = PROBE_RES_DIR
-        .resolve(dialog.getAnnotation() + ".probe_locations.txt.gz");
+    Path file = PROBE_RES_DIR.resolve(dialog.getAnnotation() + ".probe_locations.txt.gz");
 
     BufferedReader reader = FileUtils.newBufferedReader(file);
 

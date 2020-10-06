@@ -53,13 +53,8 @@ public class ResIOModule extends IOModule {
   }
 
   @Override
-  public DataFrame read(final MainMatCalcWindow window,
-      final Path file,
-      FileType type,
-      int headers,
-      int rowAnnotations,
-      String delimiter,
-      Collection<String> skipLines) throws IOException {
+  public DataFrame read(final MainMatCalcWindow window, final Path file, FileType type, int headers, int rowAnnotations,
+      String delimiter, Collection<String> skipLines) throws IOException {
 
     ResDialog dialog = new ResDialog(window);
 
@@ -73,9 +68,7 @@ public class ResIOModule extends IOModule {
   }
 
   @Override
-  public boolean write(final MainMatCalcWindow window,
-      final Path file,
-      final DataFrame m) throws IOException {
+  public boolean write(final MainMatCalcWindow window, final Path file, final DataFrame m) throws IOException {
     ResMatrix.writeResMatrix(m, file);
 
     return true;

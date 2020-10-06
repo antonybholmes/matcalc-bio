@@ -51,8 +51,7 @@ import edu.columbia.rdf.matcalc.toolbox.Module;
  * @author Antony Holmes
  *
  */
-public class ExpressionModule extends Module
-    implements ModernClickListener {
+public class ExpressionModule extends Module implements ModernClickListener {
   public static final double SEGMENT_MEAN_ZERO = 0.0001;
 
   /*
@@ -70,8 +69,7 @@ public class ExpressionModule extends Module
    */
 
   private static final ModernIcon EXPRESSION_ICON = new Raster32Icon(
-      new FilterVectorIcon(
-          ThemeService.getInstance().getColors().getBlueTheme().getColor(5),
+      new FilterVectorIcon(ThemeService.getInstance().getColors().getBlueTheme().getColor(5),
           ThemeService.getInstance().getColors().getBlueTheme().getColor(4)));
 
   /**
@@ -94,8 +92,7 @@ public class ExpressionModule extends Module
   /*
    * (non-Javadoc)
    * 
-   * @see
-   * edu.columbia.rdf.apps.matcalc.modules.Module#init(edu.columbia.rdf.apps.
+   * @see edu.columbia.rdf.apps.matcalc.modules.Module#init(edu.columbia.rdf.apps.
    * matcalc.MainMatCalcWindow)
    */
   @Override
@@ -109,15 +106,13 @@ public class ExpressionModule extends Module
 
     ModernPopupMenu2 popup = new ModernPopupMenu2();
 
-    popup.addMenuItem(new ModernTwoLineMenuItem("STDEV",
-        "Rows must have a minimum standard deviation.", EXPRESSION_ICON));
-    popup.addMenuItem(new ModernTwoLineMenuItem("Mean",
-        "Rows must have a minimum mean.", EXPRESSION_ICON));
-    popup.addMenuItem(new ModernTwoLineMenuItem("Minimum Expression",
-        "Rows must have a minimum value in some columns.", EXPRESSION_ICON));
+    popup.addMenuItem(
+        new ModernTwoLineMenuItem("STDEV", "Rows must have a minimum standard deviation.", EXPRESSION_ICON));
+    popup.addMenuItem(new ModernTwoLineMenuItem("Mean", "Rows must have a minimum mean.", EXPRESSION_ICON));
+    popup.addMenuItem(new ModernTwoLineMenuItem("Minimum Expression", "Rows must have a minimum value in some columns.",
+        EXPRESSION_ICON));
 
-    mButton = new RibbonLargeDropDownButton2("Expression", EXPRESSION_ICON,
-        popup);
+    mButton = new RibbonLargeDropDownButton2("Expression", EXPRESSION_ICON, popup);
     mButton.setShowText(false);
 
     mWindow.getRibbon().getToolbar("Data").getSection("Filter").add(mButton);
@@ -128,8 +123,7 @@ public class ExpressionModule extends Module
   /*
    * (non-Javadoc)
    * 
-   * @see
-   * org.abh.lib.ui.modern.event.ModernClickListener#clicked(org.abh.lib.ui.
+   * @see org.abh.lib.ui.modern.event.ModernClickListener#clicked(org.abh.lib.ui.
    * modern .event.ModernClickEvent)
    */
   @Override
@@ -137,17 +131,15 @@ public class ExpressionModule extends Module
     DataFrame m = mWindow.getCurrentMatrix();
 
     if (e.getMessage().equals("STDEV")) {
-      mWindow.history().addToHistory("STDEV Filter",
-          MatrixTransforms.stdDevFilter(mWindow, m, 1.5));
+      mWindow.history().addToHistory("STDEV Filter", MatrixTransforms.stdDevFilter(mWindow, m, 1.5));
     } else if (e.getMessage().equals("Mean")) {
-      mWindow.history().addToHistory("STDEV Filter",
-          MatrixTransforms.meanFilter(mWindow, m, 1.5));
+      mWindow.history().addToHistory("STDEV Filter", MatrixTransforms.meanFilter(mWindow, m, 1.5));
     } else if (e.getMessage().equals("Minimum Expression")) {
-      mWindow.history().addToHistory("Minimum Expression Filter",
-          MatrixTransforms.minExpFilter(mWindow, m, 100, 2)); // new
-                                                              // MinExpFilterMatrixTransform(this,
-                                                              // getCurrentMatrix(),
-                                                              // 100, 2));
+      mWindow.history().addToHistory("Minimum Expression Filter", MatrixTransforms.minExpFilter(mWindow, m, 100, 2)); // new
+                                                                                                                      // MinExpFilterMatrixTransform(this,
+                                                                                                                      // getCurrentMatrix(),
+                                                                                                                      // 100,
+                                                                                                                      // 2));
 
     } else {
       // Do nothing

@@ -44,8 +44,8 @@ import edu.columbia.rdf.matcalc.toolbox.core.io.IOModule;
  *
  */
 public class BedIOModule extends IOModule {
-  private static final GuiFileExtFilter FILTER = 
-      FileFilterService.getInstance().getFilter("bed"); //new BedGuiFileFilter();
+  private static final GuiFileExtFilter FILTER = FileFilterService.getInstance().getFilter("bed"); // new
+                                                                                                   // BedGuiFileFilter();
 
   public BedIOModule() {
     registerFileType(FILTER);
@@ -62,20 +62,13 @@ public class BedIOModule extends IOModule {
   }
 
   @Override
-  public DataFrame read(final MainMatCalcWindow window,
-      final Path file,
-      FileType type,
-      int headers,
-      int rowAnnotations,
-      String delimiter,
-      Collection<String> skipLines) throws IOException {
+  public DataFrame read(final MainMatCalcWindow window, final Path file, FileType type, int headers, int rowAnnotations,
+      String delimiter, Collection<String> skipLines) throws IOException {
     return Bed.toMatrix(file);
   }
 
   @Override
-  public boolean write(final MainMatCalcWindow window,
-      final Path file,
-      final DataFrame m) throws IOException {
+  public boolean write(final MainMatCalcWindow window, final Path file, final DataFrame m) throws IOException {
     BufferedWriter writer = FileUtils.newBufferedWriter(file);
 
     try {
@@ -86,16 +79,13 @@ public class BedIOModule extends IOModule {
         GenomicRegion r = getRegion(GenomeService.getInstance().guessGenome(file), m, i);
 
         if (r != null) {
-          writer.write(Join.onTab()
-              .values(r.getChr(), r.getStart(), r.getEnd(), r.getLocation())
-              .toString());
+          writer.write(Join.onTab().values(r.getChr(), r.getStart(), r.getEnd(), r.getLocation()).toString());
 
           writer.newLine();
         }
 
         /*
-         * String s = m.getText(i, 0) + ":" + m.getText(i, 1) + "-" +
-         * m.getText(i, 2);
+         * String s = m.getText(i, 0) + ":" + m.getText(i, 1) + "-" + m.getText(i, 2);
          * 
          * writer.write(Join.onTab().values(m.getText(i, 0), m.getText(i, 1),
          * m.getText(i, 2), s).toString());
@@ -121,11 +111,8 @@ public class BedIOModule extends IOModule {
     } else if (isThreeColumnGenomicLocation(m, row)) {
       // three column format
 
-      region = new GenomicRegion(
-          genome,
-          ChromosomeService.getInstance().chr(genome, m.getText(row, 0)),
-          Integer.parseInt(m.getText(row, 1)),
-          Integer.parseInt(m.getText(row, 2)));
+      region = new GenomicRegion(ChromosomeService.getInstance().chr(genome, m.getText(row, 0)),
+          Integer.parseInt(m.getText(row, 1)), Integer.parseInt(m.getText(row, 2)));
     } else {
       region = null;
     }

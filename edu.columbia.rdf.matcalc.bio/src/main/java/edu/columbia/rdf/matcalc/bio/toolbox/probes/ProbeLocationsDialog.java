@@ -46,8 +46,7 @@ public class ProbeLocationsDialog extends ModernDialogTaskWindow {
     int[] rows = { ModernWidget.WIDGET_HEIGHT };
     int[] cols = { 100, 200 };
 
-    MatrixPanel panel = new MatrixPanel(rows, cols, ModernWidget.PADDING,
-        ModernWidget.PADDING);
+    MatrixPanel panel = new MatrixPanel(rows, cols, ModernWidget.PADDING, ModernWidget.PADDING);
 
     panel.add(new ModernAutoSizeLabel("ID"));
 

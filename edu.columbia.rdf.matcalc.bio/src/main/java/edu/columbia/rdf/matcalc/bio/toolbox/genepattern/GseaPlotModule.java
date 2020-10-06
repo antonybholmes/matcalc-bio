@@ -79,16 +79,13 @@ public class GseaPlotModule extends Module implements ModernClickListener {
 
   private static final Color RED_COLOR = Color.RED;
 
-  private static final Color RED_COLOR_2 = ColorUtils.saturation(RED_COLOR,
-      0.1);
+  private static final Color RED_COLOR_2 = ColorUtils.saturation(RED_COLOR, 0.1);
 
   private static final Color BLUE_COLOR = ColorUtils.decodeHtmlColor("#3771c8");
 
-  private static final Color BLUE_COLOR_2 = ColorUtils.saturation(BLUE_COLOR,
-      0.1);
+  private static final Color BLUE_COLOR_2 = ColorUtils.saturation(BLUE_COLOR, 0.1);
 
-  private static final Color GREEN_COLOR = ColorUtils
-      .decodeHtmlColor("#00aa44");
+  private static final Color GREEN_COLOR = ColorUtils.decodeHtmlColor("#00aa44");
 
   private static final int DEFAULT_WIDTH = 1000;
 
@@ -110,28 +107,24 @@ public class GseaPlotModule extends Module implements ModernClickListener {
   /*
    * (non-Javadoc)
    * 
-   * @see
-   * edu.columbia.rdf.apps.matcalc.modules.Module#init(edu.columbia.rdf.apps.
+   * @see edu.columbia.rdf.apps.matcalc.modules.Module#init(edu.columbia.rdf.apps.
    * matcalc.MainMatCalcWindow)
    */
   @Override
   public void init(MainMatCalcWindow window) {
     mParent = window;
 
-    RibbonLargeButton button = new RibbonLargeButton("GSEA Plot",
-        AssetService.getInstance().loadIcon("line_graph", 24), "GSEA Plot",
-        "Create a GSEA Plot.");
+    RibbonLargeButton button = new RibbonLargeButton("GSEA Plot", AssetService.getInstance().loadIcon("line_graph", 24),
+        "GSEA Plot", "Create a GSEA Plot.");
     button.addClickListener(this);
 
-    mParent.getRibbon().getToolbar("Bioinformatics").getSection("GSEA")
-    .add(button);
+    mParent.getRibbon().getToolbar("Bioinformatics").getSection("GSEA").add(button);
   }
 
   /*
    * (non-Javadoc)
    * 
-   * @see
-   * org.abh.lib.ui.modern.event.ModernClickListener#clicked(org.abh.lib.ui.
+   * @see org.abh.lib.ui.modern.event.ModernClickListener#clicked(org.abh.lib.ui.
    * modern .event.ModernClickEvent)
    */
   @Override
@@ -152,15 +145,14 @@ public class GseaPlotModule extends Module implements ModernClickListener {
   /**
    * Export.
    *
-   * @throws IOException Signals that an I/O exception has occurred.
+   * @throws IOException                  Signals that an I/O exception has
+   *                                      occurred.
    * @throws ParseException
    * @throws ParserConfigurationException
    * @throws SAXException
    */
-  private void plot() throws IOException, ParseException, SAXException,
-  ParserConfigurationException {
-    Path dir = FileDialog.open(mParent).dirs()
-        .getFile(RecentFilesService.getInstance().getPwd());
+  private void plot() throws IOException, ParseException, SAXException, ParserConfigurationException {
+    Path dir = FileDialog.open(mParent).dirs().getFile(RecentFilesService.getInstance().getPwd());
 
     if (dir == null) {
       return;
@@ -241,10 +233,7 @@ public class GseaPlotModule extends Module implements ModernClickListener {
     // Find where the crossing point is in the full list of ranked genes
     //
 
-    DataFrame allRankedM = new DoubleMatrixParser(1,
-        4,
-        TextUtils.TAB_DELIMITER)
-        .parse(rankedListFile);
+    DataFrame allRankedM = new DoubleMatrixParser(1, 4, TextUtils.TAB_DELIMITER).parse(rankedListFile);
 
     // Make the first column the rank order
 
@@ -255,15 +244,14 @@ public class GseaPlotModule extends Module implements ModernClickListener {
 
     // Last index of sorted rows
     int ni = n - 1;
-    
+
     int width = DEFAULT_WIDTH;
 
-    //Matrix.setColumn(0,
-    //    Linspace.evenlySpaced(1, allRankedGenes.getRows()),
-    //    allRankedGenes);
+    // Matrix.setColumn(0,
+    // Linspace.evenlySpaced(1, allRankedGenes.getRows()),
+    // allRankedGenes);
 
-    System.err.println(
-        "aha " + allRankedM.getValue(allRankedM.getRows() - 1, 0));
+    System.err.println("aha " + allRankedM.getValue(allRankedM.getRows() - 1, 0));
 
     int crossingIndex = -1;
 
@@ -276,18 +264,18 @@ public class GseaPlotModule extends Module implements ModernClickListener {
 
       if (v <= 0) {
         System.err.println("cross " + rankedListFile + " " + i + " " + v);
-        
+
         // Crossing point is one before the inflexion
         crossingIndex = i - 1;
         break;
       }
     }
-    
+
     // For scaling the heat map
     // Max is first
     double max = allRankedM.getValue(0, 0);
     double min = allRankedM.getValue(ni, 0);
-    
+
     SysUtils.err().println("min", min, "max", max);
 
     Color color;
@@ -323,13 +311,10 @@ public class GseaPlotModule extends Module implements ModernClickListener {
       // Select the xy columns of interest
 
       System.err.println("here");
-      
+
       DataFrame plotDataM = DataFrame
-          .copyInnerColumns(new MixedMatrixParser(1,
-              0,
-              TextUtils.TAB_DELIMITER)
-              .parse(plotFile), 5, 7, 8);
-      
+          .copyInnerColumns(new MixedMatrixParser(1, 0, TextUtils.TAB_DELIMITER).parse(plotFile), 5, 7, 8);
+
       DataFrame vlinesM = DataFrame.createNumericalMatrix(1, plotDataM.getRows());
 
       // split into up and down
@@ -339,10 +324,10 @@ public class GseaPlotModule extends Module implements ModernClickListener {
 
       // Set to be the end of the points, i.e assume there is no crossing point
       // and the gsea plot is above zero
-      
+
       int plotn = plotDataM.getRows();
       int plotni = plotn - 1;
-      
+
       int geneSetCrossingIndex = plotni;
       double crossingX = n;
 
@@ -350,11 +335,11 @@ public class GseaPlotModule extends Module implements ModernClickListener {
         // For plotting vlines
         vlinesM.set(0, i, plotDataM.getInt(i, 0));
       }
-      
+
       for (int i = 0; i < plotDataM.getRows(); ++i) {
         if (plotDataM.getValue(i, 1) < 0) {
-          geneSetCrossingIndex = i - 1; //plotDataM.getInt(i, 0);
-          
+          geneSetCrossingIndex = i - 1; // plotDataM.getInt(i, 0);
+
           // crossingX = (m.getValue(i, 0) + m.getValue(i - 1, 0)) / 2.0;
 
           // Imagine p1 is (0,0) so we have y =mx and solve for x
@@ -370,39 +355,34 @@ public class GseaPlotModule extends Module implements ModernClickListener {
           break;
         }
       }
-      
+
       System.err.println("here2 " + plotDataM.getRows() + " " + geneSetCrossingIndex);
 
-      //System.err.println("cross " + geneSetCrossingIndex + " " + crossingX + " "
-      //    + mPlotData.getValue(geneSetCrossingIndex, 1));
+      // System.err.println("cross " + geneSetCrossingIndex + " " + crossingX + " "
+      // + mPlotData.getValue(geneSetCrossingIndex, 1));
 
-      
+      // DataFrame rankedM = DataFrame.createNumericalMatrix(1, n);
 
-      
-      
-      //DataFrame rankedM = DataFrame.createNumericalMatrix(1, n);
-
-      //rankedM.setColumnName(0, "Ranked x");
-      //rankedM.setColumnName(1, "Ranked y");
-      //rankedM.setColumnName(1, "Ranked z");
-      //rankedM.copyColumn(mPlotData, 0, 0);
+      // rankedM.setColumnName(0, "Ranked x");
+      // rankedM.setColumnName(1, "Ranked y");
+      // rankedM.setColumnName(1, "Ranked z");
+      // rankedM.copyColumn(mPlotData, 0, 0);
 
       // DataFrame.setColumn(1, 1, ranked);
-      //DataFrame.setColumn(1, 0, rankedM);
+      // DataFrame.setColumn(1, 0, rankedM);
 
       // Create the z
-      //rankedM.copyColumn(m, 0, 2);
+      // rankedM.copyColumn(m, 0, 2);
 
       // Make a normalized plot for a heat map
-      //for (int i = 0; i < n; ++i) {
-      //  rankedM.set(0, i, allRankedGenes.getValue(i, 0));
-      //}
+      // for (int i = 0; i < n; ++i) {
+      // rankedM.set(0, i, allRankedGenes.getValue(i, 0));
+      // }
 
       if (crossingIndex < ni) {
         // We add two extra points to ensure the plot starts and ends
         // at zero
-        DataFrame upM = DataFrame.createNumericalMatrix(geneSetCrossingIndex + 2,
-            2);
+        DataFrame upM = DataFrame.createNumericalMatrix(geneSetCrossingIndex + 2, 2);
 
         upM.setColumnName(0, "GSEA Up x");
         upM.setColumnName(1, "GSEA Up y");
@@ -425,21 +405,19 @@ public class GseaPlotModule extends Module implements ModernClickListener {
         }
 
         XYSeries series = new XYSeries("GSEA Up", color);
-        series.getStyle().getFillStyle()
-        .setColor(ColorUtils.getTransparentColor70(color));
+        series.getStyle().getFillStyle().setColor(ColorUtils.getTransparentColor70(color));
         series.getStyle().getLineStyle().setColor(color);
         series.getMarkerStyle().setVisible(false);
 
         System.err.println(upM.getShape());
-        
+
         PlotFactory.createFilledLinePlot(upM, axes, series);
       }
 
       System.err.println("down");
-      
+
       if (crossingIndex > 0) {
-        DataFrame downM = DataFrame
-            .createNumericalMatrix(plotDataM.getRows() - geneSetCrossingIndex + 2, 2);
+        DataFrame downM = DataFrame.createNumericalMatrix(plotDataM.getRows() - geneSetCrossingIndex + 2, 2);
 
         downM.setColumnName(0, "GSEA Down x");
         downM.setColumnName(1, "GSEA Down y");
@@ -466,20 +444,19 @@ public class GseaPlotModule extends Module implements ModernClickListener {
         }
 
         XYSeries series = new XYSeries("GSEA Down", color);
-        series.getStyle().getFillStyle()
-        .setColor(ColorUtils.getTransparentColor70(color));
+        series.getStyle().getFillStyle().setColor(ColorUtils.getTransparentColor70(color));
         series.getStyle().getLineStyle().setColor(color);
         series.getMarkerStyle().setVisible(false);
 
         System.err.println(downM.getShape());
-        
+
         PlotFactory.createFilledLinePlot(downM, axes, series);
       }
 
       //
       // The leading edge
       //
-      
+
       System.err.println("leading");
 
       int ls = Integer.MAX_VALUE;
@@ -524,8 +501,7 @@ public class GseaPlotModule extends Module implements ModernClickListener {
       }
 
       XYSeries series = new XYSeries("Leading", color);
-      series.getStyle().getFillStyle()
-      .setColor(ColorUtils.getTransparentColor70(color));
+      series.getStyle().getFillStyle().setColor(ColorUtils.getTransparentColor70(color));
       series.getStyle().getLineStyle().setVisible(false);
       series.getMarkerStyle().setVisible(false);
 
@@ -535,40 +511,32 @@ public class GseaPlotModule extends Module implements ModernClickListener {
       // Set some plot properties
       //
 
-      
       axes.setY1AxisLimitAutoRound();
       axes.setInternalSize(width, 400);
       axes.setMargins(100);
 
       Plot plot = axes.newPlot();
       plot.addChild(new LabelPlotLayer(p1, 0, 0, 10, -10));
-      plot.addChild(
-          new RightLabelPlotLayer(p2, allRankedM.getRows(), 0, -10, -10));
+      plot.addChild(new RightLabelPlotLayer(p2, allRankedM.getRows(), 0, -10, -10));
 
-      plot.addChild(
-          new LabelPlotLayer("Size:", allRankedM.getRows(), 0, -200, -120));
-      plot.addChild(new LabelPlotLayer(Integer.toString(sizeMap.get(name)),
-          allRankedM.getRows(), 0, -100, -120));
+      plot.addChild(new LabelPlotLayer("Size:", allRankedM.getRows(), 0, -200, -120));
+      plot.addChild(new LabelPlotLayer(Integer.toString(sizeMap.get(name)), allRankedM.getRows(), 0, -100, -120));
       // plot.getPlotLayerZModel().setZ(new LabelPlotLayer("ES:",
       // allRankedGenes.getRowCount(), 0, -200, -140));
       // plot.getPlotLayerZModel().setZ(new
       // LabelPlotLayer(TextUtils.format4DP(es),
       // allRankedGenes.getRowCount(), 0, -100, -140));
+      plot.addChild(new LabelPlotLayer("NES:", allRankedM.getRows(), 0, -200, -100));
       plot.addChild(
-          new LabelPlotLayer("NES:", allRankedM.getRows(), 0, -200, -100));
-      plot.addChild(
-          new LabelPlotLayer(Formatter.number().dp(4).format(nesMap.get(name)),
-              allRankedM.getRows(), 0, -100, -100));
+          new LabelPlotLayer(Formatter.number().dp(4).format(nesMap.get(name)), allRankedM.getRows(), 0, -100, -100));
       // plot.getPlotLayerZModel().setZ(new LabelPlotLayer("P:",
       // allRankedGenes.getRowCount(), 0, -200, -100));
       // plot.getPlotLayerZModel().setZ(new
       // LabelPlotLayer(TextUtils.format4DP(pMap.get(name)),
       // allRankedGenes.getRowCount(), 0, -100, -100));
+      plot.addChild(new LabelPlotLayer("FDR:", allRankedM.getRows(), 0, -200, -80));
       plot.addChild(
-          new LabelPlotLayer("FDR:", allRankedM.getRows(), 0, -200, -80));
-      plot.addChild(
-          new LabelPlotLayer(Formatter.number().dp(4).format(fdrMap.get(name)),
-              allRankedM.getRows(), 0, -100, -80));
+          new LabelPlotLayer(Formatter.number().dp(4).format(fdrMap.get(name)), allRankedM.getRows(), 0, -100, -80));
 
       // Plot the limits as if all genes are present
       axes.getX1Axis().getTitle().setText("Gene List Index");
@@ -580,65 +548,57 @@ public class GseaPlotModule extends Module implements ModernClickListener {
       //
       // Ranked genes
       //
-      
+
       // Copy the ranks from the file
-      
-      DataFrame rankedM = new MixedMatrixParser(1,
-          0,
-          TextUtils.TAB_DELIMITER)
-          .parse(plotFile)
-          .cols(5, 6);
-      
+
+      DataFrame rankedM = new MixedMatrixParser(1, 0, TextUtils.TAB_DELIMITER).parse(plotFile).cols(5, 6);
+
       rankedM.setColumnName(0, "Ranked x");
       rankedM.setColumnName(1, "Ranked y");
-      
+
       //
       // Heat Map
       //
-      
+
       DataFrame heatmapM = DataFrame.createNumericalMatrix(1, rankedM.getRows());
-      
+
       heatmapM.setRow(0, rankedM.columnToDouble(1));
-      
+
       subFigure = figure.newSubFigure();
-      //subFigure.setZLayout();
-      
+      // subFigure.setZLayout();
+
       axes = subFigure.newAxes().setInternalSize(width, 25);
       axes.getX1Axis().setLimits(0, n);
       axes.setLeftMargin(100);
       axes.getX1Axis().getTitle().setText("Gene List Index");
-      
-      PlotFactory.imShow(heatmapM, subFigure, axes,
-          ColorMap.createBlueWhiteRedMap(),
+
+      PlotFactory.imShow(heatmapM, subFigure, axes, ColorMap.createBlueWhiteRedMap(),
           new LinearNormalization(min, 0, max));
-      
+
       Axes.disableAllFeatures(axes);
-      
+
       subFigure = figure.newSubFigure();
       axes = subFigure.newAxes().setInternalSize(width, 25);
       axes.getX1Axis().setLimits(0, n);
       axes.setLeftMargin(100);
-      
-      PlotFactory.vlines(vlinesM, axes);
-      
-      Axes.disableAllFeatures(axes);
 
+      PlotFactory.vlines(vlinesM, axes);
+
+      Axes.disableAllFeatures(axes);
 
       // Set the axes ranges etc
 
-      //axes.getX1Axis().setLimitsAutoRound(0, allRankedGenes.getRows());
-      //axes.getY1Axis().setLimitsAutoRound(0, 1);
-      //axes.setInternalSize(DEFAULT_WIDTH, 60);
-      //axes.setMargins(100);
-      
+      // axes.getX1Axis().setLimitsAutoRound(0, allRankedGenes.getRows());
+      // axes.getY1Axis().setLimitsAutoRound(0, 1);
+      // axes.setInternalSize(DEFAULT_WIDTH, 60);
+      // axes.setMargins(100);
 
       //
       // All the ranked genes
       //
-      
+
       System.err.println("ranked " + axes.getInternalSize());
 
-      
       subFigure = figure.newSubFigure();
 
       axes = subFigure.newAxes();
@@ -646,8 +606,7 @@ public class GseaPlotModule extends Module implements ModernClickListener {
       color = GREEN_COLOR;
 
       series = new XYSeries("Ranked", color);
-      series.getStyle().getFillStyle()
-      .setColor(ColorUtils.getTransparentColor60(color));
+      series.getStyle().getFillStyle().setColor(ColorUtils.getTransparentColor60(color));
       series.getStyle().getLineStyle().setColor(color);
       series.getMarkerStyle().setVisible(false);
 
@@ -658,16 +617,15 @@ public class GseaPlotModule extends Module implements ModernClickListener {
       axes.setMargins(100);
       axes.getX1Axis().getTitle().setText("Gene List Index");
       axes.getY1Axis().getTitle().setText("Ranked List Metric");
-      //Axis.disableAllFeatures(axes.getX1Axis());
+      // Axis.disableAllFeatures(axes.getX1Axis());
       axes.getY1Axis().getGrid().setVisible(false);
       axes.getX1Axis().setLimits(0, n);
-      
 
       Graph2dWindow window = new Graph2dWindow(mParent, figure);
 
       window.setVisible(true);
 
-      //FOR DEGUG ONLY
+      // FOR DEGUG ONLY
       break;
     }
 

@@ -41,7 +41,7 @@ import edu.columbia.rdf.matcalc.toolbox.core.io.IOModule;
  */
 public class FastaReaderModule extends IOModule {
   public FastaReaderModule() {
-    registerFileOpenType(FileFilterService.getInstance().getFilter("fasta")); //FastaGuiFileFilter.FASTA_FILTER);
+    registerFileOpenType(FileFilterService.getInstance().getFilter("fasta")); // FastaGuiFileFilter.FASTA_FILTER);
   }
 
   /*
@@ -55,13 +55,8 @@ public class FastaReaderModule extends IOModule {
   }
 
   @Override
-  public DataFrame read(final MainMatCalcWindow window,
-      final Path file,
-      FileType type,
-      int headers,
-      int rowAnnotations,
-      String delimiter,
-      Collection<String> skipLines) throws IOException {
+  public DataFrame read(final MainMatCalcWindow window, final Path file, FileType type, int headers, int rowAnnotations,
+      String delimiter, Collection<String> skipLines) throws IOException {
     return toMatrix(file);
   }
 
@@ -99,16 +94,14 @@ public class FastaReaderModule extends IOModule {
 
     return ret;
   }
-  
-  public static DataFrame toMatrix(Genome genome, 
-      List<GenomicRegion> regions,
-      List<Sequence> sequences) {
+
+  public static DataFrame toMatrix(Genome genome, List<GenomicRegion> regions, List<Sequence> sequences) {
 
     DataFrame ret = DataFrame.createMixedMatrix(sequences.size(), 4);
 
     GenomicRegion.parse(genome, sequences.get(0).getName());
 
-    //ret.setColumnName(0, "Name");
+    // ret.setColumnName(0, "Name");
     ret.setColumnName(0, Bio.ASSET_GENOME);
     ret.setColumnName(1, Bio.ASSET_GENOMIC_LOCATION);
     ret.setColumnName(2, Bio.ASSET_DNA_SEQUENCE);
@@ -119,8 +112,8 @@ public class FastaReaderModule extends IOModule {
 
       String name = s.getName();
 
-      //ret.set(i, 0, name);
-      
+      // ret.set(i, 0, name);
+
       ret.set(i, 0, genome);
 
       GenomicRegion r = regions.get(i);

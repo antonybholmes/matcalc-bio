@@ -57,24 +57,23 @@ public class AnnotationSidePanel extends ModernComponent {
 
     // If two services provide the same genome, use the later.
     try {
-      IterMap<String, IterMap<String, IterMap<String, Genome>>> gmap = 
-          Genome.sort(AnnotationService.getInstance().genomes());
-      
-      
+      IterMap<String, IterMap<String, IterMap<String, Genome>>> gmap = Genome
+          .sort(AnnotationService.getInstance().genomes());
+
       for (Entry<String, IterMap<String, IterMap<String, Genome>>> nameEntry : gmap) {
         String name = nameEntry.getKey();
-        
+
         box.add(new ModernSubHeadingLabel(name));
         box.add(UI.createVGap(5));
 
         for (Entry<String, IterMap<String, Genome>> assemblyEntry : nameEntry.getValue()) {
-          //String assembly = nameEntry.getKey();
-          
+          // String assembly = nameEntry.getKey();
+
           for (Entry<String, Genome> trackEntry : assemblyEntry.getValue()) {
             String track = trackEntry.getKey();
-            
+
             Genome genome = trackEntry.getValue();
-            
+
             ModernCheckSwitch button = new ModernCheckSwitch(track);
             button.setBorder(LEFT_BORDER);
             mGenomeMap.put(button, genome);
@@ -93,8 +92,7 @@ public class AnnotationSidePanel extends ModernComponent {
 
     // box.setBorder(BORDER);
 
-    setBody(new ModernScrollPane(box)
-        .setHorizontalScrollBarPolicy(ScrollBarPolicy.NEVER));
+    setBody(new ModernScrollPane(box).setHorizontalScrollBarPolicy(ScrollBarPolicy.NEVER));
 
     setBorder(DOUBLE_BORDER);
 

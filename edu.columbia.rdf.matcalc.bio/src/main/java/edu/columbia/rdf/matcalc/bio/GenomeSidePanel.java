@@ -37,27 +37,26 @@ public class GenomeSidePanel extends ModernComponent {
 
     Box box = VBox.create();
 
-
     ModernButtonGroup g = new ModernButtonGroup();
-    
+
     try {
-      IterMap<String, IterMap<String, IterMap<String, Genome>>> gmap = 
-          Genome.sort(AnnotationService.getInstance().genomes());
-    
+      IterMap<String, IterMap<String, IterMap<String, Genome>>> gmap = Genome
+          .sort(AnnotationService.getInstance().genomes());
+
       for (Entry<String, IterMap<String, IterMap<String, Genome>>> nameEntry : gmap) {
         String name = nameEntry.getKey();
-        
+
         box.add(new ModernSubHeadingLabel(name));
         box.add(UI.createVGap(5));
 
         for (Entry<String, IterMap<String, Genome>> assemblyEntry : nameEntry.getValue()) {
-          //String assembly = nameEntry.getKey();
-          
+          // String assembly = nameEntry.getKey();
+
           for (Entry<String, Genome> trackEntry : assemblyEntry.getValue()) {
-            //String track = trackEntry.getKey();
-            
+            // String track = trackEntry.getKey();
+
             Genome genome = trackEntry.getValue();
-            
+
             ModernRadioButton button = new ModernRadioButton(name);
             g.add(button);
             button.setBorder(LEFT_BORDER);
@@ -77,8 +76,7 @@ public class GenomeSidePanel extends ModernComponent {
 
     // box.setBorder(BORDER);
 
-    setBody(new ModernScrollPane(box)
-        .setHorizontalScrollBarPolicy(ScrollBarPolicy.NEVER));
+    setBody(new ModernScrollPane(box).setHorizontalScrollBarPolicy(ScrollBarPolicy.NEVER));
 
     setBorder(DOUBLE_BORDER);
 
@@ -114,7 +112,6 @@ public class GenomeSidePanel extends ModernComponent {
 //      return null;
 //    }
 //  }
-
 
   public List<Genome> getGenomes() {
     List<Genome> ret = new ArrayList<Genome>(mCheckMap.size());

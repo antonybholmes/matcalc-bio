@@ -42,24 +42,20 @@ public class PermuteDialog extends ModernDialogTaskWindow {
 
   private GroupsCombo mGroup2Combo;
 
-  private ModernCompactSpinner mTextSize1 = new ModernCompactSpinner(1, 1000,
-      10);
+  private ModernCompactSpinner mTextSize1 = new ModernCompactSpinner(1, 1000, 10);
 
-  private ModernCompactSpinner mTextSize2 = new ModernCompactSpinner(1, 1000,
-      10);
+  private ModernCompactSpinner mTextSize2 = new ModernCompactSpinner(1, 1000, 10);
 
   private ModernTextField mTextPrefix = new ModernTextField("cls_perm");
 
-  private ModernCompactSpinner mTextPermutations = new ModernCompactSpinner(1,
-      100000, 10);
+  private ModernCompactSpinner mTextPermutations = new ModernCompactSpinner(1, 100000, 10);
 
   private ModernTextField mTextLocation = new ModernTextField();
 
-  private ModernCheckBox mCheckSampleWithReplacement = new ModernCheckBox(
-      "Sample with replacement");
+  private ModernCheckBox mCheckSampleWithReplacement = new ModernCheckBox("Sample with replacement");
 
-  private ModernButtonWidget mChangeButton = new RibbonButton(
-      "Change...", AssetService.getInstance().loadIcon("open", 16));
+  private ModernButtonWidget mChangeButton = new RibbonButton("Change...",
+      AssetService.getInstance().loadIcon("open", 16));
 
   private Path mDir = null;
 
@@ -82,8 +78,7 @@ public class PermuteDialog extends ModernDialogTaskWindow {
 
       @Override
       public void clicked(ModernClickEvent e) {
-        Path dir = FileDialog.openDir(mParent,
-            RecentFilesService.getInstance().getPwd());
+        Path dir = FileDialog.openDir(mParent, RecentFilesService.getInstance().getPwd());
 
         if (dir != null) {
           mDir = dir;
@@ -96,9 +91,8 @@ public class PermuteDialog extends ModernDialogTaskWindow {
     mTextLocation.setEditable(false);
     mTextLocation.setText(PathUtils.toString(mDir));
 
-    mTextPrefix.setText(TextUtils.replaceSpaces(mGroups.get(0).getName().trim())
-        + "_vs_" + TextUtils.replaceSpaces(mGroups.get(1).getName().trim())
-        + "_perm");
+    mTextPrefix.setText(TextUtils.replaceSpaces(mGroups.get(0).getName().trim()) + "_vs_"
+        + TextUtils.replaceSpaces(mGroups.get(1).getName().trim()) + "_perm");
 
     mGroup2Combo.setSelectedIndex(1);
 
@@ -159,8 +153,7 @@ public class PermuteDialog extends ModernDialogTaskWindow {
     content.add(UI.createVGap(30));
 
     box = HBox.create();
-    box.add(
-        new ModernAutoSizeLabel("Permutations", ModernWidget.STANDARD_SIZE));
+    box.add(new ModernAutoSizeLabel("Permutations", ModernWidget.STANDARD_SIZE));
     box.add(UI.createHGap(5));
     box.add(mTextPermutations);
     box.add(UI.createHGap(10));
@@ -208,8 +201,7 @@ public class PermuteDialog extends ModernDialogTaskWindow {
     return getGroup(mGroups, mGroup2Combo);
   }
 
-  private static XYSeries getGroup(XYSeriesGroup groups,
-      ModernComboBox2 groupCombo) {
+  private static XYSeries getGroup(XYSeriesGroup groups, ModernComboBox2 groupCombo) {
     if (groups == null || groups.getCount() == 0) {
       return null;
     }

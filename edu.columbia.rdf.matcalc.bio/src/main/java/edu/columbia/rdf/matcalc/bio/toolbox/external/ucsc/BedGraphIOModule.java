@@ -35,8 +35,8 @@ import edu.columbia.rdf.matcalc.toolbox.core.io.IOModule;
  *
  */
 public class BedGraphIOModule extends IOModule {
-  private static final GuiFileExtFilter FILTER = 
-      FileFilterService.getInstance().getFilter("bedgraph"); //new BedGraphGuiFileFilter();
+  private static final GuiFileExtFilter FILTER = FileFilterService.getInstance().getFilter("bedgraph"); // new
+                                                                                                        // BedGraphGuiFileFilter();
 
   public BedGraphIOModule() {
     registerFileOpenType(FILTER);
@@ -53,13 +53,8 @@ public class BedGraphIOModule extends IOModule {
   }
 
   @Override
-  public DataFrame read(final MainMatCalcWindow window,
-      final Path file,
-      FileType type,
-      int headers,
-      int rowAnnotations,
-      String delimiter,
-      Collection<String> skipLines) throws IOException {
+  public DataFrame read(final MainMatCalcWindow window, final Path file, FileType type, int headers, int rowAnnotations,
+      String delimiter, Collection<String> skipLines) throws IOException {
     return BedGraph.toMatrix(file);
   }
 }

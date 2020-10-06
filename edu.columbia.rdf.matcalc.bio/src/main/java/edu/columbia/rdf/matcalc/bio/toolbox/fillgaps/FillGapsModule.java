@@ -34,7 +34,6 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeMap;
 
@@ -47,7 +46,6 @@ import org.jebtk.bioinformatics.genomic.Chromosome;
 import org.jebtk.bioinformatics.genomic.ChromosomeService;
 import org.jebtk.bioinformatics.genomic.Genome;
 import org.jebtk.bioinformatics.genomic.GenomicElement;
-import org.jebtk.bioinformatics.genomic.GenomicElementsMap;
 import org.jebtk.bioinformatics.genomic.GenomicRegion;
 import org.jebtk.bioinformatics.genomic.GenomicType;
 import org.jebtk.bioinformatics.genomic.Human;
@@ -80,23 +78,20 @@ import edu.columbia.rdf.matcalc.toolbox.Module;
  *
  */
 public class FillGapsModule extends Module implements ModernClickListener {
-  private static final Logger LOG = LoggerFactory
-      .getLogger(FillGapsModule.class);
+  private static final Logger LOG = LoggerFactory.getLogger(FillGapsModule.class);
 
   /**
    * The member convert button.
    */
   private ModernButton mFillGapsButton = new RibbonLargeButton("Fill Gaps",
-      AssetService.getInstance().loadIcon("fill_gaps", 32),
-      AssetService.getInstance().loadIcon("fill_gaps", 24));
+      AssetService.getInstance().loadIcon("fill_gaps", 32), AssetService.getInstance().loadIcon("fill_gaps", 24));
 
-  private static final Path RES_FOLDER = PathUtils
-      .getPath("res/modules/annotation");
+  private static final Path RES_FOLDER = PathUtils.getPath("res/modules/annotation");
 
   public static final double SEGMENT_MEAN_ZERO = 0.0001;
-  
+
   private static final Args ARGS = new Args();
-  
+
   static {
     ARGS.add('s', "switch-tab");
   }
@@ -108,8 +103,7 @@ public class FillGapsModule extends Module implements ModernClickListener {
 
   private Map<String, Path> mBedFileMap = new TreeMap<String, Path>();
 
-  private Map<String, Map<String, String>> mDescriptionMap = 
-      new TreeMap<String, Map<String, String>>();
+  private Map<String, Map<String, String>> mDescriptionMap = new TreeMap<String, Map<String, String>>();
 
   /*
    * (non-Javadoc)
@@ -125,19 +119,18 @@ public class FillGapsModule extends Module implements ModernClickListener {
   public Args getArgs() {
     return ARGS;
   }
-  
+
   @Override
   public void run(ArgParser ap) {
     if (ap.contains("switch-tab")) {
-       mWindow.getRibbon().changeTab("Annotation");
+      mWindow.getRibbon().changeTab("Annotation");
     }
   }
 
   /*
    * (non-Javadoc)
    * 
-   * @see
-   * edu.columbia.rdf.apps.matcalc.modules.Module#init(edu.columbia.rdf.apps.
+   * @see edu.columbia.rdf.apps.matcalc.modules.Module#init(edu.columbia.rdf.apps.
    * matcalc.MainMatCalcWindow)
    */
   @Override
@@ -153,8 +146,7 @@ public class FillGapsModule extends Module implements ModernClickListener {
     // home
     mFillGapsButton.setToolTip(new ModernToolTip("Fill Gaps", "Fill gaps using reference."));
     mFillGapsButton.setClickMessage("Fill Gaps");
-    mWindow.getRibbon().getToolbar("Bioinformatics").getSection("Fill Gaps")
-        .add(mFillGapsButton);
+    mWindow.getRibbon().getToolbar("Bioinformatics").getSection("Fill Gaps").add(mFillGapsButton);
 
     mFillGapsButton.addClickListener(this);
 
@@ -190,8 +182,7 @@ public class FillGapsModule extends Module implements ModernClickListener {
   /*
    * (non-Javadoc)
    * 
-   * @see
-   * org.abh.lib.ui.modern.event.ModernClickListener#clicked(org.abh.lib.ui.
+   * @see org.abh.lib.ui.modern.event.ModernClickListener#clicked(org.abh.lib.ui.
    * modern .event.ModernClickEvent)
    */
   @Override
@@ -219,21 +210,13 @@ public class FillGapsModule extends Module implements ModernClickListener {
       return;
     }
 
-    Map<String, Integer> colMap = findColumns(mWindow,
-        m,
-        "chr",
-        "start",
-        "end",
-        "markers|probes",
-        "segment",
-        "mean");
+    Map<String, Integer> colMap = findColumns(mWindow, m, "chr", "start", "end", "markers|probes", "segment", "mean");
 
     if (colMap == null) {
       return;
     }
 
-    FillGapsDialog dialog = new FillGapsDialog(mWindow, mBedFileMap,
-        mDescriptionMap);
+    FillGapsDialog dialog = new FillGapsDialog(mWindow, mBedFileMap, mDescriptionMap);
 
     dialog.setVisible(true);
 
@@ -243,17 +226,14 @@ public class FillGapsModule extends Module implements ModernClickListener {
 
     UCSCTrack track = Bed.parseTrack(GenomicType.REGION, mBedFileMap.get(dialog.getAnnotation()));
 
-    BinarySearch<GenomicRegion> gapSearch = getBinarySearch(
-        track.getElements());
+    BinarySearch<GenomicRegion> gapSearch = getBinarySearch(track.getElements());
 
     List<String> samples = dialog.getSamples();
 
     double meanZero = dialog.getMeanZero();
 
     if (samples == null) {
-      ModernMessageDialog.createDialog(mWindow,
-          "You must load some samples",
-          MessageDialogType.WARNING);
+      ModernMessageDialog.createDialog(mWindow, "You must load some samples", MessageDialogType.WARNING);
 
       return;
     }
@@ -265,8 +245,7 @@ public class FillGapsModule extends Module implements ModernClickListener {
     }
 
     // Organize segments by sample and so we can sort them
-    Map<String, Map<Chromosome, List<Segment>>> segments = 
-        new TreeMap<String, Map<Chromosome, List<Segment>>>();
+    Map<String, Map<Chromosome, List<Segment>>> segments = new TreeMap<String, Map<Chromosome, List<Segment>>>();
 
     for (int r = 0; r < m.getRows(); ++r) {
       String name = m.getText(r, colMap.get("segment"));
@@ -278,8 +257,7 @@ public class FillGapsModule extends Module implements ModernClickListener {
       Segment segment = new Segment();
 
       segment.name = name;
-      segment.chr = ChromosomeService.getInstance()
-          .chr(genome, m.getText(r, colMap.get("chr")));
+      segment.chr = ChromosomeService.getInstance().chr(genome, m.getText(r, colMap.get("chr")));
       segment.start = (int) m.getValue(r, colMap.get("start"));
       segment.end = (int) m.getValue(r, colMap.get("end"));
       segment.markers = (int) m.getValue(r, colMap.get("markers|probes"));
@@ -293,8 +271,7 @@ public class FillGapsModule extends Module implements ModernClickListener {
     for (String name : segments.keySet()) {
       for (Chromosome chr : segments.get(name).keySet()) {
         for (Segment segment : segments.get(name).get(chr)) {
-          List<GappedSearchFeatures<GenomicRegion>> features = gapSearch
-              .getFeatures(chr, segment.start, segment.end);
+          List<GappedSearchFeatures<GenomicRegion>> features = gapSearch.getFeatures(chr, segment.start, segment.end);
 
           // update so the segment begins and ends on a probe
           segment.start = features.get(0).getPosition();
@@ -329,11 +306,9 @@ public class FillGapsModule extends Module implements ModernClickListener {
      * segments.get(name).get(chr).get(i + 1);
      * 
      * if (segment1.end >= segment2.start) { int index =
-     * BinaryGapSearch.getStartIndex(gapSearch.getFeatures(chr),
-     * segment2.start);
+     * BinaryGapSearch.getStartIndex(gapSearch.getFeatures(chr), segment2.start);
      * 
-     * System.err.println("hum " + segment1.end + " " + segment2.start + " " +
-     * chr);
+     * System.err.println("hum " + segment1.end + " " + segment2.start + " " + chr);
      * 
      * 
      * System.err.println("new end " + segment1.end + " " +
@@ -363,16 +338,13 @@ public class FillGapsModule extends Module implements ModernClickListener {
             if (segment1.end >= segment2.start) {
               segment1.end = Math.max(segment1.end, segment2.end);
 
-              int i1 = BinaryGapSearch.getStartIndex(gapSearch.getBins(chr),
-                  segment1.start);
-              int i2 = BinaryGapSearch.getStartIndex(gapSearch.getBins(chr),
-                  segment1.end);
+              int i1 = BinaryGapSearch.getStartIndex(gapSearch.getBins(chr), segment1.start);
+              int i2 = BinaryGapSearch.getStartIndex(gapSearch.getBins(chr), segment1.end);
 
               segment1.markers = i2 - i1 + 1;
 
-              System.err.println("hum " + segment1.start + " " + segment1.end
-                  + " " + segment2.start + " " + segment2.end + " " + chr + " "
-                  + i1 + " " + i2);
+              System.err.println("hum " + segment1.start + " " + segment1.end + " " + segment2.start + " "
+                  + segment2.end + " " + chr + " " + i1 + " " + i2);
 
               remove = i + 1;
 
@@ -413,8 +385,7 @@ public class FillGapsModule extends Module implements ModernClickListener {
       for (Chromosome chr : segments.get(name).keySet()) {
         segment = segments.get(name).get(chr).get(0);
 
-        index = BinaryGapSearch.getStartIndex(gapSearch.getBins(chr),
-            segment.start);
+        index = BinaryGapSearch.getStartIndex(gapSearch.getBins(chr), segment.start);
 
         // System.err.println("huh " + segment.name + " " + chr + " " +
         // segment.start +
@@ -427,8 +398,7 @@ public class FillGapsModule extends Module implements ModernClickListener {
           newSegment.name = name;
           newSegment.chr = chr;
           newSegment.start = gapSearch.getFeaturesAt(chr, 0).getPosition();
-          newSegment.end = gapSearch.getFeaturesAt(chr, previousIndex)
-              .getPosition();
+          newSegment.end = gapSearch.getFeaturesAt(chr, previousIndex).getPosition();
           newSegment.markers = previousIndex + 1;
           newSegment.copyNumberMean = meanZero;
 
@@ -451,15 +421,13 @@ public class FillGapsModule extends Module implements ModernClickListener {
         for (int i = 1; i < segments.get(name).get(chr).size(); ++i) {
           segment = segments.get(name).get(chr).get(i);
 
-          index = BinaryGapSearch.getStartIndex(gapSearch.getBins(chr),
-              segment.start);
+          index = BinaryGapSearch.getStartIndex(gapSearch.getBins(chr), segment.start);
 
           System.err.println("i " + index + " " + segment.start);
 
           previousSegment = segments.get(name).get(chr).get(i - 1);
 
-          previousIndex = BinarySearch.getEndIndex(gapSearch.getBins(chr),
-              previousSegment.end);
+          previousIndex = BinarySearch.getEndIndex(gapSearch.getBins(chr), previousSegment.end);
 
           System.err.println("pi " + previousIndex + " " + previousSegment.end);
 
@@ -472,8 +440,7 @@ public class FillGapsModule extends Module implements ModernClickListener {
             newSegment = new Segment();
             newSegment.name = name;
             newSegment.chr = chr;
-            newSegment.start = gapSearch.getFeaturesAt(chr, previousIndex)
-                .getPosition();
+            newSegment.start = gapSearch.getFeaturesAt(chr, previousIndex).getPosition();
             newSegment.end = gapSearch.getFeaturesAt(chr, index).getPosition();
             newSegment.markers = index - previousIndex + 1;
             newSegment.copyNumberMean = meanZero;
@@ -493,11 +460,9 @@ public class FillGapsModule extends Module implements ModernClickListener {
 
     for (String name : segments.keySet()) {
       for (Chromosome chr : segments.get(name).keySet()) {
-        segment = segments.get(name).get(chr)
-            .get(segments.get(name).get(chr).size() - 1);
+        segment = segments.get(name).get(chr).get(segments.get(name).get(chr).size() - 1);
 
-        index = BinarySearch.getStartIndex(gapSearch.getBins(segment.chr),
-            segment.end);
+        index = BinarySearch.getStartIndex(gapSearch.getBins(segment.chr), segment.end);
 
         nextIndex = gapSearch.getBins(segment.chr).size() - 1; // gapSearch.size(chr)
                                                                // - 1;
@@ -515,8 +480,7 @@ public class FillGapsModule extends Module implements ModernClickListener {
           newSegment.name = name;
           newSegment.chr = chr;
           newSegment.start = gapSearch.getFeaturesAt(chr, index).getPosition();
-          newSegment.end = gapSearch.getFeaturesAt(chr, nextIndex)
-              .getPosition();
+          newSegment.end = gapSearch.getFeaturesAt(chr, nextIndex).getPosition();
           newSegment.markers = nextIndex - index + 1;
           newSegment.copyNumberMean = meanZero;
 
@@ -531,8 +495,7 @@ public class FillGapsModule extends Module implements ModernClickListener {
 
     for (String name : samples) {
       for (Chromosome chr : Human.CHROMOSOMES) {
-        if (!newSegments.containsKey(name)
-            || !newSegments.get(name).containsKey(chr)) {
+        if (!newSegments.containsKey(name) || !newSegments.get(name).containsKey(chr)) {
           // Empty chr that needs filling
 
           if (!gapSearch.containsChr(chr)) {
@@ -543,8 +506,7 @@ public class FillGapsModule extends Module implements ModernClickListener {
           newSegment.name = name;
           newSegment.chr = chr;
           newSegment.start = gapSearch.getFeaturesAt(chr, 0).getPosition();
-          newSegment.end = gapSearch.getFeaturesAt(chr, gapSearch.size(chr) - 1)
-              .getPosition();
+          newSegment.end = gapSearch.getFeaturesAt(chr, gapSearch.size(chr) - 1).getPosition();
           newSegment.markers = gapSearch.size(chr);
           newSegment.copyNumberMean = meanZero;
 
@@ -556,8 +518,7 @@ public class FillGapsModule extends Module implements ModernClickListener {
     mWindow.history().addToHistory("Fill Gaps", segmentsToMatrix(newSegments));
   }
 
-  private static void addSegment(final Segment segment,
-      Map<String, Map<Chromosome, List<Segment>>> segments) {
+  private static void addSegment(final Segment segment, Map<String, Map<Chromosome, List<Segment>>> segments) {
     if (!segments.containsKey(segment.name)) {
       segments.put(segment.name, new TreeMap<Chromosome, List<Segment>>());
     }
@@ -569,8 +530,7 @@ public class FillGapsModule extends Module implements ModernClickListener {
     segments.get(segment.name).get(segment.chr).add(segment);
   }
 
-  private static DataFrame segmentsToMatrix(
-      Map<String, Map<Chromosome, List<Segment>>> segments) {
+  private static DataFrame segmentsToMatrix(Map<String, Map<Chromosome, List<Segment>>> segments) {
 
     int n = 0;
 
@@ -609,14 +569,11 @@ public class FillGapsModule extends Module implements ModernClickListener {
     return ret;
   }
 
-  public static BinarySearch<GenomicRegion> getBinarySearch(
-      GenomicElementsMap regions) {
+  public static BinarySearch<GenomicRegion> getBinarySearch(List<GenomicElement> regions) {
     BinarySearch<GenomicRegion> search = new BinarySearch<GenomicRegion>();
 
-    for (Entry<Chromosome, Set<GenomicElement>> region : regions) {
-      for (GenomicElement e : region.getValue()) {
-        search.add(e, e);
-      }
+    for (GenomicElement region : regions) {
+      search.add(region, region);
     }
 
     return search;

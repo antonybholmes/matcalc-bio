@@ -56,8 +56,7 @@ import edu.columbia.rdf.matcalc.toolbox.Module;
 /**
  * The class BoxWhiskerPlotModule.
  */
-public class PermuteClsModule extends Module
-    implements ModernClickListener {
+public class PermuteClsModule extends Module implements ModernClickListener {
 
   /**
    * The member parent.
@@ -77,28 +76,24 @@ public class PermuteClsModule extends Module
   /*
    * (non-Javadoc)
    * 
-   * @see
-   * edu.columbia.rdf.apps.matcalc.modules.Module#init(edu.columbia.rdf.apps.
+   * @see edu.columbia.rdf.apps.matcalc.modules.Module#init(edu.columbia.rdf.apps.
    * matcalc.MainMatCalcWindow)
    */
   @Override
   public void init(MainMatCalcWindow window) {
     mParent = window;
 
-    RibbonLargeButton button = new RibbonLargeButton("Permute CLS",
-        AssetService.getInstance().loadIcon("save", 24), "Permute CLS",
-        "Create random permutations of a GenePattern CLS using the groups.");
+    RibbonLargeButton button = new RibbonLargeButton("Permute CLS", AssetService.getInstance().loadIcon("save", 24),
+        "Permute CLS", "Create random permutations of a GenePattern CLS using the groups.");
     button.addClickListener(this);
 
-    mParent.getRibbon().getToolbar("Bioinformatics").getSection("GenePattern")
-        .add(button);
+    mParent.getRibbon().getToolbar("Bioinformatics").getSection("GenePattern").add(button);
   }
 
   /*
    * (non-Javadoc)
    * 
-   * @see
-   * org.abh.lib.ui.modern.event.ModernClickListener#clicked(org.abh.lib.ui.
+   * @see org.abh.lib.ui.modern.event.ModernClickListener#clicked(org.abh.lib.ui.
    * modern .event.ModernClickEvent)
    */
   @Override
@@ -115,7 +110,7 @@ public class PermuteClsModule extends Module
   /**
    * Export.
    *
-   * @throws IOException Signals that an I/O exception has occurred.
+   * @throws IOException         Signals that an I/O exception has occurred.
    * @throws ParseException
    * @throws TranscoderException the transcoder exception
    */
@@ -127,7 +122,7 @@ public class PermuteClsModule extends Module
    * Export matrix.
    *
    * @param pwd the pwd
-   * @throws IOException Signals that an I/O exception has occurred.
+   * @throws IOException         Signals that an I/O exception has occurred.
    * @throws ParseException
    * @throws TranscoderException the transcoder exception
    */
@@ -143,9 +138,7 @@ public class PermuteClsModule extends Module
     XYSeriesGroup groups = mParent.getGroups();
 
     if (groups.size() < 2) {
-      ModernMessageDialog.createDialog(mParent,
-          "You must create some groups.",
-          MessageDialogType.WARNING);
+      ModernMessageDialog.createDialog(mParent, "You must create some groups.", MessageDialogType.WARNING);
 
       return;
     }
@@ -161,9 +154,7 @@ public class PermuteClsModule extends Module
     int reps = dialog.getPermutations();
 
     if (reps < 1) {
-      ModernMessageDialog.createDialog(mParent,
-          "You must create at least one permutation.",
-          MessageDialogType.WARNING);
+      ModernMessageDialog.createDialog(mParent, "You must create at least one permutation.", MessageDialogType.WARNING);
 
       return;
     }
@@ -231,15 +222,11 @@ public class PermuteClsModule extends Module
     }
 
     if (reps == 1) {
-      ModernMessageDialog.createDialog(mParent,
-          MessageDialogType.INFORMATION,
-          "The CLS file has been saved in:",
+      ModernMessageDialog.createDialog(mParent, MessageDialogType.INFORMATION, "The CLS file has been saved in:",
           PathUtils.toString(dir));
     } else {
-      ModernMessageDialog.createDialog(mParent,
-          MessageDialogType.INFORMATION,
-          "The " + reps + " CLS files have been saved in:",
-          PathUtils.toString(dir));
+      ModernMessageDialog.createDialog(mParent, MessageDialogType.INFORMATION,
+          "The " + reps + " CLS files have been saved in:", PathUtils.toString(dir));
     }
   }
 }

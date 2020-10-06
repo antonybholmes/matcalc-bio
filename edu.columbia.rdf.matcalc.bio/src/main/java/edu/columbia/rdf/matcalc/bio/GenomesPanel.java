@@ -29,8 +29,7 @@ public class GenomesPanel extends ModernComponent {
 
   private ModernCheckTree<String> mTree;
 
-  private ModernButton mSelectAllButton = new RibbonButton(
-      "Select All");
+  private ModernButton mSelectAllButton = new RibbonButton("Select All");
 
   private boolean mCheckAll = true;
 
@@ -43,20 +42,17 @@ public class GenomesPanel extends ModernComponent {
     try {
       mTree = AnnotationService.getInstance().createTree(mode);
 
-      ModernScrollPane scrollPane = new ModernScrollPane(mTree)
-          .setHorizontalScrollBarPolicy(ScrollBarPolicy.NEVER);
+      ModernScrollPane scrollPane = new ModernScrollPane(mTree).setHorizontalScrollBarPolicy(ScrollBarPolicy.NEVER);
 
       setBody(scrollPane); // new ModernContentPanel(scrollPane));
 
       // Set a default
-      ((CheckTreeNode<String>) mTree
-          .getChildByPath("/ucsc/hg19/ucsc_refseq_hg19")).setChecked(true);
+      ((CheckTreeNode<String>) mTree.getChildByPath("/ucsc/hg19/ucsc_refseq_hg19")).setChecked(true);
     } catch (IOException e) {
       e.printStackTrace();
     }
 
-    if (mode == ModernCheckTreeMode.MULTI
-        || mode == ModernCheckTreeMode.MIN_ONE) {
+    if (mode == ModernCheckTreeMode.MULTI || mode == ModernCheckTreeMode.MIN_ONE) {
       Box box = new HSpacedBox();
       box.setBorder(TOP_BORDER);
       box.add(mSelectAllButton);

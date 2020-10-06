@@ -52,20 +52,13 @@ public class GctIOModule extends IOModule {
   }
 
   @Override
-  public DataFrame read(final MainMatCalcWindow window,
-      final Path file,
-      FileType type,
-      int headers,
-      int rowAnnotations,
-      String delimiter,
-      Collection<String> skipLines) throws IOException {
+  public DataFrame read(final MainMatCalcWindow window, final Path file, FileType type, int headers, int rowAnnotations,
+      String delimiter, Collection<String> skipLines) throws IOException {
     return GctMatrix.parseMatrix(file);
   }
 
   @Override
-  public boolean write(final MainMatCalcWindow window,
-      final Path file,
-      final DataFrame m) throws IOException {
+  public boolean write(final MainMatCalcWindow window, final Path file, final DataFrame m) throws IOException {
     GctMatrix.writeGctMatrix(m, file);
 
     return true;

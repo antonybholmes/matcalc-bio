@@ -55,9 +55,7 @@ public class FastaWriterModule extends IOModule {
   }
 
   @Override
-  public boolean write(final MainMatCalcWindow window,
-      final Path file,
-      final DataFrame m) throws IOException {
+  public boolean write(final MainMatCalcWindow window, final Path file, final DataFrame m) throws IOException {
 
     List<Sequence> sequences = toSequences(window, m);
 
@@ -70,8 +68,7 @@ public class FastaWriterModule extends IOModule {
     return true;
   }
 
-  public static List<Sequence> toSequences(final MainMatCalcWindow window,
-      final DataFrame m) {
+  public static List<Sequence> toSequences(final MainMatCalcWindow window, final DataFrame m) {
 
     int c1 = DataFrame.findColumn(m, "Name");
 
@@ -94,7 +91,7 @@ public class FastaWriterModule extends IOModule {
     List<Sequence> sequences = new ArrayList<Sequence>(m.getRows());
 
     SysUtils.err().println("seq", c1, m.getText(0, c1));
-    
+
     for (int i = 0; i < m.getRows(); ++i) {
       String name = c1 != -1 ? m.getText(i, c1) : "Seq" + (i + 1);
 
